@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <set xpath="/challenges">
+        <challenge_category name="Occupancy" title_key="challengeCategoryOccupancy"
+                            icon="ui_game_symbol_challenge_category1"/>
+    </set>
+
+</configs>

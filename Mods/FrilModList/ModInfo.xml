@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+    <Name value="FrilModList" />
+    <DisplayName value="Fril Mod List" />
+    <Version value="1.5.1" />
+    <Description value="Adds a Mods button to the ESC menu that lists every mod you are running and its version." />
+    <Author value="Frilioth" />
+    <Website value="https://frilcraft.uk" />
+</xml>

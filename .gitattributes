@@ -1,0 +1,29 @@
+# FrilOstrichChallenge - Git LFS
+#
+# WHY. GitHub refuses any single file over 100MB on a normal push. Each Ostrich world holds a
+# dtm.raw of 134,217,728 bytes, and there are five worlds. LFS keeps a small pointer in the repo
+# and the real file in GitHub's large file storage, so the limit stops applying.
+#
+# Area 7 needs none of this. Its worlds are 4K maps, so its .raw files are 33MB and go in
+# normally. The Ostrich's are 8K.
+#
+# THE COST, so it is written down somewhere. GitHub Free includes 10GB of LFS storage and 10GB
+# of bandwidth a month. The worlds are about 692MB a set once the generated files are left out,
+# so roughly 7% of the allowance. But LFS STORAGE IS CUMULATIVE ACROSS HISTORY: regenerate a
+# world and the old copy stays stored for ever beside the new one. That is about fourteen
+# regenerations before the ceiling, and clearing it means rewriting history.
+#
+# Release assets do NOT count against any of this, which is why the packaged Mods.zip still
+# belongs on a release rather than in here.
+
+*.raw filter=lfs diff=lfs merge=lfs -text
+*.ttw filter=lfs diff=lfs merge=lfs -text
+
+# The world textures. Individually under the limit, but large, numerous and binary, so they get
+# the same treatment rather than bloating the ordinary repo.
+Mods/OstrichChallenge/worlds/**/*.png filter=lfs diff=lfs merge=lfs -text
+
+# The asset bundles and the menu videos, for the same reason. hotelLuggage.unity3d alone is 77MB,
+# which is under GitHub's hard limit and over its warning threshold.
+*.unity3d filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text

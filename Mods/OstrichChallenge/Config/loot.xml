@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <remove xpath="//item[@name='vehiclesSkillMagazine']" />
+
+    <removeattribute xpath="//lootcontainer/@destroy_on_close" />
+    <setattribute xpath="//lootcontainer[@name='junk']" name="destroy_on_close">empty</setattribute>
+    <setattribute xpath="//lootcontainer[@name='laundryBasket']" name="destroy_on_close">empty</setattribute>
+
+    <remove xpath="//lootgroup[@name='groupHardenedChestT5']/item" />
+    <remove xpath="//lootgroup[@name='groupHardenedChestT5']/conditional" />
+
+    <insertbefore xpath="//lootgroup[@name='groupHardenedChestT5']">
+        <lootgroup name="occArmouryRifle" count="1" loot_quality_template="qualTwitchT6Template">
+            <item name="gunMGT1AK47" count="1"/>
+        </lootgroup>
+    </insertbefore>
+
+    <append xpath="//lootgroup[@name='groupHardenedChestT5']">
+        <item group="occArmouryRifle" count="1"/>
+        <item name="ammo762mmBulletBall" count="300"/>
+        <item name="medicalFirstAidKit" count="2"/>
+        <item name="medicalBandage" count="5"/>
+        <item name="drugAntibiotics" count="2"/>
+        <item name="drugPainkillers" count="2"/>
+        <item name="foodCanChili" count="3"/>
+        <item name="foodCanPasta" count="3"/>
+        <item name="foodCanBeef" count="2"/>
+        <item name="drinkJarBoiledWater" count="4"/>
+    </append>
+
+    <append xpath="//lootgroup[@name='groupNightstand']">
+        <item name="ammo9mmBulletBall" count="1,3" loot_prob_template="lower"/>
+    </append>
+    <append xpath="//lootgroup[@name='groupLuggage']">
+        <item name="ammo9mmBulletBall" count="1,3" loot_prob_template="lower"/>
+    </append>
+    <append xpath="//lootgroup[@name='groupToilet']">
+        <item name="ammo9mmBulletBall" count="1,3" loot_prob_template="lower"/>
+    </append>
+    <append xpath="//lootgroup[@name='groupMicrowave']">
+        <item name="ammo9mmBulletBall" count="1,3" loot_prob_template="lower"/>
+    </append>
+
+    <append xpath="/lootcontainers">
+
+        <lootcontainer name="occSafeFirst" size="8,5" sound_open="UseActions/open_safe"
+                       sound_close="UseActions/close_safe" open_time="1"
+                       loot_quality_template="qualPlus1Template">
+            <item group="groupSmallSafeLoot"/>
+            <item name="resourceLockPick" count="1" prob="0.1"/>
+        </lootcontainer>
+
+        <lootcontainer name="occSafeRestock" size="8,5" sound_open="UseActions/open_safe"
+                       sound_close="UseActions/close_safe" open_time="1"
+                       loot_quality_template="qualPlus1Template">
+            <item group="groupSmallSafeLoot02" loot_prob_template="medHigh" force_prob="true"/>
+            <item group="groupSmallSafeLoot03" loot_prob_template="medLow" force_prob="true"/>
+        </lootcontainer>
+
+    </append>
+
+    <setattribute xpath="//item[@name='oldCash']" name="name">casinoCoin</setattribute>
+
+    <append xpath="/lootcontainers">
+
+        <lootgroup name="groupOccBagHoldall" count="all">
+            <item name="casinoCoin" count="25,90"/>
+            <item name="foodCanChili" count="1" loot_prob_template="medLow" force_prob="true"/>
+            <item name="foodCanPeas" count="1" loot_prob_template="medLow" force_prob="true"/>
+            <item name="drinkJarPureMineralWater" count="1,2" loot_prob_template="med" force_prob="true"/>
+            <item name="resourceCloth" count="2,5" loot_prob_template="medLow" force_prob="true"/>
+            <item name="drugVitamins" count="1" loot_prob_template="low" force_prob="true"/>
+        </lootgroup>
+
+        <lootgroup name="groupOccBagBriefcase" count="all">
+            <item name="casinoCoin" count="60,180"/>
+            <item name="resourcePaper" count="3,8" loot_prob_template="medHigh" force_prob="true"/>
+            <item name="drinkJarBeer" count="1" loot_prob_template="medLow" force_prob="true"/>
+            <item name="drinkJarCoffee" count="1" loot_prob_template="medLow" force_prob="true"/>
+            <item name="resourceLockPick" count="1" loot_prob_template="veryLow" force_prob="true"/>
+        </lootgroup>
+
+        <lootgroup name="groupOccBagHandbag" count="all">
+            <item name="casinoCoin" count="40,140"/>
+            <item name="drugPainkillers" count="1,2" loot_prob_template="med" force_prob="true"/>
+            <item name="drinkCanMegaCrush" count="1" loot_prob_template="medLow" force_prob="true"/>
+            <item name="medicalBandage" count="1,2" loot_prob_template="medLow" force_prob="true"/>
+            <item name="resourceSewingKit" count="1" loot_prob_template="veryLow" force_prob="true"/>
+        </lootgroup>
+
+        <lootgroup name="groupOccBagToolbag" count="all">
+            <item name="casinoCoin" count="15,50"/>
+            <item name="resourceDuctTape" count="1,3" loot_prob_template="med" force_prob="true"/>
+            <item name="resourceMechanicalParts" count="1,4" loot_prob_template="med" force_prob="true"/>
+            <item name="resourceElectricParts" count="1,4" loot_prob_template="med" force_prob="true"/>
+            <item name="resourceOil" count="1,2" loot_prob_template="medLow" force_prob="true"/>
+            <item name="resourceSpring" count="1,2" loot_prob_template="low" force_prob="true"/>
+        </lootgroup>
+
+        <lootgroup name="groupOccBagMedkit" count="all">
+            <item name="casinoCoin" count="20,60"/>
+            <item name="medicalFirstAidBandage" count="1,2" loot_prob_template="medHigh" force_prob="true"/>
+            <item name="medicalBandage" count="2,4" loot_prob_template="med" force_prob="true"/>
+            <item name="drugPainkillers" count="1,2" loot_prob_template="medLow" force_prob="true"/>
+            <item name="drugAntibiotics" count="1" loot_prob_template="low" force_prob="true"/>
+            <item name="medicalSplint" count="1" loot_prob_template="low" force_prob="true"/>
+        </lootgroup>
+
+        <lootgroup name="groupOccBagWeapons" count="all">
+            <item name="casinoCoin" count="20,70"/>
+            <item name="ammo9mmBulletBall" count="15,40" loot_prob_template="medHigh" force_prob="true"/>
+            <item name="ammo762mmBulletBall" count="5,10" loot_prob_template="med" force_prob="true"/>
+            <item name="ammoShotgunShell" count="6,16" loot_prob_template="medLow" force_prob="true"/>
+            
+            <item name="gunHandgunT1PistolParts" count="1,2" loot_prob_template="medLow" force_prob="true"/>
+            <item name="gunShotgunT1DoubleBarrelParts" count="1,2" loot_prob_template="low" force_prob="true"/>
+            <item name="gunRifleT1HuntingRifleParts" count="1,2" loot_prob_template="low" force_prob="true"/>
+            <item name="medicalFirstAidBandage" count="1" loot_prob_template="low" force_prob="true"/>
+        </lootgroup>
+
+        <lootgroup name="groupOccBagBooks" count="all">
+            <item group="skillMagazines" count="1,3"/>
+            <item group="perkBooks" count="1" loot_prob_template="low" force_prob="true"/>
+            
+            <item group="occEssentialMags" count="1,3" prob="0.33"/>
+        </lootgroup>
+
+        <lootgroup name="groupOccBagFob" count="all">
+            <item name="occKeyFob" count="1"/>
+            <item name="ammo9mmBulletBall" count="30,60"/>
+            <item name="ammo762mmBulletBall" count="20,40"/>
+            <item name="drinkJarPureMineralWater" count="2,3"/>
+            <item name="occChocNAwe" count="2,4"/>
+            <item name="drugAntibiotics" count="1,2"/>
+        </lootgroup>
+
+        <lootcontainer name="occBagHoldall" count="1" size="6,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagHoldall"/>
+        </lootcontainer>
+
+        <lootcontainer name="occBagBriefcase" count="1" size="6,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagBriefcase"/>
+        </lootcontainer>
+
+        <lootcontainer name="occBagHandbag" count="1" size="6,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagHandbag"/>
+        </lootcontainer>
+
+        <lootcontainer name="occBagToolbag" count="1" size="6,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagToolbag"/>
+        </lootcontainer>
+
+        <lootcontainer name="occBagMedkit" count="1" size="6,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagMedkit"/>
+        </lootcontainer>
+
+        <lootcontainer name="occBagBooks" count="1" size="6,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagBooks"/>
+        </lootcontainer>
+
+        <lootcontainer name="occBagWeapons" count="1" size="6,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagWeapons"/>
+        </lootcontainer>
+
+        <lootcontainer name="occBagFob" count="1" size="8,3" open_time="1"
+                       sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
+                       loot_quality_template="qualBaseTemplate">
+            <item group="groupOccBagFob"/>
+        </lootcontainer>
+
+    </append>
+
+    <remove xpath="//lootgroup[@name='groupZpackReg']/item[@group='booksAllScaled']"/>
+    <remove xpath="//lootgroup[@name='groupZpackStrong']/item[@group='booksAllScaled']"/>
+    <remove xpath="//lootgroup[@name='groupZpackBoss']/item[@group='booksAllScaled']"/>
+
+    <insertBefore xpath="/lootcontainers/lootgroup[@name='empty']">
+        
+        <lootgroup name="occEssentialMags" count="1">
+            <item name="foodSkillMagazine"/>
+            <item name="workstationSkillMagazine"/>
+            <item name="medicalSkillMagazine"/>
+        </lootgroup>
+    </insertBefore>
+
+    <append xpath="//lootgroup[@name='groupCrackabookShelves']">
+        <item group="occEssentialMags" count="1" prob="0.5" force_prob="true"/>
+    </append>
+    <append xpath="//lootgroup[@name='groupBookPile']">
+        <item group="occEssentialMags" count="1" prob="0.5" force_prob="true"/>
+    </append>
+    <append xpath="//lootgroup[@name='groupSingleBooks']">
+        <item group="occEssentialMags" count="1" prob="0.5" force_prob="true"/>
+    </append>
+    <append xpath="//lootgroup[@name='groupFileCabinet']">
+        <item group="occEssentialMags" count="1" prob="0.3" force_prob="true"/>
+    </append>
+
+    <append xpath="//lootgroup[@name='groupBookcase']">
+        <item group="occEssentialMags" count="1" prob="0.5" force_prob="true"/>
+    </append>
+
+</configs>

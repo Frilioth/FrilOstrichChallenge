@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Servers>
+    <ServerGroup Name="The Ostrich Challenge" Logo="" Description="You are the night security guard at a fourteen floor hotel that is full of sleeping guests, and something in the basement is hunting you.">
+        <Server Name="The Ostrich Challenge" Logo="">
+            <Description>
+                The Ostrich Challenge — A self-contained survival challenge mod for 7 Days to Die (V3.3 and V3.4)
+
+                You are the night security guard at the Ostrich. Every room above the ground floor holds sleeping guests, and more arrive all night to take any room you have emptied. Your job is to empty the hotel completely, and then deal with the thing in the basement.
+
+                It cannot be killed while the hotel has guests in it. Shoot it, blow it up, drop it down a stairwell, and it gets back up. It is tied to the hotel being open, and the hotel closes when it is empty.
+
+                Death is permanent. If it gets you, your run is over.
+
+                THE JOB:
+
+                Guests arrive from ten in the morning through to four the next morning, three quarters of them after dark. A room counts as empty once you have cleared it, and an empty room is immediately available to the next guest who walks through the door. Clearing rooms is not progress on its own. Progress is clearing them faster than the hotel can fill them.
+
+                Four things have to reach nothing at the same time: guests asleep in rooms, guests walking the building, guests stood in reception, and guests still on their way in.
+
+                FEATURES:
+
+                A fourteen floor hotel, plus a ground floor, a basement and a roof, every room of it occupied.
+                A nightly check-in system. Guests walk in through the doors, report to reception and take the rooms you clear.
+                A stalker that hunts you by sound, hears through floors, and cannot be killed until the hotel is empty.
+                Six difficulty tiers chosen on the New Game screen: Night Porter, Duty Manager, Full House, No Vacancies, Do Not Disturb and The Last Guest.
+                Two terminals. The roof laptop reads the register as it stood at five this morning. The front office terminal reads the hotel live, and it is on the stalker's own floor.
+                A ham radio on the roof, and a man on the other end of it who talks to you once a day and cannot help.
+                An in-game How to play page on the ESC menu, so nobody has to guess what they are supposed to be doing.
+                A permanent ending. Put it down inside the window, take the key fob off it, and drive out of the basement car park.
+                Permadeath. One shift, one run.
+
+                RECOMMENDED SETTINGS:
+
+                Play it on Full House the first time. It is the default for a reason.
+                Loot Respawn: whatever you like, the mod does not depend on it.
+                Set your sandbox options before you start.
+
+                EAC must be disabled.
+
+                Created by Frilioth
+                Twitch: twitch.tv/frilioth
+            </Description>
+
+            <Version>1.226.3</Version>
+            <EAC>Disabled</EAC>
+            <Discord></Discord>
+            <Donate></Donate>
+            <DownloadMode>Release</DownloadMode>
+            <Downloads>
+                <Download>https://github.com/Frilioth/FrilOstrichChallenge/releases</Download>
+                <AltDownload/>
+            </Downloads>
+
+        </Server>
+    </ServerGroup>
+</Servers>

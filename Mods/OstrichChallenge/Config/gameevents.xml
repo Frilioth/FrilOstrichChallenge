@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <set xpath="/gameevents/action_sequence[@name='game_first_spawn']">
+        <property name="allow_user_trigger" value="false" />
+        <property name="action_type" value="Game" />
+        <action class="Delay">
+            <property name="phase" value="1" />
+            <property name="time" value="5" />
+        </action>
+        
+        <action class="SetItemSlots">
+            <property name="items_location" value="Toolbelt" />
+
+            <property name="items" value="occHandoverNote,occGuardPistol,ammo9mmBulletBall,meleeWpnBatonT0PipeBaton,occGuardKnife,meleeToolFlashlight02,medicalFirstAidBandage,casinoCoin,meleeToolSalvageT1Wrench,occChocNAwe" />
+            <property name="item_counts" value="1,1,30,1,1,1,2,200,1,1" />
+            <property name="slot_numbers" value="0,1,2,3,4,5,6,7,8,9" />
+        </action>
+
+        <action class="SetItemSlots">
+            <property name="items_location" value="Equipment" />
+            <property name="items" value="armorRogueOutfit,armorPreacherBoots" />
+            <property name="item_counts" value="1,1" />
+        </action>
+
+    </set>
+
+</configs>

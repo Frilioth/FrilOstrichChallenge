@@ -1,0 +1,15 @@
+<OstrichChallenge>
+   <append xpath="/styles/global">
+
+      <style_entry name="occHeaderBgColor"     value="36,36,34"/>
+      <style_entry name="occPageBgColor"       value="36,36,34"/>
+      <style_entry name="occPanelBorderColor"  value="183,156,99"/>    
+      <style_entry name="occHeaderTitleColor"  value="238,232,208"/>   
+      <style_entry name="occHeaderMottoColor"  value="60,72,51"/>      
+      <style_entry name="occPageTitleColor"    value="238,232,208"/>
+      <style_entry name="occPageBodyColor"     value="238,232,208"/>   
+      <style_entry name="occBrassColor"        value="183,156,99"/>
+      <style_entry name="occQuietColor"        value="150,150,150"/>
+
+   </append>
+</OstrichChallenge>

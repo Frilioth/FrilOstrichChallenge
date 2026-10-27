@@ -1,0 +1,469 @@
+<Frils-HUD>
+
+    <set xpath="/windows/window[@name='windowCompass']/@width">600</set>
+    <set xpath="/windows/window[@name='windowCompass']/@pos">-300,-9</set>
+
+    <remove xpath="/windows/window[@name='windowCompass']/sprite[@pos='47,0']"/>
+    <remove xpath="/windows/window[@name='windowCompass']/sprite[@pos='50,-3']"/>
+
+    <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@pos">0,-12</set>
+    <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@width">600</set>
+    <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@rect_size">0.395,1</set>
+    <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@rect_offset">{#compass_rotation / 360 + 0.0625 - 0.1975},0</set>
+
+    <remove xpath="/windows/window[@name='windowCompass']/sprite[@pos='240,-60']"/>
+
+    <append xpath="/windows/window[@name='windowCompass']">
+
+        <label depth="10"
+               name="TextContent"
+               pos="0,-3"
+               width="600"
+               height="38"
+               text="|"
+               font_size="38"
+               color="[white]"
+               justify="center"/>
+
+        <sprite sprite="" color="255,255,255,255" globalopacitymod="1.8">
+            <label depth="2"
+                   name="TextContent"
+                   pos="300,-57"
+                   font_size="28"
+                   color="[white]"
+                   style="Outlined_Text"
+                   justify="center"
+                   pivot="center"
+                   text="[{daycolor}]{# localization('dayname_' + ((day - 1) % 7 + 1)) }    {time}    {daytitle}: {day}[-]"
+                   height="30"
+                   upper_case="true"/>
+        </sprite>
+
+    </append>
+
+    <set xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@rows='2']/@pos">9,285</set>
+
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/@width">171</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/sprite[@depth='3']/@width">169</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/sprite[@name='BarContent']/@width">169</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/label[@name='TextContent']/@pos">44,-19</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/label[@name='TextContent']/@font_size">26</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/label[@name='TextContent']/@width">125</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/filledsprite[@depth='8']/@width">171</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/filledsprite[@depth='3']/@width">170</set>
+
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/@width">171</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/@pos">0,-168</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/sprite[@depth='3']/@width">169</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/sprite[@name='BarContent']/@width">169</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/label[@name='TextContent']/@pos">44,-19</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/label[@name='TextContent']/@font_size">26</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/label[@name='TextContent']/@width">125</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/filledsprite[@depth='8']/@width">171</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/filledsprite[@depth='3']/@width">170</set>
+
+    <remove xpath="/windows/window[@name='windowToolbelt']//sprite[@visible='{showxp}']"/>
+
+    <append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@rows='2']">
+        <rect width="171" height="35" pos="0,-206" xp_fill_speed="2.5">
+            <sprite depth="1" name="border" color="0,0,0,128" type="sliced"/>
+            <sprite depth="2" name="background" color="0,0,0,160" type="sliced"/>
+            <sprite depth="3" name="background" color="110,110,110,160" width="169" type="filled" fillspritepad="true" fill="1"/>
+            <sprite depth="5" name="BarContent" color="{xpcolor}" width="169" type="filled" fillspritepad="true" fill="{xp}" controller="ToolbeltWindow"/>
+            <sprite depth="6" name="Icon" atlas="{uiatlas}" sprite="ui_game_symbol_arrow_right" size="26,26" pos="16,-18" pivot="center" foregroundlayer="true"/>
+            <label depth="7" name="TextContent" pos="44,-19" font_size="26" color="[white]" justify="center" pivot="left" text="LEVEL {cvar($LastPlayerLevel)}" width="125" height="26" controller="MapStats"/>
+            <sprite depth="8" name="border" color="0,0,0,255" type="sliced" fillcenter="false"/>
+            <filledsprite depth="8" name="background" color="0,0,0,255" width="171" fillcenter="false" type="filled" fill="1"/>
+            <filledsprite depth="3" name="background" color="0,0,0,255" width="170" fillcenter="false" type="filled" fill="1"/>
+        </rect>
+    </append>
+
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Stamina']/@height">35</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Stamina']/sprite[@name='Icon']/@pos">16,-18</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Health']/@height">35</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Health']/@pos">0,-92</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Health']/sprite[@name='Icon']/@pos">16,-18</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/@height">35</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/@pos">0,-130</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/sprite[@name='Icon']/@pos">16,-18</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/@height">35</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/sprite[@name='Icon']/@pos">16,-18</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Stamina']/label[@name='TextContent']/@pos">44,-19</set>
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Health']/label[@name='TextContent']/@pos">44,-19</set>
+
+    <append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@rows='2']">
+        <rect width="84" height="35" pos="0,-244">
+            <sprite depth="1" name="border" color="0,0,0,235" type="sliced"/>
+            <sprite depth="2" name="background" color="0,0,0,160" type="sliced"/>
+            <sprite depth="3" name="Icon" sprite="ui_game_symbol_climb" size="24,24" pos="14,-18" pivot="center" foregroundlayer="true"/>
+            <label depth="4" name="TextContent" pos="30,-19" font_size="20" color="[white]" justify="center" pivot="left" text="{occfloor}" width="50" height="24" controller="OccupancyFloor, OstrichChallenge"/>
+            <sprite depth="5" name="border" color="0,0,0,255" type="sliced" fillcenter="false"/>
+        </rect>
+        <rect width="84" height="35" pos="87,-244">
+            <sprite depth="1" name="border" color="0,0,0,235" type="sliced"/>
+            <sprite depth="2" name="background" color="0,0,0,160" type="sliced"/>
+            <sprite depth="3" name="Icon" sprite="ui_game_symbol_temperature" size="24,24" pos="14,-18" pivot="center" foregroundlayer="true"/>
+            <label depth="4" name="TextContent" pos="30,-19" font_size="20" color="[white]" justify="center" pivot="left" text="{playercoretemp}" width="50" height="24" controller="MapStats"/>
+            <sprite depth="5" name="border" color="0,0,0,255" type="sliced" fillcenter="false"/>
+        </rect>
+    </append>
+
+    <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@controller='BuffPopoutList']/@pos">90,261</set>
+
+    <remove xpath="/windows/window[@name='windowLocation']"/>
+
+    <set xpath="/windows/window[@name='windowTargetBar']/rect[@visible='{isnotboss}']/@pos">-200,-140</set>
+    <set xpath="/windows/window[@name='windowTargetBar']/rect[@visible='{isboss}']/@pos">-267,-140</set>
+
+    <set xpath="/windows/window[@name='windowEntering']/rect/grid/@pivot">center</set>
+    <set xpath="/windows/window[@name='windowEntering']/rect/grid/@pos">170,-85</set>
+
+    <append xpath="/windows">
+
+        <window name="windowOccupancyRegister" depth="10" width="1200" height="910" pos="0,-42" anchor="CenterCenter" cursor_area="true"
+                backgroundcolor="0,0,0,0" disableautobackground="true">
+
+            <texture name="escFrame" depth="0" pos="-600,455" width="1200" height="910"
+                     color="255,255,255,255"
+                     texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_frame.png"/>
+
+            <rect name="tabs" controller="TabSelector" select_tab_contents_on_open="true">
+                <rect name="core" pos="-560,445" disableautobackground="true">
+
+                    <texture name="escSign" depth="5" pos="328,2" width="464" height="197"
+                             color="255,255,255,255"
+                             texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_sign.png"/>
+
+                    <rect name="tabsHeader">
+                        <grid name="tabButtons" pos="254,-205" depth="12" rows="1" cols="3" cell_width="204" cell_height="48" repeat_content="true" arrangement="horizontal">
+                            <rect controller="TabSelectorButton">
+                                <simplebutton name="tabButton" depth="12" pos="0,0" width="200" height="46" font_size="24"
+                                              sprite="ui_game_header_fill" bordercolor="[occBrassColor]" defaultcolor="[occHeaderBgColor]"
+                                              selectedsprite="menu_empty3px" selectedcolor="[occBrassColor]"
+                                              foregroundlayer="false" caption="{tab_name_localized}"/>
+                            </rect>
+                        </grid>
+                    </rect>
+
+                    <rect name="tabsContents">
+
+                        <rect name="page_job" controller="TabSelectorTab" tab_key="occesc_tab_job">
+                            
+                            <rect name="body" pos="0,-265" width="1100" height="600">
+                                <label name="text" depth="10" pos="98,-5" width="924" height="560" justify="left" effect="Outline8" effect_color="0,0,0,255" effect_distance="1,1" color="[occPageBodyColor]" font_size="30" text_key="occesc_job_body" foregroundlayer="true"/>
+                            </rect>
+                        </rect>
+
+                        <rect name="page_him" controller="TabSelectorTab" tab_key="occesc_tab_him">
+                            
+                            <rect name="body" pos="0,-265" width="1100" height="600">
+                                <label name="text" depth="10" pos="98,-5" width="924" height="560" justify="left" effect="Outline8" effect_color="0,0,0,255" effect_distance="1,1" color="[occPageBodyColor]" font_size="30" text_key="occesc_him_body" foregroundlayer="true"/>
+                            </rect>
+                        </rect>
+
+                        <rect name="page_out" controller="TabSelectorTab" tab_key="occesc_tab_out">
+                            
+                            <rect name="body" pos="0,-265" width="1100" height="600">
+                                <label name="text" depth="10" pos="98,-5" width="924" height="560" justify="left" effect="Outline8" effect_color="0,0,0,255" effect_distance="1,1" color="[occPageBodyColor]" font_size="30" text_key="occesc_out_body" foregroundlayer="true"/>
+                            </rect>
+                        </rect>
+
+                    </rect>
+
+                </rect>
+            </rect>
+        </window>
+    </append>
+
+    <append xpath="/windows">
+        <window name="windowOccupancyTerminal" depth="10" width="900" height="706"
+                anchor="CenterCenter" cursor_area="true" backgroundcolor="0,0,0,220">
+            <rect name="screen" pos="-450,353" disableautobackground="true">
+
+                <sprite name="bezel"  depth="1" pos="0,0"    sprite="ui_game_header_fill" color="16,20,16" width="900" height="706" type="sliced"/>
+                <sprite name="glass"  depth="2" pos="14,-14" sprite="ui_game_header_fill" color="8,12,8"   width="872" height="678" type="sliced"/>
+
+                <label name="head1" depth="10" pos="40,-34"  width="820" justify="left" color="120,255,120" font_size="26" text="{occterminal}" foregroundlayer="true"/>
+                <label name="head2" depth="10" pos="40,-66"  width="820" justify="left" color="60,160,60"  font_size="20" text="{occterminalsub}" foregroundlayer="true"/>
+                
+                <label name="rule" depth="10" pos="40,-92" width="820" justify="left" color="40,110,40" font_size="18" text="--------------------------------------------------------------------------------------------------------" foregroundlayer="true"/>
+
+                <label name="heading" depth="10" pos="40,-108" width="820" justify="left" color="120,255,120" font_size="22" text="{occheading}" foregroundlayer="true"/>
+
+                <label name="total"   depth="10" pos="40,-140" width="300" justify="left" color="180,255,180" font_size="54" text="{occtotal}" foregroundlayer="true"/>
+                <label name="caption" depth="10" pos="40,-206" width="500" justify="left" color="60,160,60"  font_size="20" text="GUESTS IN THE HOTEL" foregroundlayer="true"/>
+                <label name="change"  depth="10" pos="40,-234" width="820" justify="left" color="120,255,120" font_size="20" text="{occchange}" foregroundlayer="true"/>
+
+                <label name="notice"  depth="10" pos="40,-286" width="820" height="40" justify="left" color="110,190,110" font_size="18" text="{occnotice}" foregroundlayer="true"/>
+
+                <label name="breach"  depth="10" pos="40,-286" width="820" height="40" justify="left" color="255,70,70" font_size="18" text="{occbreach}" foregroundlayer="true"/>
+
+                <label name="alert"   depth="10" pos="40,-256" width="820" height="46" justify="left" color="255,230,90" font_size="21" text="{occalert}" foregroundlayer="true"/>
+
+                <label name="rule2" depth="10" pos="40,-308" width="820" justify="left" color="40,110,40" font_size="18" text="--------------------------------------------------------------------------------------------------------" foregroundlayer="true"/>
+
+                <label name="floorsLeft"  depth="10" pos="40,-324"  width="400" height="300" justify="left" color="120,255,120" font_size="19" text="{occfloorsleft}" foregroundlayer="true"/>
+                <label name="floorsRight" depth="10" pos="460,-324" width="400" height="300" justify="left" color="120,255,120" font_size="19" text="{occfloorsright}" foregroundlayer="true"/>
+
+                <label name="rule3" depth="10" pos="40,-600" width="820" justify="left" color="40,110,40" font_size="18" text="--------------------------------------------------------------------------------------------------------" foregroundlayer="true"/>
+                <label name="state" depth="10" pos="40,-622" width="820" height="40" justify="left" color="200,220,120" font_size="20" text="{occstate}" foregroundlayer="true"/>
+                <label name="close" depth="10" pos="40,-660" width="820" justify="left" color="60,160,60" font_size="18" text="PRESS ESC TO CLOSE" foregroundlayer="true"/>
+
+            </rect>
+        </window>
+    </append>
+
+    <append xpath="/windows">
+        <window name="windowOstrichNote" depth="10" width="1200" height="910" pos="0,-42"
+                anchor="CenterCenter" cursor_area="true"
+                backgroundcolor="0,0,0,0" disableautobackground="true">
+
+            <texture name="noteFrame" depth="0" pos="-600,455" width="1200" height="910"
+                     color="255,255,255,255"
+                     texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_frame.png"/>
+
+            <rect name="core" pos="-560,445" disableautobackground="true">
+
+                <texture name="noteSign" depth="5" pos="328,2" width="464" height="197"
+                         color="255,255,255,255"
+                         texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_sign.png"/>
+
+                <rect name="body" pos="0,-210" width="1100" height="640">
+                    <label name="text" depth="10" pos="98,-5" width="924" height="545"
+                           justify="center" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="32"
+                           text_key="occHandoverNoteBody" foregroundlayer="true"/>
+
+                    <label name="rule" depth="10" pos="98,-555" width="924" justify="center"
+                           color="[occBrassColor]" font_size="22"
+                           text="------------------------------------------------"
+                           foregroundlayer="true"/>
+
+                    <label name="pointer" depth="10" pos="98,-585" width="924" justify="center"
+                           color="[occBrassColor]" font_size="24"
+                           text="Press ESC to close. The job, him and the way out are on the ESC menu."
+                           foregroundlayer="true"/>
+                </rect>
+            </rect>
+        </window>
+    </append>
+
+    <append xpath="/windows">
+        <window name="windowOstrichFailed" depth="10" width="1200" height="910" pos="0,-42"
+                anchor="CenterCenter" cursor_area="true"
+                controller="OccupancyFailed, OstrichChallenge"
+                backgroundcolor="0,0,0,0" disableautobackground="true">
+
+            <texture name="failedFrame" depth="0" pos="-600,455" width="1200" height="910"
+                     color="255,255,255,255"
+                     texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_frame.png"/>
+
+            <rect name="core" pos="-560,445" disableautobackground="true">
+
+                <texture name="failedSign" depth="5" pos="328,2" width="464" height="197"
+                         color="255,255,255,255"
+                         texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_sign.png"/>
+
+                <rect name="body" pos="0,-210" width="1100" height="640">
+
+                    <label name="text" depth="10" pos="98,-5" width="924" height="270"
+                           justify="center" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="30"
+                           text="{occfailedbody}" foregroundlayer="true"/>
+
+                    <label name="register" depth="10" pos="98,-210" width="924" height="40"
+                           justify="center" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occBrassColor]" font_size="30"
+                           text="{occfailedregister}" foregroundlayer="true"/>
+
+                    <label name="registertotal" depth="10" pos="98,-250" width="924" height="40"
+                           justify="center" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occBrassColor]" font_size="30"
+                           text="{occfailedtotal}" foregroundlayer="true"/>
+
+                    <label name="statsleftlabels" depth="10" pos="90,-300" width="210" height="250"
+                           justify="right" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occfailedleftlabels}" foregroundlayer="true"/>
+
+                    <label name="statsleftvalues" depth="10" pos="320,-300" width="70" height="250"
+                           justify="left" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occfailedleftvalues}" foregroundlayer="true"/>
+
+                    <label name="statsmidlabels" depth="10" pos="440,-300" width="150" height="250"
+                           justify="right" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occfailedmidlabels}" foregroundlayer="true"/>
+
+                    <label name="statsmidvalues" depth="10" pos="610,-300" width="90" height="250"
+                           justify="left" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occfailedmidvalues}" foregroundlayer="true"/>
+
+                    <label name="statsrightlabels" depth="10" pos="750,-300" width="170" height="250"
+                           justify="right" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occfailedrightlabels}" foregroundlayer="true"/>
+
+                    <label name="statsrightvalues" depth="10" pos="940,-300" width="90" height="250"
+                           justify="left" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occfailedrightvalues}" foregroundlayer="true"/>
+
+                    <label name="rule" depth="10" pos="98,-555" width="924" justify="center"
+                           color="[occBrassColor]" font_size="22"
+                           text="------------------------------------------------"
+                           foregroundlayer="true"/>
+
+                    <label name="pointer" depth="10" pos="98,-585" width="924" justify="center"
+                           color="[occBrassColor]" font_size="24"
+                           text="Press ESC to close."
+                           foregroundlayer="true"/>
+                </rect>
+            </rect>
+        </window>
+    </append>
+
+    <append xpath="/windows">
+        <window name="windowOstrichCompleted" depth="10" width="1200" height="910" pos="0,-42"
+                anchor="CenterCenter" cursor_area="true"
+                controller="OccupancyCompleted, OstrichChallenge"
+                backgroundcolor="0,0,0,0" disableautobackground="true">
+
+            <texture name="completedFrame" depth="0" pos="-600,455" width="1200" height="910"
+                     color="255,255,255,255"
+                     texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_frame.png"/>
+
+            <rect name="core" pos="-560,445" disableautobackground="true">
+
+                <texture name="completedSign" depth="5" pos="328,2" width="464" height="197"
+                         color="255,255,255,255"
+                         texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_sign.png"/>
+
+                <rect name="body" pos="0,-210" width="1100" height="640">
+
+                    <label name="text" depth="10" pos="98,-5" width="924" height="270"
+                           justify="center" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="30"
+                           text="{occcompletedbody}" foregroundlayer="true"/>
+
+                    <label name="registertotal" depth="10" pos="98,-210" width="924" height="40"
+                           justify="center" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occBrassColor]" font_size="30"
+                           text="{occcompletedtotal}" foregroundlayer="true"/>
+
+                    <label name="statsleftlabels" depth="10" pos="90,-300" width="210" height="250"
+                           justify="right" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occcompletedleftlabels}" foregroundlayer="true"/>
+
+                    <label name="statsleftvalues" depth="10" pos="320,-300" width="70" height="250"
+                           justify="left" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occcompletedleftvalues}" foregroundlayer="true"/>
+
+                    <label name="statsmidlabels" depth="10" pos="440,-300" width="150" height="250"
+                           justify="right" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occcompletedmidlabels}" foregroundlayer="true"/>
+
+                    <label name="statsmidvalues" depth="10" pos="610,-300" width="90" height="250"
+                           justify="left" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occcompletedmidvalues}" foregroundlayer="true"/>
+
+                    <label name="statsrightlabels" depth="10" pos="750,-300" width="170" height="250"
+                           justify="right" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occcompletedrightlabels}" foregroundlayer="true"/>
+
+                    <label name="statsrightvalues" depth="10" pos="940,-300" width="90" height="250"
+                           justify="left" effect="Outline8" effect_color="0,0,0,255"
+                           effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
+                           text="{occcompletedrightvalues}" foregroundlayer="true"/>
+
+                    <label name="rule" depth="10" pos="98,-555" width="924" justify="center"
+                           color="[occBrassColor]" font_size="22"
+                           text="------------------------------------------------"
+                           foregroundlayer="true"/>
+
+                    <label name="pointer" depth="10" pos="98,-585" width="924" justify="center"
+                           color="[occBrassColor]" font_size="24"
+                           text="Press ESC to close."
+                           foregroundlayer="true"/>
+                </rect>
+            </rect>
+        </window>
+    </append>
+
+    <append xpath="/windows">
+        <window name="windowOstrichVersion" anchor="TopRight" pos="-310,-34" width="300" height="24" depth="-20">
+            <label name="ostrichVersionLabel"
+                   depth="3"
+                   pos="0,0"
+                   width="300"
+                   height="24"
+                   font_size="18"
+                   justify="right"
+                   color="255,255,255,170"
+                   effect="Outline8"
+                   effect_color="0,0,0,255"
+                   effect_distance="1,1"
+                   text="{ostrichversion}"
+                   controller="OstrichVersion, OstrichChallenge"/>
+        </window>
+    </append>
+
+    <set xpath="/windows/window[@name='windowPagingHeader']/iconbutton[@name='Challenges']/@visible">false</set>
+
+    <insertBefore xpath="//window[@name='ingameMenu']/grid[@name='buttons']/simplebutton[@name='btnOpenConsole']">
+        <simplebutton name="btnOstrichGuide" depth="3" width="250" height="46" caption_key="xuiOstrichGuideButton" font_size="34" />
+    </insertBefore>
+
+    <append xpath="/windows">
+
+        <window name="windowOstrichGuide" anchor="center" pos="-630,400" width="1260" height="800"
+                controller="OstrichGuide, OstrichChallenge" cursor_area="true">
+
+            <rect name="header" height="43" depth="1">
+                <headerbg />
+                <label style="header.name" pos="6,-6" width="700" text_key="xuiOstrichGuideTitle" />
+            </rect>
+
+            <rect name="content" pos="0,-46" height="${parentinnerheight-46}" depth="1" padding="20">
+                <boxbg />
+
+                <rect name="headers" pos="0,0" width="300" height="${parentinnerheight}" depth="2">
+                    <rect name="btnOstrichGuide0"  pos="0,0"    width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead0}"  /></rect>
+                    <rect name="btnOstrichGuide1"  pos="0,-50"  width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead1}"  /></rect>
+                    <rect name="btnOstrichGuide2"  pos="0,-100" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead2}"  /></rect>
+                    <rect name="btnOstrichGuide3"  pos="0,-150" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead3}"  /></rect>
+                    <rect name="btnOstrichGuide4"  pos="0,-200" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead4}"  /></rect>
+                    <rect name="btnOstrichGuide5"  pos="0,-250" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead5}"  /></rect>
+                    <rect name="btnOstrichGuide6"  pos="0,-300" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead6}"  /></rect>
+                    <rect name="btnOstrichGuide7"  pos="0,-350" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead7}"  /></rect>
+                    <rect name="btnOstrichGuide8"  pos="0,-400" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead8}"  /></rect>
+                    <rect name="btnOstrichGuide9"  pos="0,-450" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead9}"  /></rect>
+                    <rect name="btnOstrichGuide10" pos="0,-500" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead10}" /></rect>
+                </rect>
+
+                <label name="guideTitle" depth="2" pos="320,-2" width="890" height="40"
+                       text="{ostrichguidetitle}" font_size="32" pivot="topleft" />
+
+                <rect name="guideBody" pos="320,-50" width="890" height="${parentinnerheight-50}"
+                      depth="2" on_scroll="true" gamepad_selectable="true" snap="false" use_selection_box="true">
+                    <defaultscrollbar />
+                    <scrollview pos="5,0" width="860" clippingsoftness="0,10">
+                        <label name="guideBodyText" depth="4" pos="0,0" width="850" height="400"
+                               text="{ostrichguidebody}" font_size="26" pivot="topleft"
+                               overflow="resizeheight" />
+                    </scrollview>
+                </rect>
+            </rect>
+
+        </window>
+
+    </append>
+
+</Frils-HUD>

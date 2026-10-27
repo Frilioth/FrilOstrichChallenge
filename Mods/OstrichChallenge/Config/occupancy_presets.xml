@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <preset name="OstrichNightPorter"
+            icon="@modfolder(OstrichChallenge):Resources/ostrich_preset_nightporter.png"
+            localized_name="occPresetNightPorterName"
+            description_key="occPresetNightPorterDesc"
+            difficulty_rating="1"
+            code="AAHKAPAGFCGGCAUAAMLBRDBFGBGGANBBJABKABLABNABPABOABVAXDBCIBCJBCDACEACAACFACHCCXAXCCDMJDAJDBJDCJDDJDEJDFJDGJDHJDIJDJJDKJEHJEABEXGFJAEOAFKAEPAEQAEUAEVAFLDFOD" />
+
+    <preset name="OstrichDutyManager"
+            icon="@modfolder(OstrichChallenge):Resources/ostrich_preset_dutymanager.png"
+            localized_name="occPresetDutyManagerName"
+            description_key="occPresetDutyManagerDesc"
+            difficulty_rating="2"
+            code="AAPAAMIANBBJBBKBBLBBNABPABOAXDBCDACEACAACFACXAEABEXGFJAEOAFKAEPAEQAEUAEVA" />
+
+    <preset name="OstrichFullHouse"
+            icon="@modfolder(OstrichChallenge):Resources/ostrich_preset_fullhouse.png"
+            localized_name="occPresetFullHouseName"
+            description_key="occPresetFullHouseDesc"
+            difficulty_rating="3"
+            default="true"
+            code="AAPAANBBOAXDBCDACAACFACXAXCEEXGFJAEOAFKAEPAEQAEUAEVA" />
+
+    <preset name="OstrichNoVacancies"
+            icon="@modfolder(OstrichChallenge):Resources/ostrich_preset_novacancies.png"
+            localized_name="occPresetNoVacanciesName"
+            description_key="occPresetNoVacanciesDesc"
+            difficulty_rating="4"
+            code="AAPAANBBOAXDBCDACAACXAXCFEXGEOAFKAEPAEQAEUAEVA" />
+
+    <preset name="OstrichDoNotDisturb"
+            icon="@modfolder(OstrichChallenge):Resources/ostrich_preset_donotdisturb.png"
+            localized_name="occPresetDoNotDisturbName"
+            description_key="occPresetDoNotDisturbDesc"
+            difficulty_rating="5"
+            code="AAPAAUDAMEANBBIDBPFBOACDABZFCAACFACXAXCGEXGFJAEOAFKAEPAEQAEUAEVA" />
+
+    <preset name="OstrichLastGuest"
+            icon="@modfolder(OstrichChallenge):Resources/ostrich_preset_lastguest.png"
+            localized_name="occPresetLastGuestName"
+            description_key="occPresetLastGuestDesc"
+            difficulty_rating="6"
+            code="AAPAAUEAMAANBBIEBJEBKEBLEBMDBNFBPFBOACDABZFBYACAACFACXAXCAEXGFJAEOAFKAEPAEQAEUAEVA" />
+
+</configs>

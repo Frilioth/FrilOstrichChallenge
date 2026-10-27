@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configs>
+
+    <append xpath="/xui">
+        <window_group name="frilModList">
+            <window name="windowFrilModList"/>
+        </window_group>
+    </append>
+
+</configs>

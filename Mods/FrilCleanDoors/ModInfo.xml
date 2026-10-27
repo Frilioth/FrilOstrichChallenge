@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+    <Name value="FrilCleanDoors" />
+    <DisplayName value="Fril's Clean Doors" />
+    <Version value="1.2.2" />
+    <Description value="Removes the boarded-up plank appearance from doors so they render clean when repaired, and stops player-crafted window glass shattering on the first hit. Covers 255 doors and 61 window shape variants. XML-only, server-side, no DLL." />
+    <Author value="Frilioth" />
+    <Website value="" />
+</xml>

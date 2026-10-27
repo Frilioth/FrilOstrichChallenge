@@ -1,0 +1,9 @@
+<configs>
+
+   <set xpath="//window[@name='mainMenu']/texture[@name='gameLogo']/@texture">@modfolder(OstrichLogo):Resources/ostrich_logo.png</set>
+   <set xpath="//window[@name='newsScreen']//texture[@name='gameLogo']/@texture">@modfolder(OstrichLogo):Resources/ostrich_logo.png</set>
+
+   <set xpath="//window[@name='mainMenuNews']/rect[@name='game']/@visible">false</set>
+   <set xpath="//window[@name='mainMenuNews']/rect[@name='featured']/@visible">false</set>
+
+</configs>

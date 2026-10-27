@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <remove xpath="//entitygroup[not(@name='animalZombieBear') and not(@name='ZombieBearsGroup')]/e[@n='animalZombieBear']"/>
+    <remove xpath="//entitygroup[not(@name='animalDireWolf')]/e[@n='animalDireWolf']"/>
+    <remove xpath="//entitygroup[not(@name='animalBear') and not(@name='animalBearSmall') and not(@name='BearGroup') and not(@name='BearSmallGroup')]/e[@n='animalBear']"/>
+
+</configs>

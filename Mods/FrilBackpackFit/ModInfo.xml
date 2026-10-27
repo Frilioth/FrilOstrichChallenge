@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+	<Name value="FrilBackpackFit" />
+	<DisplayName value="Fril's Backpack Fit" />
+	<Version value="1.0.1" />
+	<Description value="Companion to AGF No Scroll Backpack. Resizes the backpack slots so the panel is always full, bigger slots for smaller backpacks." />
+	<Author value="Frilioth" />
+	<Website value="https://twitch.tv/Frilioth" />
+</xml>

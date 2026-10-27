@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<videocycler interval="10">
+
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam1"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam2"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam3"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam4"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam5"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam6"/>
+	<clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam7"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam8"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam9"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam10"/>
+    <clip uri="@modfolder(FrilOstrichMenuVideoCycler):Video/ostrich_menu_cam11"/>
+
+</videocycler>

@@ -1,0 +1,4 @@
+<FrilBackpackFit>
+
+	<setattribute xpath="/windows/window[@name='windowBackpack']/rect[@name='content']/grid[@name='inventory'][@controller='Backpack']" name="controller">FrilBackpackFit, FrilBackpackFit</setattribute>
+</FrilBackpackFit>

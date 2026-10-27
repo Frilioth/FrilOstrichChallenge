@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+    
+    <remove xpath="/Sounds/SoundDataNode[starts-with(@name, 'occRadio')]" />
+
+    <append xpath="/Sounds">
+
+        <SoundDataNode name="occArmouryAlarm"> <AudioSource name="@:Sounds/Prefabs/AudioSource_VO_Announce.prefab"/>
+            <Noise ID="4" noise="60" time="2" heat_map_strength="0.2" heat_map_time="90"/>
+            <AudioClip ClipName="@:Sounds/Electricity/Alarms/alarm1_lp.wav"/>
+            <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="10"/> <MaxRepeatRate value="0"/>
+        </SoundDataNode>
+
+        <SoundDataNode name="occupancyBell"> <AudioSource name="@:Sounds/Prefabs/AudioSource_VO_Announce.prefab"/>
+            <AudioClip ClipName="@:Sounds/TriggeredEvents/elevator_ding1.wav"/>
+            <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0"/> <NoiseScale value="0"/> <MaxVoices value="10"/> <MaxRepeatRate value="0"/>
+        </SoundDataNode>
+
+    <SoundDataNode name="occRadioFirst_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirst/occRadioFirst_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioTwo_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioTwo/occRadioTwo_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioTwo_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioTwo/occRadioTwo_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioTwo_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioTwo/occRadioTwo_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioTwo_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioTwo/occRadioTwo_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioTwo_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioTwo/occRadioTwo_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioTwo_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioTwo/occRadioTwo_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioThree_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioThree/occRadioThree_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioThree_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioThree/occRadioThree_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioThree_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioThree/occRadioThree_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioThree_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioThree/occRadioThree_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioThree_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioThree/occRadioThree_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioThree_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioThree/occRadioThree_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioFour_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFour/occRadioFour_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFour_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFour/occRadioFour_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFour_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFour/occRadioFour_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFour_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFour/occRadioFour_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFour_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFour/occRadioFour_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFour_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFour/occRadioFour_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioFive_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFive_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFive_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFive_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFive_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFive_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFive_07">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_07"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFive_08">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_08"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioFirstRoar_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFirstRoar_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFirstRoar_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFirstRoar_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFirstRoar_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFirstRoar_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioFirstRoar_07">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_07"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioSeenHim_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioSeenHim_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioSeenHim_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioSeenHim_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioSeenHim_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioSeenHim_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioSeenHim_07">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_07"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioSeenHim_08">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_08"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioGettingWorse_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingWorse/occRadioGettingWorse_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingWorse_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingWorse/occRadioGettingWorse_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingWorse_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingWorse/occRadioGettingWorse_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingWorse_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingWorse/occRadioGettingWorse_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingWorse_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingWorse/occRadioGettingWorse_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingWorse_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingWorse/occRadioGettingWorse_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioGettingBetter_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingBetter/occRadioGettingBetter_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingBetter_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingBetter/occRadioGettingBetter_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingBetter_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingBetter/occRadioGettingBetter_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingBetter_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingBetter/occRadioGettingBetter_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingBetter_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingBetter/occRadioGettingBetter_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioGettingBetter_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingBetter/occRadioGettingBetter_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioExplosion_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioExplosion/occRadioExplosion_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioExplosion_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioExplosion/occRadioExplosion_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioExplosion_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioExplosion/occRadioExplosion_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioExplosion_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioExplosion/occRadioExplosion_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioExplosion_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioExplosion/occRadioExplosion_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioExplosion_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioExplosion/occRadioExplosion_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioHurt_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioHurt/occRadioHurt_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioHurt_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioHurt/occRadioHurt_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioHurt_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioHurt/occRadioHurt_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioHurt_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioHurt/occRadioHurt_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioHurt_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioHurt/occRadioHurt_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioHurt_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioHurt/occRadioHurt_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioEmpty_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioEmpty/occRadioEmpty_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioEmpty_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioEmpty/occRadioEmpty_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioEmpty_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioEmpty/occRadioEmpty_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioEmpty_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioEmpty/occRadioEmpty_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioEmpty_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioEmpty/occRadioEmpty_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioEmpty_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioEmpty/occRadioEmpty_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioAfterHim_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioAfterHim/occRadioAfterHim_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioAfterHim_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioAfterHim/occRadioAfterHim_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occRadioRepeat_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioRepeat/occRadioRepeat_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioRepeat_02">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioRepeat/occRadioRepeat_02"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioRepeat_03">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioRepeat/occRadioRepeat_03"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioRepeat_04">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioRepeat/occRadioRepeat_04"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioRepeat_05">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioRepeat/occRadioRepeat_05"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+    <SoundDataNode name="occRadioRepeat_06">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioRepeat/occRadioRepeat_06"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occEnding_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occEnding/occEnding_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    <SoundDataNode name="occDeskCall_01">
+        <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
+        <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occDeskCall/occDeskCall_01"/>
+        <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
+    </SoundDataNode>
+
+    </append>
+</configs>

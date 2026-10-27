@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+
+	<set xpath="/shapes/shape[@name='windowStoreOneSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreTwoSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreThreeSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreFourSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStorePaneFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreOneSidedCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreTwoSidedCornerLeftFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreTwoSidedCornerRightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreTwoSidedCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreThreeSidedCornerLeftFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreThreeSidedCornerRightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreThreeSidedCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreFourSidedCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreCornerCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='windowStoreWedge60TipFullLeft']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreWedge60TipFullRight']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreWedge60FullLeft']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowStoreWedge60FullRight']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='windowStoreThreeSidedTriangleFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='windowRampFourSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowRampTwoSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowRampOutsideCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowRampDiagonalCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='rampWindow01Centered']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='windowWedge60TipFourSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowWedge60FourSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowWedge60TipTwoSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowWedge60TwoSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowWedge60TipOutsideCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowWedge60OutsideCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='windowPlatePaneFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateCircleFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquare4SidedHalfWidthFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquareHalfLeftFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquareHalfRightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquareHalfStraightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquareHalf3SidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquare1SidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquare2SidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquare3SidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquare4SidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateRoundedSquareCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateThreeSidedTriangleFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleLeftFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleRightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='archWindowFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='archHalfWindowFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='arch2mWindow01Top']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='arch2mWindow01Center']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='arch2mWindow01Bottom']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowArchTopFilledCenteredStained']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='windowCircleCenterFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowCircleFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowCircleStraightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowCircleStraightCenterFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<set xpath="/shapes/shape[@name='window01']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='window02Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='window04Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowIndustrial01Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+	<set xpath="/shapes/shape[@name='windowIndustrial02Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
+
+	<remove xpath="/shapes/shape[@name='windowStoreOneSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreTwoSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreThreeSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreFourSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreOneSidedCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreTwoSidedCornerLeftFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreTwoSidedCornerRightFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreTwoSidedCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreThreeSidedCornerLeftFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreThreeSidedCornerRightFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreThreeSidedCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreFourSidedCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreCornerCornerFull']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='windowStoreWedge60TipFullLeft']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreWedge60TipFullRight']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreWedge60FullLeft']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowStoreWedge60FullRight']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='windowStoreThreeSidedTriangleFull']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='windowRampFourSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowRampTwoSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowRampOutsideCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowRampDiagonalCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='rampWindow01Centered']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='windowWedge60TipFourSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowWedge60FourSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowWedge60TipTwoSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowWedge60TwoSidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowWedge60TipOutsideCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowWedge60OutsideCornerFull']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='windowPlateCircleFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquare4SidedHalfWidthFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquareHalfLeftFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquareHalfRightFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquareHalfStraightFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquareHalf3SidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquare1SidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquare2SidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquare3SidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquare4SidedFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquareCornerFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateThreeSidedTriangleFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleLeftFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleRightFull']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='archWindowFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='archHalfWindowFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='arch2mWindow01Top']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='arch2mWindow01Center']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='arch2mWindow01Bottom']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowArchTopFilledCenteredStained']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='windowCircleCenterFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowCircleFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowCircleStraightFull']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowCircleStraightCenterFull']/property[@class='UpgradeBlock']"/>
+
+	<remove xpath="/shapes/shape[@name='window01']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='window02Full']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='window04Full']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowIndustrial01Full']/property[@class='UpgradeBlock']"/>
+	<remove xpath="/shapes/shape[@name='windowIndustrial02Full']/property[@class='UpgradeBlock']"/>
+
+</configs>

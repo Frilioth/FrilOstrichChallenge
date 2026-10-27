@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <remove xpath="//recipe[@name='vehicleBicycleChassis']"/>
+    <remove xpath="//recipe[@name='vehicleBicycleHandlebars']"/>
+    <remove xpath="//recipe[@name='vehicleBicyclePlaceable']"/>
+
+    <remove xpath="//recipe[@name='vehicleMinibikeChassis']"/>
+    <remove xpath="//recipe[@name='vehicleMinibikeHandlebars']"/>
+    <remove xpath="//recipe[@name='vehicleMinibikePlaceable']"/>
+
+    <remove xpath="//recipe[@name='vehicleMotorcycleChassis']"/>
+    <remove xpath="//recipe[@name='vehicleMotorcycleHandlebars']"/>
+    <remove xpath="//recipe[@name='vehicleMotorcyclePlaceable']"/>
+
+    <remove xpath="//recipe[@name='vehicleTruck4x4Accessories']"/>
+    <remove xpath="//recipe[@name='vehicleTruck4x4Chassis']"/>
+    <remove xpath="//recipe[@name='vehicleTruck4x4Placeable']"/>
+
+    <remove xpath="//recipe[@name='vehicleGyroCopterAccessories']"/>
+    <remove xpath="//recipe[@name='vehicleGyroCopterChassis']"/>
+    <remove xpath="//recipe[@name='vehicleGyrocopterPlaceable']"/>
+
+    <remove xpath="/recipes/recipe[@name='keystoneBlock']"/>
+
+    <remove xpath="/recipes/recipe[@name='bucketEmpty']"/>
+
+    <append xpath="/recipes">
+        <recipe name="casinoCoin" count="100" craft_time="60">
+            <ingredient name="resourceSilverNugget" count="1"/>
+        </recipe>
+        <recipe name="casinoCoin" count="250" craft_time="60">
+            <ingredient name="resourceGoldNugget" count="1"/>
+        </recipe>
+        <recipe name="casinoCoin" count="500" craft_time="60">
+            <ingredient name="resourceRawDiamond" count="1"/>
+        </recipe>
+    </append>
+
+    <append xpath="/recipes">
+        <recipe name="occVendingRepairKit" count="1" craft_area="workbench" craft_time="30">
+            <ingredient name="resourceElectricParts" count="10"/>
+            <ingredient name="resourceMechanicalParts" count="10"/>
+            <ingredient name="resourceForgedSteel" count="6"/>
+            <ingredient name="resourceSpring" count="5"/>
+        </recipe>
+    </append>
+
+    <remove xpath="//recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='foodRottingFlesh']"/>
+    <set xpath="//recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='resourcePotassiumNitratePowder']/@count">16</set>
+    <set xpath="//recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='resourceClayLump']/@count">16</set>
+
+    <set xpath="/recipes/recipe[@name='plantedAloe1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedBlueberry1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedCoffee1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedCorn1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedMushroom1']/ingredient[@name='foodCropMushrooms']/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedPotato1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedPumpkin1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedYucca1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedCotton1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedGoldenrod1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedChrysanthemum1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedHop1']/ingredient/@count">2</set>
+    <set xpath="/recipes/recipe[@name='plantedGraceCorn1']/ingredient/@count">2</set>
+
+    <append xpath="/recipes">
+        <recipe name="ammoArrowWood" count="1" craft_time="1.4" tags="packMuleCrafting">
+            <ingredient name="resourceWood" count="1"/>
+            <ingredient name="resourceScrapPolymers" count="1"/>
+        </recipe>
+
+        <recipe name="ammoCrossbowBoltWood" count="1" craft_time="1.4" tags="packMuleCrafting">
+            <ingredient name="resourceWood" count="1"/>
+            <ingredient name="resourceScrapPolymers" count="1"/>
+        </recipe>
+    </append>
+
+    <set xpath="/recipes/recipe[@name='ammoArrowStone']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+    <set xpath="/recipes/recipe[@name='ammoArrowIron']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+    <set xpath="/recipes/recipe[@name='ammoBundleArrowStone']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+    <set xpath="/recipes/recipe[@name='ammoBundleArrowIron']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+
+    <set xpath="/recipes/recipe[@name='ammoCrossbowBoltStone']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+    <set xpath="/recipes/recipe[@name='ammoCrossbowBoltIron']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+    <set xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltStone']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+    <set xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltIron']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
+
+</configs>

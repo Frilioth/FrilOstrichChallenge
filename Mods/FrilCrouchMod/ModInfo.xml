@@ -1,0 +1,8 @@
+<xml>
+  <Name value="FrilCrouchMod"/>
+  <DisplayName value="Fril Crouch Mod"/>
+  <Version value="1.10.0"/>
+  <Description value="Crouch camera drop, 1x1 block gap entry, and crouch-cover stealth (enemies cannot see a crouched player behind a solid block). If an enemy watched you take cover it comes and breaks it. No dependencies."/>
+  <Author value="Fril"/>
+  <Website value=""/>
+</xml>

@@ -1,0 +1,327 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,english
+dayname_1,,,,,Monday
+dayname_2,,,,,Tuesday
+dayname_3,,,,,Wednesday
+dayname_4,,,,,Thursday
+dayname_5,,,,,Friday
+dayname_6,,,,,Saturday
+dayname_7,,,,,Sunday
+challengeCategoryOccupancy,,,,,Occupancy
+occesc_tab_register,,,,,Register
+occesc_tab_job,,,,,The job
+occesc_tab_him,,,,,Him
+occesc_tab_out,,,,,The way out
+occesc_job_body,,,,,"You are the night security guard of the Ostrich Hotel. Every room still has someone in it.\n\nThe count on the laptop in the roof security office is taken at 5am each morning, and it is the number that matters. Clear rooms, floor by floor, and it falls.\n\nGuests keep arriving. A bell rings when a wave reaches the doors, from mid morning until the small hours. They walk in, cross reception, and climb to the lowest empty room they can find. Most of them, anyway. Stop them on the stairs and they never check in. Miss them and they are in the register at 5am.\n\nThere is nobody to trade with in here and nothing to build your way out with. What you find in the hotel is what you have."
+occesc_him_body,,,,,"Something else is in the building with you, and it does not sleep.\n\nHe hunts by sound. Gunfire carries furthest, doors and footsteps less so. He walks while he is looking, and runs when he hears something worth running for.\n\nHe learns the building. Where he has seen you, where you hid, which floors you have been working. Quiet does not mean safe: the longer the hotel is silent, the more of it he searches.\n\nHe can be put down, but while the hotel has guests he gets back up."
+occesc_out_body,,,,,"There is a 4x4 in the basement car park and a roller shutter in front of it. Neither is any use to you: he is carrying the key.\n\nHe can be killed for good once a count of the register comes back zero. The laptop on the roof takes one automatically at 5am every morning. It is not the only terminal in the building. You then have until the next count, so a full day. Guests arriving in the meantime do not stop you, but if any of them are in the building when that count comes round the window shuts and you start again.\n\nKill him, take the fob, open the shutter, and drive. The man whose broadcast you picked up is out there somewhere.\n\nThe hotel is fifteen floors. Good luck."
+sandboxPresetGroupOstrichPresets,,,,,The Ostrich Hotel
+occPresetNightPorterName,,,,,Night Porter
+occPresetNightPorterDesc,,,,,"A quiet shift. Fewer guests, slower nights, and room to learn the building before it learns you."
+occPresetDutyManagerName,,,,,Duty Manager
+occPresetDutyManagerDesc,,,,,"The hotel as it was meant to run. Guests keep coming, and the register only falls if you make it."
+occPresetFullHouseName,,,,,Full House
+occPresetFullHouseDesc,,,,,Every room taken and the bell going all night. The intended way to play.
+occPresetNoVacanciesName,,,,,No Vacancies
+occPresetNoVacanciesDesc,,,,,Arrivals outpace you unless you clear floors properly. Ammunition is scarce and mistakes are expensive.
+occPresetDoNotDisturbName,,,,,Do Not Disturb
+occPresetDoNotDisturbDesc,,,,,"Tougher guests, longer nights, and very little found in the rooms. He is rarely far away."
+occPresetLastGuestName,,,,,The Last Guest
+occPresetLastGuestDesc,,,,,"The hotel against one guard. Nothing is given, nothing respawns in your favour, and the register is a long way from zero."
+occUniformCap,,,,,Security Cap
+occUniformCapDesc,,,,,Ostrich Hotel security. The badge is plastic and the peak keeps the rain off. It will not stop anything.
+occUniformShirt,,,,,Security Uniform
+occUniformShirtDesc,,,,,"A pressed shirt with the hotel crest on the pocket. Smart, and no protection whatsoever."
+occUniformBoots,,,,,Duty Boots
+occUniformBootsDesc,,,,,Comfortable enough for a full shift of walking corridors. Fifteen floors of them.
+occRadioListen,,,,,Press <E> to listen to the radio
+occRadioFirst,,,,,"...if anyone is hearing this, I am east of the city, past the water. Camp is marked on your map now, that is the best I can do from here.\n\nI am not coming in after you. Whatever is in those towers, it is not worth it. Get yourself out and get yourself here."
+occRadioTwo,,,,,"Still there, then. Good.\n\nI can hear it sometimes when you leave the set on. Something heavy, moving about below you. Do not go looking for it."
+occRadioThree,,,,,"Quiet night your end. Quiet nights are the ones that worry me.\n\nKeep the doors shut. They do not need to be locked, just shut. Things wander in through what is open."
+occRadioFour,,,,,"Somebody on the coast says the big buildings filled up first. People went inside and stayed inside.\n\nThat is your hotel, is it not. Every room."
+occRadioFive,,,,,"Fuel is the thing. If you find something with four wheels and a full tank, do not admire it, drive it.\n\nI will keep the fire going."
+occRadioGettingWorse,,,,,"You sound busier than yesterday.\n\nIf the count is going up, you are losing ground. They come in at night, that is what everyone said before the radios went quiet. Stop them at the door or you will be clearing the same floor twice."
+occRadioEmpty,,,,,"Say that again.\n\nEmpty? The whole building?\n\nThen finish it. Whatever has been walking those floors will not stay down while there is anyone left in there to keep it company, and there is nobody left. Go and find it."
+occRadioAfterHim,,,,,"I heard that from here.\n\nThen there is nothing between you and the road. Do not pack, do not sweep the place for one more tin. Drive.\n\nI will leave the gate open."
+occRadioRepeat,,,,,"Static, and the tail of something you have already heard.\n\nHe only comes on once a day."
+occLaptopRead,,,,,Press <E> to read the register
+occDeskRead,,,,,Press <E> to read the front desk
+occDeskStop,,,,,Stop check-ins
+blockcommand_occDeskRead,,,,,Read the front desk
+blockcommand_occDeskStop,,,,,STOP CHECK-INS
+blockcommand_occLaptopRead,,,,,Read the register
+occVendingRepairKit,,,,,Vending Machine Repair Kit
+occVendingRepairKitDesc,,,,,"Electrical guts, a motor, a compressor coil and the springs off a dispenser rack. Enough of a machine to bring another one back. Fit it to a dead vending machine with a repair tool."
+npcTraderFrilioth,,,,,Frilioth
+occGuardPistol,,,,,Guard's 9mm
+occGuardPistolDesc,,,,,The sidearm you came on shift with. Worn smooth at the grip and never once jammed. It will not let you down now.
+occGuardKnife,,,,,Guard's Knife
+occGuardKnifeDesc,,,,,"On your belt since your first night here. Kept sharp out of habit, and it has outlasted everything else in the building."
+occChocNAwe,,,,,Choc 'n' Awe
+occChocNAweDesc,,,,,"Shockingly delicious. A ration bar from a better-funded war. Fifteen food, seven health, and no smell to give you away."
+posterARUKTitle,,,,,Alzheimer's Research UK Poster
+posterARUKDesc,,,,,Game Over for Dementia. Alzheimer's Research UK funds the scientists working to bring about the first life-changing dementia treatment. frilagainstdementia.co.uk
+occBagHoldall,,,,,Guest's Holdall
+occBagBriefcase,,,,,Guest's Briefcase
+occBagHandbag,,,,,Guest's Handbag
+occBagToolbag,,,,,Staff Tool Bag
+occBagMedkit,,,,,Staff Medical Bag
+occBagMedkit_01,,,,,Staff Medical Bag
+occBagBooks,,,,,Book Bag
+occBagWeapons,,,,,Soldier's Kitbag
+ostrichRestockNever,,,true,,Never
+ostrichRestockCheckIn,,,true,,On check-in
+ostrichRestockDaily,,,true,,Daily
+ostrichRestockVanilla,,,true,,Loot Respawn Days
+ostrichRestockCheckIn75,,,true,,On check-in 75%
+ostrichRestockCheckIn50,,,true,,On check-in 50%
+ostrichRestockCheckIn25,,,true,,On check-in 25%
+go600,,,true,,Room Restock
+ostrichBloodMoonWorks,,,true,,He works it
+ostrichBloodMoonNightOff,,,true,,He takes the night off
+go601,,,true,,Stalker on Blood Moon
+go601Desc,,,true,,"Whether the stalker hunts you on a blood moon. He works it: he behaves exactly as he does on any other night, on top of the horde. He takes the night off: when the horde starts he breaks off whatever he is doing, walks back down to the basement and is left alone until it ends. He is not removed from the building, so he is still down there if you go looking."
+go600Desc,,,true,,"What refills looted containers. Never: nothing restocks. On check-in: a room restocks the morning after a guest checks into it, so a room you clear and keep clear stays empty. Daily: an emptied container restocks a day later, anywhere. Loot Respawn Days: the vanilla setting above decides. Half-looted containers are never restocked."
+occKeyFob,,,,,Ostrich Key Fob
+occKeyFobDesc,,,,,The hotel's master fob. Unlocks the 4x4 in the car park and powers the roller shutter. He was carrying it all along.
+occBagFob,,,,,His Effects
+occBagBriefcase_01,,,,,Guest's Briefcase
+occBagBriefcase_02,,,,,Guest's Briefcase
+occBagBriefcase_03,,,,,Guest's Briefcase
+occBagBriefcase_04,,,,,Guest's Briefcase
+occBagBriefcase_05,,,,,Guest's Briefcase
+occBagBriefcase_06,,,,,Guest's Briefcase
+occBagBriefcase_07,,,,,Guest's Briefcase
+occBagHoldall_01,,,,,Guest's Suitcase
+occBagHoldall_02,,,,,Guest's Suitcase
+occBagHoldall_03,,,,,Guest's Suitcase
+occBagHoldall_04,,,,,Guest's Suitcase
+occBagHoldall_05,,,,,Guest's Suitcase
+occBagHoldall_06,,,,,Guest's Suitcase
+occBagHoldall_07,,,,,Guest's Suitcase
+occBagHoldall_08,,,,,Guest's Suitcase
+occBagHoldall_09,,,,,Guest's Suitcase
+occBagHoldall_10,,,,,Guest's Suitcase
+occBagHoldall_11,,,,,Guest's Suitcase
+occBagHoldall_12,,,,,Guest's Suitcase
+occBagHoldall_13,,,,,Guest's Suitcase
+occBagHoldall_14,,,,,Guest's Suitcase
+occBagHoldall_15,,,,,Guest's Suitcase
+occBagHoldall_16,,,,,Guest's Suitcase
+occBagHoldall_17,,,,,Guest's Suitcase
+occBagHoldall_18,,,,,Guest's Suitcase
+occBagHoldall_19,,,,,Guest's Suitcase
+occBagHoldall_20,,,,,Guest's Holdall
+occBagHoldall_21,,,,,Guest's Holdall
+occBagHoldall_22,,,,,Guest's Suitcase
+occBagToolbag_01,,,,,Staff Tool Box
+occBagToolbag_02,,,,,Staff Tool Bag
+ammoArrowWood,,,,,Wooden Arrow (Ammo)
+ammoArrowWoodDesc,,,,,"A sharpened shaft with no head to speak of. It flies, and that is about the best that can be said for it."
+ammoCrossbowBoltWood,,,,,Wooden Crossbow Bolt (Ammo)
+ammoCrossbowBoltWoodDesc,,,,,A shaft whittled to a point. It will do until you find something with a head on it.
+occGuestBusinessMan,,,,,Businessman
+occGuestPartyGirl,,,,,Party Girl
+occGuestNurse,,,,,Nurse
+occGuestJanitor,,,,,Janitor
+occGuestUtilityWorker,,,,,Utility Worker
+occGuestBoe,,,,,Boe
+occGuestJoe,,,,,Joe
+occGuestMoe,,,,,Moe
+occGuestArlene,,,,,Arlene
+occGuestDarlene,,,,,Darlene
+occGuestMarlene,,,,,Marlene
+occGuestYo,,,,,Yo
+occGuestSteve,,,,,Steve
+occGuestSkateboarder,,,,,Skateboarder
+occGuestBiker,,,,,Biker
+occGuestBowler,,,,,Bowler
+occGuestBurnt,,,,,Burnt Zombie
+occGuestFatHawaiian,,,,,Tourist
+occGuestFemaleFat,,,,,Big Mama
+occGuestInmate,,,,,Inmate
+occGuestLab,,,,,Lab Worker
+occGuestLumberjack,,,,,Lumberjack
+occGuestMaleHazmat,,,,,Hazmat
+occGuestSoldier,,,,,Soldier
+occGuestTomClark,,,,,Tom Clark
+occHandoverNote,,,,,Duty Manager's Handover
+occHandoverNoteTooltip,,,,,A note left for the night guard before the last shift anyone worked here.
+occHandoverNoteBody,,,,,"Evening. Three things before your rounds.\n\nThe delivery came at last and it's still sat on the pallets in the basement car park.\n\nThe new AK for the office is in there, with the ammunition and the medical supplies. Get it up to the security office when you've got a minute. I am not leaving a rifle in a car park all weekend.\n\nFourth floor have complained about the noise again. I've told them it's the lift.\n\nAnd don't let anyone else check in tonight. We're full.\n\nDuty Manager"
+# ============================================================
+# LOADING SCREEN TIPS
+#
+# Ported from the Hospital Challenge. A key names the body text and the same key
+"# plus ""_title"" names the heading. Config/loadingscreen.xml lists which keys are"
+# in the rotation.
+#
+# Vanilla flags every one of its own 41 tips UsedInMainMenu = x so these do too.
+# The Hospital leaves that column blank. Using x is the safer direction and costs
+# nothing.
+# ============================================================
+ostrichLoadingTip01_title,UI,Loading Screen,x,,The Register
+ostrichLoadingTip01,UI,Loading Screen,x,,"The count on the laptop in the roof security office is taken at 5am each morning, and it is the number that matters. Clear rooms, floor by floor, and it falls."
+ostrichLoadingTip02_title,UI,Loading Screen,x,,The Bell
+ostrichLoadingTip02,UI,Loading Screen,x,,"The bell means a wave has reached the doors. They cross reception and climb to the lowest empty room they can find. Most of them, anyway. Stop them on the stairs and they never check in."
+ostrichLoadingTip03_title,UI,Loading Screen,x,,Work Downwards
+ostrichLoadingTip03,UI,Loading Screen,x,,"Arrivals head for the lowest empty room, though one in five wanders higher. Clear the bottom floors first and all you have done is make them somewhere to stay. Empty the hotel from the top down."
+ostrichLoadingTip04_title,UI,Loading Screen,x,,He Hunts By Sound
+ostrichLoadingTip04,UI,Loading Screen,x,,"Gunfire carries furthest, doors and footsteps less so. He walks while he is looking and runs when he hears something worth running for. Crouching cuts how far your noise travels."
+ostrichLoadingTip05_title,UI,Loading Screen,x,,Quiet Is Not Safe
+ostrichLoadingTip05,UI,Loading Screen,x,,"The longer the hotel is silent, the more of it he searches. Sitting still buys you less than it feels like it should."
+ostrichLoadingTip06_title,UI,Loading Screen,x,,He Learns the Building
+ostrichLoadingTip06,UI,Loading Screen,x,,"He remembers where he has seen you, where you hid, and which floors you have been working. The same hiding place is a worse idea the second time."
+ostrichLoadingTip07_title,UI,Loading Screen,x,,He Gets Back Up
+ostrichLoadingTip07,UI,Loading Screen,x,,"He can be put down, but while the hotel still has guests he gets back up. Dropping him buys you time, not a result."
+ostrichLoadingTip08_title,UI,Loading Screen,x,,He Has the Key
+ostrichLoadingTip08,UI,Loading Screen,x,,There is a 4x4 in the basement car park and a roller shutter in front of it. Neither is any use to you. He has been carrying the fob the whole time.
+ostrichLoadingTip09_title,UI,Loading Screen,x,,"Zero, And Then The Window"
+ostrichLoadingTip09,UI,Loading Screen,x,,"He can be killed for good once a count of the register comes back zero. The laptop on the roof takes one automatically at 5am every morning, and it is not the only terminal in the building. Guests checking in during that day do not shut the window, but if any of them are still in the building at the next count it closes and you start again."
+ostrichLoadingTip10_title,UI,Loading Screen,x,,Nothing Is Coming
+ostrichLoadingTip10,UI,Loading Screen,x,,There is nobody to trade with in here and nothing to build your way out with. What you find in the hotel is what you have.
+ostrichLoadingTip11_title,UI,Loading Screen,x,,The Radio
+ostrichLoadingTip11,UI,Loading Screen,x,,"The set picks up one broadcast a day and no more. He got out, he is a long way from here, and he has made it very clear he is not coming in after you."
+ostrichLoadingTip12_title,UI,Loading Screen,x,,Rooms Refill
+ostrichLoadingTip12,UI,Loading Screen,x,,"On the default Room Restock setting a room is restocked the morning after a guest checks into it, so a room you clear and keep clear stays empty. Half-looted containers are never restocked."
+ostrichLoadingTip13_title,UI,Loading Screen,x,,Fifteen Floors
+ostrichLoadingTip13,UI,Loading Screen,x,,"The hotel is fifteen floors and the laptop is at the top of them. Count the climb into every plan, especially the ones that go wrong halfway up."
+ostrichLoadingTip14_title,UI,Loading Screen,x,,The City Is Not A Way Out
+ostrichLoadingTip14,UI,Loading Screen,x,,"Step off the hotel's plot and the street comes for you, and what is out there does not walk. The shelter is a long drive, not a short run."
+ostrichLoadingTip15_title,UI,Loading Screen,x,,You Came On Shift
+ostrichLoadingTip15,UI,Loading Screen,x,,"The cap, the shirt and the boots are a uniform, not armour. Your sidearm, the baton, a knife and a torch are everything you brought. The rest of it is in the building somewhere."
+# ============================================================
+# UI & MENU - SPAWN / RESPAWN SCREEN
+#
+# Overrides of vanilla keys. The four friend-spawn keys are left alone because
+# this is a single-player challenge and the Hospital does not touch them either.
+#
+"# v1.92.1: lblSpawnRandom was ""Wake up somewhere in the city"" in v1.92.0 on the"
+"# strength of a grep for ""permadeath"" that found nothing. Fril: ""The Ostrich"
+"# challenge is permadeath btw"". An empty grep meant the guessed name was wrong"
+# and not that the rule was absent. It now carries the weight the Hospital's
+# does. See the devlog for what is NOT wired: no six presets set Death Penalty.
+# ============================================================
+respawnTitleMessage,UI,Respawn Window,x,,EVERY ROOM IS TAKEN.
+lblSpawn,UI,Spawn Menu,x,,Start your shift
+lblSpawnRandom,UI,Spawn Menu,x,,This is how your shift ended...
+lblSpawnNearBedroll,UI,Spawn Menu,x,,Your shift is over. Exit to main menu
+lblSpawnOnBedroll,UI,Spawn Menu,x,,Your shift is over. Exit to main menu
+lblSpawnNearBackpack,UI,Spawn Menu,x,,Your shift is over. Exit to main menu
+# ============================================================
+# DEATH WINDOW
+#
+# Shown once per run after the player dies and the respawn has put the UI back.
+# Ported from the Hospital Challenge: hospitalMissionFailedTitle and
+# hospitalMissionFailedBody. See Failed.cs and the devlog for what was NOT
+# ported with it.
+#
+# The register figure and the run stats are pulled at runtime through
+# XUiC_OccupancyFailed's bindings. They are not in these strings.
+#
+# v1.94.0: occFailedTitle WAS REMOVED. It is not lost by accident.
+# v1.93.0 used vanilla's tip box which has a title bar. The hotel's own window
+# has the Ostrich II sign plate at the top instead and the body's first line is
+# the heading. There was no room for a separate title label either: the layout
+# comes to 493px of the 545px available. Nothing reads the key any more so it is
+# gone rather than left dead in the file.
+# ============================================================
+occFailedBody,UI,Death Window,x,,"The Ostrich has one more guest.\n\nYou did not make it out of the building. Whatever has been walking those floors is still walking them, and the register will be read at 5am exactly as it always is.\n\nYour shift is over. Exit to the main menu."
+occFailedTooltip,UI,Death Window,x,,END OF SHIFT. Your run is over. Exit to the main menu.
+occCompletedBody,UI,Ending Window,x,,"You are out.\n\nThe Ostrich is behind you. Whatever is still walking those floors can walk them without you now, and nobody is going to read that register again.\n\nYour shift is over."
+# ============================================================
+# POI NAME
+#
+# The key IS the prefab name. Vanilla's own rows are the pattern. They are shown
+# below with the commas replaced by spaces. A comma here would split the comment
+# into fields and plant junk metadata on a junk key.
+#   hotel_02      POI  POIName  ->  Haven Hotel
+#   hospital_01   POI  POIName  ->  Navezgane General Hospital
+# Without this row the game falls back to printing the raw prefab name and
+"# the banner reads ""Ostrich_Hotel_2""."
+# ============================================================
+Ostrich_Hotel_2,POI,POIName,,,Ostrich Hotel 2
+subtitleSpeaker_Radio,,,,,Radio
+subtitleSpeaker_Frilioth,,,,,Frilioth
+occRadioFirst_01,,,,,"You actually made it to the roof. I saw you heading for the stairs. If I'm honest, I didn't fancy your chances. I went out the back door and I've ended up in some old bomb shelter. I was lucky, really lucky. Don't leave that place on foot. You won't get far, trust me. I'm not coming to get you. Whatever's in there with you now just isn't worth the risk. I'll send you my coords when I think it's safe for me to do so. Until then, you're on your own, my old china."
+occRadioTwo_01,,,,,"You're still alive then. Good. I can hear it sometimes, when you leave the set on. It sounds heavy, moving about in there with you. Do not go looking for it."
+occRadioTwo_02,,,,,"Morning. Heard something through your radio last night. Heavy footsteps, or something close to them. I saw something enormous on my way out of that place. I hope to God it's not the same thing."
+occRadioTwo_03,,,,,"Remember the night we got separated? There was something near the back exit. Huge bloody thing. I'm not going to describe it to you. You'll know it if you see it. If it's still in there, give it a wide berth."
+occRadioTwo_04,,,,,I heard something moving around yesterday. Sounded like someone dragging a wardrobe across the floor. Only I remember what I saw that first night. And I don't think it was furniture.
+occRadioTwo_05,,,,,"There's something I probably should've told you sooner. Just before I got out, I saw something enormous coming down the corridor. In the end I ran. At the minute that's all I'm willing to talk about. If you see it, I suggest you do the same."
+occRadioTwo_06,,,,,"That heavy thumping I keep hearing through the radio... It reminds me of something I saw on the way out. I sincerely hope I'm wrong. Because if I'm right, you've got a serious problem."
+occRadioThree_01,,,,,Remember those bloody doors? Always swinging shut when you were trying to carry something through. Never thought I'd miss 'em. Just don't assume they're keeping anything out.
+occRadioThree_02,,,,,"Funny thing about those doors. They'll shut behind just about anything. So if you find one closed, don't go assuming nobody's been through it. Could be quite the opposite."
+occRadioThree_03,,,,,Remember those corridors? Every door seemed determined to slam in your face. Used to drive me up the wall. Bet it's a different story now.
+occRadioThree_04,,,,,"I've been thinking about those hotel doors. Nice solid things, most of 'em. But I wouldn't trust one to keep me safe. Not with the sort of noises I'm hearing through that radio."
+occRadioThree_05,,,,,You know what always annoyed me about that place? The doors. Shut behind you every bloody time. Now I reckon I'd quite like a door or two between me and whatever's making those noises.
+occRadioThree_06,,,,,"Just because a corridor goes quiet doesn't mean it's empty. Those doors close behind everything, remember. Keep your ears open, even when your eyes tell you there's nothing there."
+occRadioFour_01,,,,,I still remember seeing you heading for those stairs. Nearly shouted after you. Nearly. Sometimes I wonder whether I should've followed. Suppose we'll never know.
+occRadioFour_02,,,,,"Funny, isn't it? We worked in that place for years. Knew every corridor, every shortcut. Then one night, neither of us had a bloody clue where we were going."
+occRadioFour_03,,,,,"I remember the noise more than anything. People shouting, alarms going off, glass breaking. Then I got outside and everything went strangely quiet. I've never liked quiet since."
+occRadioFour_04,,,,,You know what I remember about that night? I was carrying a cup of coffee when everything kicked off. Still had it in my hand when I got outside. Most of it down my shirt. Never did work out why I didn't just drop it.
+occRadioFour_05,,,,,Sometimes I think about the people we worked with. Wonder how many made it out. I try not to dwell on it. Not much point in asking questions when you know you won't like the answers.
+occRadioFour_06,,,,,"I keep thinking about that back exit. Must've walked past it a thousand times without giving it a second thought. Then one night it saved my life. Funny old world. Well, it used to be."
+occRadioFive_01,,,,,"I've been thinking. If you manage to get out of that place, there must still be somewhere safe. Somewhere we can sit down and have a proper conversation. Preferably without half the population trying to eat us."
+occRadioFive_02,,,,,"When you finally get clear of that hotel, don't hang about. Put some distance between yourself and that place. We'll work out the rest when you're safe."
+occRadioFive_03,,,,,"You know, I'm actually starting to believe you might get out of there. Didn't fancy your chances at first. Still not entirely convinced. But you've surprised me before."
+occRadioFive_04,,,,,It's quiet here. Sometimes too quiet. Caught myself talking to the radio when it wasn't even switched on yesterday. So do me a favour. Keep yourself alive. I could use the company.
+occRadioFive_05,,,,,I've got my position marked on a map. I'm not putting the coordinates out over the airwaves just yet. No telling who's listening. You concentrate on surviving. We'll deal with the rest when the time comes.
+occRadioFive_06,,,,,Tell you what. You make it out of that hotel and I'll put the kettle on. Can't promise the tea gonna be any good. I've been using the same teabags for longer than I care to admit. At least you know it won't be made in a microwave
+occRadioFive_07,,,,,"Sometimes I feel bad about leaving you there. I know we both made our own choices that night, but still. I'd feel a damn sight better knowing you'd made it out."
+occRadioFive_08,,,,,"Look, I can't come and get you. We both know that. But if you can find your own way out, I'll be here. Same frequency, same miserable voice. You've got my word."
+occRadioFirstRoar_01,,,,,Morning. I heard it yesterday. That roar. I know what made that sound. I saw the bloody thing when I was getting out. I've been dreading the day you'd run into it. I'm just glad there's still someone at the other end of this radio.
+occRadioFirstRoar_02,,,,,"That noise yesterday... Christ, I know that sound. Saw the thing that made it on my way out. I was hoping you'd never have to face it. I don't know what happened afterwards, but I'm hoping you're somewhere safe."
+occRadioFirstRoar_03,,,,,"I've been sitting here thinking about what I heard. That roar took me straight back to the night we escaped. That great brute in the corridor. I didn't stop to see what it wanted, and I hope you didn't either."
+occRadioFirstRoar_04,,,,,"Morning. I heard something through your radio yesterday that I hoped I'd never hear again. I know exactly what made it. I saw the bloody thing before I escaped. Please, just keep yourself alive."
+occRadioFirstRoar_05,,,,,"Well, that was a noise I could've lived without hearing again. It's him. Has to be. That enormous bastard I saw near the back exit. I've got no idea how you stop something like that. I tried, for about three seconds. Then I ran."
+occRadioFirstRoar_06,,,,,"Didn't sleep much last night. Kept hearing that roar in my head. I remember the size of that thing. I remember how fast I ran when I saw it. Whatever you do, don't underestimate it."
+occRadioFirstRoar_07,,,,,"Morning. I never told you what happened on my way out. I emptied half a magazine into that thing. Point blank. It didn't even break its stride. But something on its chest started blinking Red. And it started making a noise, like a countdown. I didn't stick around to find out what the noise was for."
+occRadioSeenHim_01,,,,,"I keep thinking about that roar. Every time I hear something heavy through the radio, I wonder whether it's him again. Whatever you do, don't let that bastard corner you."
+occRadioSeenHim_02,,,,,"That thing I saw on my way out... I've never seen anything move like that. Not something that size. I don't know what it is, and I don't particularly care. I just want you to stay away from it."
+occRadioSeenHim_03,,,,,I've heard some horrible things through this radio. But that roar's the one I can't get out of my head. Knowing you're still in that building with it doesn't exactly help me sleep.
+occRadioSeenHim_04,,,,,"I had a go at that thing, the first time I saw it. Didn't last long. Then I ran, and I'm not ashamed to tell you. I'm still here, so I reckon I got that the right way round."
+occRadioSeenHim_05,,,,,"You know, I used to think the worst thing in that hotel was the food. Then I saw that bloody great monster. Suddenly the breakfast buffet doesn't seem quite so bad."
+occRadioSeenHim_06,,,,,"I've been thinking about that creature. It's not just how big it is. It's the way it moves. There's something terribly wrong about it. If you hear that roar again, get yourself out of its way."
+occRadioSeenHim_07,,,,,"I wish I could tell you something useful about that thing. What it is. Where the hell it came from. But I can't. I've told you what I saw, and that's the lot. Sorry. Not much of a help, am I?"
+occRadioSeenHim_08,,,,,"Every time the radio crackles, I find myself listening for that roar. It's ridiculous, really. I'm miles away from the bloody thing. But I can still see it standing in that corridor. Some sights just don't leave you."
+occRadioGettingWorse_01,,,,,Morning. Didn't get much sleep last night. There was a hell of a racket coming through that radio. Sounds like things are getting worse in there. Wish I could do more than sit here listening.
+occRadioGettingWorse_02,,,,,"It's getting louder your end. I keep hoping things'll settle down, but that doesn't seem to be happening. Don't let them wear you out. You've still got to look after yourself."
+occRadioGettingWorse_03,,,,,"I was listening yesterday. Sounded like the whole bloody building was on the move. Can't imagine what it must be like actually being there. Well, I can. That's why I ran."
+occRadioGettingWorse_04,,,,,"More noise coming through the set yesterday. Every time I think you've got a bit of breathing room, it sounds like another lot turn up. Just take your time. No point rushing into something you can't get back out of."
+occRadioGettingWorse_05,,,,,"It was a rough night by the sound of things. I heard enough to know you've got your hands full. Just remember, you've only got one life. Don't throw it away trying to do everything at once."
+occRadioGettingWorse_06,,,,,"Morning. I'd love to tell you things are sounding better, but I'd be lying. I don't know how you're managing in there but keep going. I'm not ready to lose my only drinking buddy just yet."
+occRadioGettingBetter_01,,,,,"Morning. It's been unusually quiet your end. I'm hoping that's a good sign. Whatever you're doing in there, keep it up. And try not to do anything stupid. I'd rather not spend tomorrow morning talking to myself."
+occRadioGettingBetter_02,,,,,"You know, I actually slept reasonably well last night. First time in ages. Didn't hear much coming through the radio. I'm choosing to believe that's good news. Don't go proving me wrong."
+occRadioGettingBetter_03,,,,,It's been quieter in there. Either you're making progress or that radio's finally giving up. I'm going with progress. Sounds nicer.
+occRadioGettingBetter_04,,,,,"I'll tell you something. I didn't hear nearly as much racket yesterday. Might be nothing, of course. But it's the first time in a while I've felt a little bit hopeful."
+occRadioGettingBetter_05,,,,,Something's different today. I can actually hear the background hiss on your radio again. Makes a nice change from all that growling and banging about. Keep doing whatever you're doing.
+occRadioGettingBetter_06,,,,,"Morning, sunshine. Sounds a little more peaceful in there. Never thought I'd use the word peaceful to describe that hotel again. Mind you, I never thought I'd be living in a bomb shelter either."
+occRadioExplosion_01,,,,,"What the bloody hell was that yesterday? Nearly blew my headphones off! I don't know what you're doing in there, but try not to bring the whole place down on yourself."
+occRadioExplosion_02,,,,,"Morning. Whatever you were doing yesterday, I heard it. Nearly jumped out of my bloody skin. I'm assuming you're still in one piece. Try to keep it that way will you."
+occRadioExplosion_03,,,,,"Christ almighty. That was one hell of a bang. Nearly knocked my tea over. And believe me, tea's becoming something of a luxury around here. Try to keep the explosions to a minimum, eh?"
+occRadioExplosion_04,,,,,"I heard something yesterday that sounded suspiciously like half the hotel exploding. I'm hoping it wasn't. You've still got to get out of that building, remember."
+occRadioExplosion_05,,,,,"You know, most people start their morning with a nice cup of coffee. Me? I get an explosion coming through the headphones. Really appreciate that. Anyway, glad you're still ok."
+occRadioExplosion_06,,,,,"That noise yesterday... Bloody hell. I sat here for ages afterwards, listening for something. Don't know what I expected to hear. Just glad there's still a signal coming through."
+occRadioHurt_01,,,,,"You're breathing funny. Sit down. Whatever you're bleeding from, deal with it now, not after one more room. That building will still be there in ten minutes."
+occRadioHurt_02,,,,,"You sound rough. I can't do anything from here, so you'll have to do it yourself. Patch yourself up. Get some rest. There's no rush."
+occRadioHurt_03,,,,,"I can hear you struggling at the mic. I don't know what's happened, and I'm not going to pretend I do. Just find somewhere you can catch your breath."
+occRadioHurt_04,,,,,"Morning. You don't sound too clever today. I know what you're like. Always got to finish whatever you've started. Well, this time, whatever it is can wait. Look after yourself."
+occRadioHurt_05,,,,,That's some heavy breathing coming through the set. Ordinarily I'd make a joke about it. Not today. You need to take care of yourself. Seriously.
+occRadioHurt_06,,,,,"Listen, I'm not much use to you sitting here. And I hate that. I really do. But if you're hurt, you've got to stop and sort it out. I need you to make it through this."
+occRadioEmpty_01,,,,,"Morning. I haven't heard much coming through your radio. Hardly anything, actually. I don't want to get your hopes up, but it sounds like you might finally be getting somewhere. There's still that heavy thing wandering around though. Don't forget about that. And I'll tell you something else. I've stopped keeping my location to myself. Soon as that thing stops moving, it goes on your map."
+occRadioEmpty_02,,,,,"It's quiet. Really quiet. I've been sitting here listening, waiting for the usual racket. Nothing. I don't know what you've been doing in there, but I hope it's working. Just don't let your guard down. Not yet. I'm giving you my position tonight. When that heavy thing stops moving, you'll see it on your map."
+occRadioEmpty_03,,,,,"You know, when all this started, I thought that building would be the death of you. I'm beginning to think I might've been wrong. Haven't heard much movement lately. But there's still that one awful noise I remember. We both know what's making it, so be careful. I'm done sitting on my coordinates, by the way. They're yours. On your map the minute that thing is finished."
+occRadioEmpty_04,,,,,Morning. Can't remember the last time that hotel sounded this quiet. I almost miss the noise. Almost. I'd love to think you're nearly finished in there. Just don't go celebrating until you've made it here. And you'll know where here is. My position goes on your map as soon as that thing stops moving.
+occRadioEmpty_05,,,,,"I've been listening to the radio all night. Nothing much happening your end. I'd call that a victory, wouldn't you? Although, knowing that place, there's probably something horrible waiting around the next corner. Don't give it the satisfaction. One more thing. Those coordinates I've been sitting on. They're yours now, on your map, soon as it's down."
+occRadioEmpty_06,,,,,"Well, this is different. That place used to sound like a railway station at rush hour. Now I can barely hear a thing. You've come a long way. Whatever's left in there, don't underestimate it. And I'm done being careful about where I am. Finish it and you'll find me on your map."
+occRadioAfterHim_01,,,,,"Another morning, another broadcast. And you're still in that bloody hotel. I know you've always been a stubborn sod, but this is getting ridiculous. Find a way out, will you?"
+occRadioAfterHim_02,,,,,"I was beginning to think you'd decided to move in permanently. Lovely place, the hotel. Wonderful views, excellent service. Slight problem with the other guests. Come on. Time to leave."
+occRadioRepeat_01,,,,,[Low radio hiss. A short click followed by silence.]
+occRadioRepeat_02,,,,,"[Static, with a faint ""...same time tomorrow...""]"
+occRadioRepeat_03,,,,,"[A burst of interference. Indistinct speech, then silence.]"
+occRadioRepeat_04,,,,,"[Static with a barely audible ""...be careful...""]"
+occRadioRepeat_05,,,,,"[The radio clicks, hums and returns to static.]"
+occRadioRepeat_06,,,,,"[Distant voice fragment ""...still here..."" followed by interference.]"
+occEnding_01,,,,,"My god you made it, you actually bloody made it. It's good to see you mate, really good. I kept talking and talking on this radio and I never knew if any of it was getting through. This place doesn't have a lot but it's safe. The M60's on the roof keep most things away. Sit down, mate. You're done."
+occDeskCall_01,,,,,"I've been able to hack into the Hotel network and I can see you've emptied the place. Now go and kill the big fella, then steal a car from the garage and get over here, but be careful when you do as I'm expecting all hell to break loose. My coords are one one four seven west, one three one zero south, mark it on your map now, while you have the chance. Good luck mate."
+xuiOstrichGuideButton,UI,Guide,x,,How to play
+xuiOstrichGuideTitle,UI,Guide,x,,The Ostrich Challenge

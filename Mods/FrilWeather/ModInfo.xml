@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+    <Name value="FrilWeather" />
+    <DisplayName value="Fril's Weather" />
+    <Version value="1.1.0" />
+    <Description value="Rain and fog stop when you are under cover. Vanilla only halves the rain indoors and never stops it, and leaves the fog filling the room. This clears both while you are sheltered and hands them straight back when you step outside. Works in any POI or player-built base, underground included, with nothing to configure. Client-side and visual only." />
+    <Author value="Frilioth" />
+    <Website value="https://frilcraft.uk" />
+</xml>

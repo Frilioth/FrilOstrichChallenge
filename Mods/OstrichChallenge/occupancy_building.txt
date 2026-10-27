@@ -1,0 +1,32 @@
+# Occupancy director building data
+home -16.40431 36.08 -24.70474
+radius 40
+box -24 -28 7 5
+laptop -16 120 -1
+desk -20 42 -20
+car -19.55387 36.08 -15.60364 90.25001
+trader -1146.671 28.09332 -1309.684 59.75
+radio -15 119 -2
+shutter -11 36 4
+entrance 4.056152 40.08 -11.49278
+entrance -10.50476 42.08 -26.13619
+entrance -23.79753 42.08 -19.40738
+entrance -10.56771 42.08 3.537198
+reception -17.18316 42.08 -11.46492
+floor 36.08
+floor 42.08
+floor 48.08
+floor 53.08
+floor 58.08
+floor 63.08
+floor 68.08
+floor 73.08
+floor 78.08
+floor 83.08
+floor 88.08
+floor 93.08
+floor 98.08
+floor 103.08
+floor 108.08
+floor 113.08
+floor 118.08

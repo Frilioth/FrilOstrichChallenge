@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <remove xpath="//entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvival']"/>
+    <remove xpath="//entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalSP']"/>
+    <remove xpath="//entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalMP']"/>
+
+    <append xpath="/entity_classes">
+        <entity_class name="npcTraderFrilioth">
+
+            <property name="Archetype"        value="Frilioth"/>
+            <property name="ModelType"        value="SDCS"/>
+            <property name="AvatarController" value="AvatarSDCSController"/>
+            <property name="PhysicsBody"      value="PlayerSDCS"/>
+
+            <property name="Class"            value="EntityTrader"/>
+            <property name="UserSpawnType"    value="Menu"/>
+            <property name="Tags"             value="entity,npc,human,humanSDCS,trader"/>
+            <property name="EntityType"       value="Player"/>
+            <property name="Faction"          value="trader"/>
+            <property name="HasRagdoll"       value="false"/>
+            <property name="Prefab"           value="NPC"/>
+            <property name="Parent"           value="Players"/>
+            <property name="Weight"           value="70"/>
+            <property name="LookAtAngle"      value="60"/>
+
+            <property name="AITask-1"   value="ApproachAndAttackTarget" data="class=EntityHuman"/>
+            <property name="AITarget-1" value="SetAsTargetIfHurt"       data="class=EntityHuman"/>
+
+            <property name="NPCID"            value="traderfrilioth"/>
+            <property name="IsEnemyEntity"    value="true"/>
+            <property name="WalkType"         value="7"/>
+            <property name="SurfaceCategory"  value="organic"/>
+            <property name="ParticleOnDeath"  value="blood_death"/>
+            <property name="HasDeathAnim"     value="true"/>
+            <property name="SoundRandomTime"  value="200"/>
+
+            <property name="SoundHurt"             value="player1painlg"/>
+            <property name="SoundHurtSmall"        value="player1painsm"/>
+            <property name="SoundDeath"            value="player1death"/>
+            <property name="SoundStamina"          value="player1stamina"/>
+            <property name="SoundDrownPain"        value="player1drownpain"/>
+            <property name="SoundWaterSurface"     value="player1drownsurface"/>
+            <property name="SoundDrownDeath"       value="player1drowndeath"/>
+            <property name="SoundJump"             value="player1Jump"/>
+            <property name="SoundLandSoft"         value="player1LandSoft"/>
+            <property name="SoundLandHard"         value="player1LandHard"/>
+            <property name="SoundPlayerLandThump"  value="PlayerLandThump"/>
+
+            <property name="MaxViewAngle"     value="180"/>
+            <property name="LootList"         value="traderNPC"/>
+
+            <property name="MoveSpeed"        value="0.75"/>
+            <property name="MoveSpeedAggro"   value="1.15, 1.15"/>
+            <property name="MoveSpeedPanic"   value="1.35"/>
+            <property name="CanClimbLadders"  value="true"/>
+
+            <property name="ExperienceGain"     value="130"/>
+            <property name="TimeStayAfterDeath" value="30"/>
+            <property name="DeadBodyHitPoints"  value="251"/>
+            <property name="NavObject"          value="trader"/>
+
+            <effect_group name="Base Effects">
+                <passive_effect name="HealthMax" operation="base_set" value="100000"/>
+                <passive_effect name="BuffResistance" operation="base_set" value="1" tags="buffFatiguedTrigger,buffArmSprainedCHTrigger,buffLegSprainedCHTrigger,buffLaceration,buffInfectionCatch,buffAbrasionCatch,buffInjuryStunned01CHTrigger,buffInjuryBleedingOne,buffInjuryBleedingTwo,buffInjuryBleeding,buffBurningZombie,buffBurningElement,buffBurningEnvironment,buffBurningEnvironmentHack,buffBurningFlamingArrow,buffBurningMolotov,buffIsOnFire,buffShocked,buffRadiationPool"/>
+            </effect_group>
+        </entity_class>
+
+        <entity_class name="occBagFob" extends="EntityLootContainerBoss">
+            <property name="LootList" value="occBagFob"/>
+            <property name="OverrideName" value="occBagFob"/>
+            <property name="SizeScale" value="1.0"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+            <property name="TimeStayAfterDeath" value="86400"/>
+        </entity_class>
+
+    </append>
+
+    <append xpath="/entity_classes">
+
+        <entity_class name="occBagHoldall" extends="EntityLootContainerRegular">
+            <property name="LootList" value="occBagHoldall"/>
+            <property name="OverrideName" value="occBagHoldall"/>
+            <property name="Mesh" value="@:Entities/LootContainers/duffle01Prefab.prefab"/>
+            <property name="SizeScale" value="0.9"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+        </entity_class>
+
+        <entity_class name="occBagBriefcase" extends="EntityLootContainerRegular">
+            <property name="LootList" value="occBagBriefcase"/>
+            <property name="OverrideName" value="occBagBriefcase"/>
+            <property name="Mesh" value="@:Entities/LootContainers/backpack_vehicleDroppedPrefab.prefab"/>
+            <property name="SizeScale" value="0.75"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+        </entity_class>
+
+        <entity_class name="occBagHandbag" extends="EntityLootContainerRegular">
+            <property name="LootList" value="occBagHandbag"/>
+            <property name="OverrideName" value="occBagHandbag"/>
+            <property name="Mesh" value="@:Entities/LootContainers/pursePrefab.prefab"/>
+            <property name="SizeScale" value="0.7"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+        </entity_class>
+
+        <entity_class name="occBagToolbag" extends="EntityLootContainerRegular">
+            <property name="LootList" value="occBagToolbag"/>
+            <property name="OverrideName" value="occBagToolbag"/>
+            <property name="Mesh" value="@:Entities/LootContainers/zpackBluePrefab.prefab"/>
+            <property name="SizeScale" value="0.9"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+        </entity_class>
+
+        <entity_class name="occBagMedkit" extends="EntityLootContainerRegular">
+            <property name="LootList" value="occBagMedkit"/>
+            <property name="OverrideName" value="occBagMedkit"/>
+            <property name="Mesh" value="@:Entities/LootContainers/backpack01Prefab.prefab"/>
+            <property name="SizeScale" value="0.7"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+        </entity_class>
+
+        <entity_class name="occBagBooks" extends="EntityLootContainerRegular">
+            <property name="LootList" value="occBagBooks"/>
+            <property name="OverrideName" value="occBagBooks"/>
+            <property name="Mesh" value="@:Entities/LootContainers/backpack03Prefab.prefab"/>
+            <property name="SizeScale" value="0.7"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+        </entity_class>
+
+        <entity_class name="occBagWeapons" extends="EntityLootContainerRegular">
+            
+            <property name="LootList" value="occBagWeapons"/>
+            <property name="OverrideName" value="occBagWeapons"/>
+            <property name="Mesh" value="@:Entities/LootContainers/weapon_bags_largePrefab.prefab"/>
+            <property name="SizeScale" value="0.9"/>
+            <property name="SoundSpawn" value="zpack_spawn"/>
+        </entity_class>
+
+        <entity_class name="occBagBriefcase_01" extends="occBagBriefcase">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_a.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagBriefcase_02" extends="occBagBriefcase">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_b.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagBriefcase_03" extends="occBagBriefcase">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_c.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagBriefcase_04" extends="occBagBriefcase">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_d.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagBriefcase_05" extends="occBagBriefcase">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_e.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagBriefcase_06" extends="occBagBriefcase">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_f.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagBriefcase_07" extends="occBagBriefcase">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_g.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+
+        <entity_class name="occBagHoldall_01" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002a_dirty_a.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_02" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002a_dirty_b.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_03" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002a_dirty_c.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_04" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002a_dirty_d.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_05" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002a_dirty_e.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_06" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002a_dirty_f.prefab"/>
+            <property name="SizeScale" value="0.85"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_07" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002c_dirty_a.prefab"/>
+            <property name="SizeScale" value="0.765"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_08" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002c_dirty_b.prefab"/>
+            <property name="SizeScale" value="0.765"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_09" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002c_dirty_c.prefab"/>
+            <property name="SizeScale" value="0.765"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_10" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002c_dirty_d.prefab"/>
+            <property name="SizeScale" value="0.765"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_11" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002c_dirty_e.prefab"/>
+            <property name="SizeScale" value="0.765"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_12" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002c_dirty_f.prefab"/>
+            <property name="SizeScale" value="0.765"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_13" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0003e_dirty_a.prefab"/>
+            <property name="SizeScale" value="0.654"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_14" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0003e_dirty_b.prefab"/>
+            <property name="SizeScale" value="0.654"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_15" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0003e_dirty_c.prefab"/>
+            <property name="SizeScale" value="0.654"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_16" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0003e_dirty_d.prefab"/>
+            <property name="SizeScale" value="0.654"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_17" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0003e_dirty_e.prefab"/>
+            <property name="SizeScale" value="0.654"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_18" extends="occBagHoldall">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0003e_dirty_f.prefab"/>
+            <property name="SizeScale" value="0.654"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_19" extends="occBagHoldall">
+            <property name="Mesh" value="@:Entities/LootContainers/luggageBigClosedPrefab.prefab"/>
+            <property name="SizeScale" value="0.75"/>
+        </entity_class>
+
+        <entity_class name="occBagHoldall_20" extends="occBagHoldall">
+            <property name="Mesh" value="@:Entities/LootContainers/sports_bag01Prefab.prefab"/>
+            <property name="SizeScale" value="0.9"/>
+        </entity_class>
+        <entity_class name="occBagHoldall_21" extends="occBagHoldall">
+            <property name="Mesh" value="@:Entities/LootContainers/sports_bag02Prefab.prefab"/>
+            <property name="SizeScale" value="0.9"/>
+        </entity_class>
+
+        <entity_class name="occBagHoldall_22" extends="occBagHoldall">
+            <property name="Mesh" value="@:Entities/LootContainers/luggageMediumClosedPrefab.prefab"/>
+            <property name="SizeScale" value="0.75"/>
+        </entity_class>
+
+        <entity_class name="occBagMedkit_01" extends="occBagMedkit">
+            <property name="Mesh" value="#@modfolder:Resources/hotelLuggageFirstaid.unity3d?suitcase_0004c_dirty_g.prefab"/>
+            <property name="SizeScale" value="0.425"/>
+        </entity_class>
+
+        <entity_class name="occBagToolbag_01" extends="occBagToolbag">
+            <property name="Mesh" value="@:Entities/LootContainers/metalToolBoxClosedPrefab.prefab"/>
+            <property name="SizeScale" value="0.9"/>
+        </entity_class>
+        <entity_class name="occBagToolbag_02" extends="occBagToolbag">
+            <property name="Mesh" value="@:Entities/LootContainers/weapon_bags_smallPrefab.prefab"/>
+            <property name="SizeScale" value="0.9"/>
+        </entity_class>
+
+        <entity_class name="occGuestBusinessMan" extends="zombieBusinessMan">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagBriefcase,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestPartyGirl" extends="zombiePartyGirl">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHandbag,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestNurse" extends="zombieNurse">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagMedkit,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestJanitor" extends="zombieJanitor">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagToolbag,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestUtilityWorker" extends="zombieUtilityWorker">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagToolbag,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestBoe"          extends="zombieBoe">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestJoe"          extends="zombieJoe">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestMoe"          extends="zombieMoe">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestArlene"       extends="zombieArlene">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestDarlene"      extends="zombieDarlene">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestMarlene"      extends="zombieMarlene">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestYo"           extends="zombieYo">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestSteve"        extends="zombieSteve">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestSkateboarder" extends="zombieSkateboarder">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestBiker"        extends="zombieBiker">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestBowler"       extends="zombieBowler">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestBurnt"        extends="zombieBurnt">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestFatHawaiian"  extends="zombieFatHawaiian">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestFemaleFat"    extends="zombieFemaleFat">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHandbag,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestInmate"       extends="zombieInmate">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagToolbag,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestLab"          extends="zombieLab">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagMedkit,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestLumberjack"   extends="zombieLumberjack">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagToolbag,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestMaleHazmat"   extends="zombieMaleHazmat">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagToolbag,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestSoldier"      extends="zombieSoldier">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagWeapons,6,occBagBooks,4"/>
+        </entity_class>
+
+        <entity_class name="occGuestTomClark"     extends="zombieTomClark">
+            <property name="LootDropProb" value=".25"/>
+            <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
+        </entity_class>
+
+    </append>
+
+    <append xpath="/entity_classes/entity_class[@name='zombieDemolition']">
+        <property name="SleeperSightToWakeMax" value="110,110"/>
+
+        <property name="SightLightThreshold" value="-2,60"/>
+    </append>
+
+    <set xpath="/entity_classes/entity_class[@name='zombieDemolition']/property[@class='Explosion']/property[@name='BlockDamage']/@value">500</set>
+
+</configs>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configs>
+
+    <append xpath="/archetypes">
+        <archetype name="Frilioth" male="true" race="White" variant="4" eye_color="Green04">
+            <equipment transform_name="body"  prefab="@:Entities/Player/{sex}/Gear/LumberJack/gear{sex}LumberJackPrefab.prefab" excludes="body"/>
+            <equipment transform_name="feet"  prefab="@:Entities/Player/{sex}/Gear/Preacher/gear{sex}PreacherPrefab.prefab" excludes="feet"/>
+        </archetype>
+    </append>
+
+</configs>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+    <Name value="FrilOstrichMenuVideoCycler" />
+    <DisplayName value="The Ostrich Challenge - Menu Video Cycler" />
+    <Version value="1.1.0" />
+    <Description value="Rotates the main-menu background video through the hotel's security camera feeds. Standalone: drop in your own clips and edit Config/videocycler.xml, no rebuild needed." />
+    <Author value="Frilioth" />
+    <Website value="https://frilcraft.uk" />
+</xml>

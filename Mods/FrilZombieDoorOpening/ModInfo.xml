@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+    <Name value="FrilZombieDoorOpening"/>
+    <DisplayName value="Fril Zombie Door Opening"/>
+    <Version value="0.9.2"/>
+    <Description value="Zombies fumble at unlocked closed doors then open them instead of bashing through. Locked doors are still bashed normally. Spencer Mansion style."/>
+    <Author value="Fril"/>
+    <Website value=""/>
+</xml>

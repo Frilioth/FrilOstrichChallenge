@@ -1,0 +1,73 @@
+# FrilOstrichChallenge
+
+# ============================================================================================
+# THE WORLDS GO UP THROUGH GIT LFS, NOT THROUGH THIS FILE. See .gitattributes.
+#
+# They were ignored here briefly, on the grounds that GitHub refuses any file over 100MB and
+# each world holds a 134MB dtm.raw. That reasoning was right about the limit and wrong about
+# the free LFS allowance, which is 10GB of storage and 10GB of bandwidth a month rather than
+# the 1GB assumed. The worlds fit.
+#
+# WHAT IS IGNORED INSTEAD is the half of each world the game builds for itself on first load.
+# ChunkProviderGenerateWorldFromRaw has a processFiles coroutine that writes dtm_processed.raw
+# while the loading screen says "Processing world files", and getFilenameDTM falls back to
+# dtm.raw when the processed one is absent. generateHalfResTexture does the same job for the
+# splat textures. None of it is authored, all of it is cache, and it is 140MB per world.
+#
+# TESTED IN GAME, 27 Oct 2026, 3.4.0 (b6). The five generated files were moved out of the
+# Wasteland world and a new game started on it. The log reads:
+#
+#     Calculating world hashes took 232 ms (world size 132 MiB)     <- before
+#     Processing world files
+#     Calculating world hashes took 365 ms (world size 265 MiB)     <- after
+#     Loading and creating dtm raw file took 13588ms
+#
+# The game rebuilt every one of them itself, the world doubled on disk, and checksums.txt was
+# recalculated without a word of complaint. Thirteen seconds, once, on first load. Fril: "it
+# loaded fine and the files we took out were regenerated".
+# ============================================================================================
+Mods/OstrichChallenge/worlds/**/dtm_processed.raw
+Mods/OstrichChallenge/worlds/**/*_processed.png
+Mods/OstrichChallenge/worlds/**/*_half.png
+Mods/OstrichChallenge/worlds/**/main.ttw.bak
+
+# THE PACKAGED MOD IS A RELEASE ASSET, NOT A REPO FILE.
+# Area 7's Mods.zip is 707MB and the Hospital's is 954MB. Neither of those repos has a
+# .gitignore, so in both of them that zip is sat there untracked waiting for a careless
+# "git add .".
+Mods.zip
+*.zip
+
+# RUNTIME OUTPUT, NOT MOD CONTENT.
+# occupancy_path.csv is what "occ dir path on" writes, one row per tick of a recorded route.
+# It is a debugging artefact and the mod neither reads it nor needs it.
+#
+# NOTE occupancy_building.txt IS NOT IGNORED AND MUST NOT BE. The mod loads it from its own
+# folder on startup (OstrichChallenge.cs sets Building.FilePath to it) and it carries the
+# floor heights, the home spot, reception, the entrances, the laptop, the car and the shutter.
+# Without it the mod does not know the shape of the building. It is content, not output.
+occupancy_path.csv
+
+# Development notes. These live in the working folder and must never reach a release.
+zzzzzzHelp_Docs/
+Recordings/
+DEVLOG*.md
+DEMO_*.md
+Demolisher_State_Table.html
+
+# Build output and local scratch
+/tmp/
+*.dll.mdb
+*.pdb
+
+# Windows and editor leftovers
+Thumbs.db
+desktop.ini
+*.bak
+*.tmp
+~$*
+
+# Fireworks working files. The exported PNGs are what the mod ships; the .png source files
+# Fireworks saves alongside them are working documents and do not belong in a release repo.
+# Remove this line if you decide you want the sources version-controlled after all.
+*.fw.png
