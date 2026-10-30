@@ -1,5 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Sandbox Option Presets
 
+    The hotel's difficulty tiers, in their OWN group in the Sandbox Options preset dropdown
+    rather than the shared "Modded" group. Loaded by the mod itself (see Presets.cs), because
+    sandbox_overrides.xml always hands presets to the "Modded" group whatever their category says.
+
+    THE CODES BELOW ARE THE HOSPITAL CHALLENGE'S LADDER, USED AS A STARTING POINT.
+    They are settings values only, and they were tuned for a different challenge: a hospital, on
+    foot, with a gyrocopter at the end. They give a working group from the first load instead of
+    six empty tiers, and they should be regenerated for the hotel.
+
+    TO FILL IN A TIER PROPERLY
+      1. In game: New Game, Sandbox Options, set everything the way you want it.
+      2. Use the copy button beside the sandbox code box.
+      3. Paste it into code="" below, replacing what is there.
+      4. Save and restart the game. No rebuild needed.
+
+    A preset whose code is FILLMEIN is skipped at load, so a half-finished tier never appears
+    broken in the menu.
+
+    WORTH CHECKING when regenerating, because this mod's own systems read them:
+      LootRespawnDays   NOTE, CHANGED IN v1.7.0: the mod forces this to 0 and it no longer has
+                        anything to do with containers. It drives the SLEEPER volume respawn,
+                        and anything above zero refills cleared rooms with zombies. Leave it.
+                        Container restocking is the Room Restock option above.
+      XPMultiplier      how fast the player levels, which decides how soon they can fight him
+      EnemySpawnMode    wandering hordes are the ground floor's pressure; off makes it a museum
+      BloodMoonFrequency  check-in is suspended on horde nights, so this changes the rhythm
+      StarterSkillPoints  EVERY tier below currently sets this to None against a vanilla default
+                        of 4, which is why the first play-through began with no points at all.
+                        Whatever a tier should give, set it deliberately rather than leaving it.
+      ZombieMoveNight / ZombieFeralMove / ZombieBMMove
+                        the stalker's speed once he has the player. GetMoveSpeedAggro indexes
+                        [0.00 Walk, 0.35 Jog, 0.70 Run, 1.00 Sprint, 1.35 Nightmare], and there is
+                        no separate setting for him: he moves at whatever every other zombie does.
+                        Daytime is vanilla's own default (Walk) unless a tier overrides it.
+
+    ROOM RESTOCK (v1.7.0) — AND HOW TO ADD IT TO A CODE WITHOUT REGENERATING ONE
+
+    The mod now registers its own sandbox option, "Room Restock", in the Resources tab, with
+    four values: Never / On check-in / Daily / Loot Respawn Days. It behaves like any vanilla
+    option, so setting it in the options screen and hitting the copy button captures it.
+
+    It can also be added to an EXISTING code by hand, because the code format is keyed rather
+    than positional. After the leading version character the code is a run of three-character
+    triplets: two characters naming the option, one naming the chosen value. Unknown options are
+    skipped on load, and the order of the triplets does not matter.
+
+    Our option is id 600, which encodes as "XC", and the values are A, B, C, D in the order
+    above. So APPEND one of these to the end of any code:
+
+        XCA   Never          nothing in the building ever restocks
+        XCB   On check-in    a room restocks the morning after a guest checks into it
+        XCC   Daily          an emptied container restocks a day later, anywhere
+        XCD   Loot Respawn Days   the vanilla slider decides, as it did before v1.7.0
+
+    Nothing else in the code changes and no other setting shifts, because nothing is positional.
+    A code carrying XC loaded WITHOUT this mod simply skips it.
+
+    THE INTENDED LADDER, which is why the option exists:
+      Night Porter    XCC  Daily      the soft tier; the hotel keeps feeding you
+      Duty Manager    XCB  On check-in
+      Full House      XCB  On check-in
+      No Vacancies    XCB  On check-in
+      Do Not Disturb  XCB  On check-in
+      The Last Guest  XCA  Never      what you did not take on the way up is gone
+
+    A tier that says nothing gets On check-in, which is the option's default.
+
+    ATTRIBUTES
+      name              required, internal id, no spaces
+      code              required, the sandbox code from the options screen
+      localized_name    what players see, a Localization.csv key
+      description_key   the blurb, a Localization.csv key
+      difficulty_rating shows a skull and xN; keep ascending
+      default           "true" marks the default selection for a new game
+      icon              optional; @modfolder(OstrichChallenge):Resources/file.png also works
+
+    THE TIER ART (v1.5.3)
+
+    Six pulp-horror covers, one per tier, in Resources/. No DLL change and no XUi change was
+    needed: Presets.cs hands the whole XElement to the game's own LoadPresetFromXml, so the
+    game parses icon= itself, SandboxPresetInfo has a native Icon field, and the menu draws it
+    with an XUi <texture> that runs the path through the standard mod-path resolver and loads
+    it off disk. No asset bundle. This was already documented in the Area 7 and Hospital preset
+    files and should have been read before it was investigated.
+
+    A BARE SPRITE NAME RENDERS NOTHING. icon="ui_game_symbol_*" does not work. Only a vanilla
+    resources path (Data/Sandbox/icons/user_custom) or a @modfolder path to a real file.
+
+    THE EXTENSION IS IGNORED AND THE FORMAT IS SNIFFED. These six are JPEG data with .png
+    names: 627 KB for the set instead of several megabytes as PNGs. Hospital's equivalent six
+    came to 2.1 MB the same way.
+
+    DRAWN AT 180x180, ASPECT KEPT, so square is the safe shape. These are 512x512, which leaves
+    headroom without carrying a 1024 into a 180px slot.
+
+    THE THUMBNAIL TEST, learned on Hospital: Walk-In and Flatline shipped with border colours
+    three points apart on every channel, so the easiest and hardest tiers were indistinguishable
+    as thumbnails and both had to be redrawn. These six were measured onto a deliberate ramp
+    instead, all at lightness 41% and saturation 62% so they carry equal weight, with only the
+    hue moving:
+
+        Night Porter   #286EAA  208 deg      No Vacancies    #AA5A28   23 deg
+        Duty Manager   #28AA64  148 deg      Do Not Disturb  #AA2832  355 deg
+        Full House     #AA8C28   46 deg      The Last Guest  #000000  none
+
+    The Last Guest leaves the hue wheel entirely, which is the point: it is the only tier that
+    is not a colour. If its frame disappears against a dark menu background, #1A1A1A gives it
+    an edge while still reading as the black one.
+-->
 <configs>
 
     <preset name="OstrichNightPorter"

@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configs>
 
+	<!-- ============================================================
+	     FrilCleanDoors  v1.2.2  -  shapes.xml
+	
+	     Makes player-crafted window shapes survive a hit or two
+	     instead of shattering on the first contact, and lets you
+	     upgrade them like any other shape.
+	
+	     How it works: window shape variants have three states - Full
+	     (glass intact), Broken (cracked), Empty (frame only). Vanilla
+	     gives the Full state MaterialHitpointMultiplier=0.001, which
+	     on a weak-wood frame is 0.1 HP - any non-zero damage instantly
+	     downgrades to Broken. This patch raises the multiplier to 0.1
+	     so the Full state holds 10% of the material's MaxDamage before
+	     downgrading. Broken and Empty states are left at vanilla.
+	
+	     Effective HP added by the Full state, by frame material:
+	       frameShapes (weak wood, MaxDmg 100)  -> Full HP 10
+	       woodShapes  (wood,      MaxDmg 500)  -> Full HP 50
+	       concreteShapes / steelShapes         -> proportionally more
+	
+	     Total durability is ~10% above vanilla per window - enough
+	     that the glass survives a hit or two, but small enough not
+	     to significantly affect game balance.
+	
+	     v1.2.0: Full multi was 0.5 (50% break point, ~50% durability
+	             inflation). Replaced with 0.1 in v1.2.1.
+	     v1.2.2: removed the vanilla ItemCount=10000 upgrade trap so
+	             windows can actually be upgraded (e.g. wood ->
+	             cobblestone) like any other shape.
+	
+	     Bulletproof shapes use a separate shape group and a separate
+	     block - they are NOT affected by this patch.
+	
+	     61 Full window shapes patched (multiplier).
+	     59 Full window shapes patched (upgrade trap removed).
+	     ============================================================ -->
+
+	<!-- Store windows (square) -->
 	<set xpath="/shapes/shape[@name='windowStoreOneSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowStoreTwoSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowStoreThreeSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
@@ -17,19 +55,23 @@
 	<set xpath="/shapes/shape[@name='windowStoreFourSidedCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowStoreCornerCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Store wedge windows -->
 	<set xpath="/shapes/shape[@name='windowStoreWedge60TipFullLeft']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowStoreWedge60TipFullRight']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowStoreWedge60FullLeft']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowStoreWedge60FullRight']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Store triangle windows -->
 	<set xpath="/shapes/shape[@name='windowStoreThreeSidedTriangleFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Ramp windows -->
 	<set xpath="/shapes/shape[@name='windowRampFourSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowRampTwoSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowRampOutsideCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowRampDiagonalCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='rampWindow01Centered']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Wedge60 windows -->
 	<set xpath="/shapes/shape[@name='windowWedge60TipFourSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowWedge60FourSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowWedge60TipTwoSidedFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
@@ -37,6 +79,7 @@
 	<set xpath="/shapes/shape[@name='windowWedge60TipOutsideCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowWedge60OutsideCornerFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Plate / decorative windows -->
 	<set xpath="/shapes/shape[@name='windowPlatePaneFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowPlateCircleFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowPlateRoundedSquare4SidedHalfWidthFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
@@ -53,6 +96,7 @@
 	<set xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleLeftFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleRightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Arch windows -->
 	<set xpath="/shapes/shape[@name='archWindowFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='archHalfWindowFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='arch2mWindow01Top']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
@@ -60,17 +104,41 @@
 	<set xpath="/shapes/shape[@name='arch2mWindow01Bottom']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowArchTopFilledCenteredStained']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Circle windows -->
 	<set xpath="/shapes/shape[@name='windowCircleCenterFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowCircleFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowCircleStraightFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowCircleStraightCenterFull']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+	<!-- Industrial / generic windows -->
 	<set xpath="/shapes/shape[@name='window01']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='window02Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='window04Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowIndustrial01Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 	<set xpath="/shapes/shape[@name='windowIndustrial02Full']/property[@name='MaterialHitpointMultiplier']/@value">0.1</set>
 
+
+	<!-- ============================================================
+	     v1.2.2 fix: remove the vanilla "ItemCount=10000" override
+	     on the upgrade chain.
+	
+	     Vanilla puts a 10000-item upgrade cost on every Full window
+	     shape to stop players upgrading them before the glass breaks
+	     (their Full HP is 0.001 * MaxDamage = effectively zero).
+	
+	     The comment in vanilla shapes.xml reads:
+	       "Needed for material upgrade due to MaterialHitpointMultiplier"
+	
+	     With our 0.1 multiplier the Full state has real HP and the
+	     anti-upgrade trap is no longer needed. Removing it makes the
+	     shape inherit the block's normal upgrade cost (e.g. 8 wood or
+	     10 cobblestone per material step) so windows can be upgraded
+	     like any other shape.
+	
+	     59 shapes patched (the 2 pane shapes have no trap to remove).
+	     ============================================================ -->
+
+	<!-- Store windows (square) -->
 	<remove xpath="/shapes/shape[@name='windowStoreOneSidedFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowStoreTwoSidedFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowStoreThreeSidedFull']/property[@class='UpgradeBlock']"/>
@@ -86,19 +154,23 @@
 	<remove xpath="/shapes/shape[@name='windowStoreFourSidedCornerFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowStoreCornerCornerFull']/property[@class='UpgradeBlock']"/>
 
+	<!-- Store wedge windows -->
 	<remove xpath="/shapes/shape[@name='windowStoreWedge60TipFullLeft']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowStoreWedge60TipFullRight']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowStoreWedge60FullLeft']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowStoreWedge60FullRight']/property[@class='UpgradeBlock']"/>
 
+	<!-- Store triangle windows -->
 	<remove xpath="/shapes/shape[@name='windowStoreThreeSidedTriangleFull']/property[@class='UpgradeBlock']"/>
 
+	<!-- Ramp windows -->
 	<remove xpath="/shapes/shape[@name='windowRampFourSidedFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowRampTwoSidedFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowRampOutsideCornerFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowRampDiagonalCornerFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='rampWindow01Centered']/property[@class='UpgradeBlock']"/>
 
+	<!-- Wedge60 windows -->
 	<remove xpath="/shapes/shape[@name='windowWedge60TipFourSidedFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowWedge60FourSidedFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowWedge60TipTwoSidedFull']/property[@class='UpgradeBlock']"/>
@@ -106,6 +178,7 @@
 	<remove xpath="/shapes/shape[@name='windowWedge60TipOutsideCornerFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowWedge60OutsideCornerFull']/property[@class='UpgradeBlock']"/>
 
+	<!-- Plate / decorative windows -->
 	<remove xpath="/shapes/shape[@name='windowPlateCircleFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquare4SidedHalfWidthFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowPlateRoundedSquareHalfLeftFull']/property[@class='UpgradeBlock']"/>
@@ -121,6 +194,7 @@
 	<remove xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleLeftFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowPlateTwoSidedTriangleRightFull']/property[@class='UpgradeBlock']"/>
 
+	<!-- Arch windows -->
 	<remove xpath="/shapes/shape[@name='archWindowFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='archHalfWindowFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='arch2mWindow01Top']/property[@class='UpgradeBlock']"/>
@@ -128,11 +202,13 @@
 	<remove xpath="/shapes/shape[@name='arch2mWindow01Bottom']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowArchTopFilledCenteredStained']/property[@class='UpgradeBlock']"/>
 
+	<!-- Circle windows -->
 	<remove xpath="/shapes/shape[@name='windowCircleCenterFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowCircleFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowCircleStraightFull']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='windowCircleStraightCenterFull']/property[@class='UpgradeBlock']"/>
 
+	<!-- Industrial / generic windows -->
 	<remove xpath="/shapes/shape[@name='window01']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='window02Full']/property[@class='UpgradeBlock']"/>
 	<remove xpath="/shapes/shape[@name='window04Full']/property[@class='UpgradeBlock']"/>

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Buffs
 
+    NO NEWBIE COAT BUFF. Vanilla gives a new character buffNewbieCoat, the XP death-penalty
+    protection that runs down over levels 1 to 5. It is separate from the coat item itself, which
+    is removed with the rest of the starting kit in entityclasses.xml, so taking the item away
+    leaves the buff sitting in the bar on its own.
+
+    Removed the same way the Hospital Challenge removes it.
+-->
 <configs>
 
     <remove xpath="/buffs/buff[@name='buffNewbieCoat']"/>

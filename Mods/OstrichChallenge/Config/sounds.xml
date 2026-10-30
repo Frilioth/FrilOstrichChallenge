@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- OstrichChallenge: the check-in bell.
+     The vanilla elevator_ding plays through AudioSource_Interact, the quiet source used for
+     door handles and switches, so it was easy to miss. This plays the first ding clip (Fril's pick of the four)
+     through AudioSource_VO_Announce, the source the traders use for their announcements, which
+     is made to be heard clearly. The mod plays it to the player twice, a "ding-ding", on every wave.
 
+     v1.26.0: THE OLD COMMENT HERE CLAIMED "It has NO Noise entry, so it never attracts zombies or
+     the stalker", while the node below set NoiseScale to 1 and CrouchNoiseScale to 0.5. That was
+     never verified. Fril, 2 October, having seen it twice: "The guests bell ... is being played at
+     my location, by me, and its very loud. Twice now its woken sleepers that are nearby."
+
+     He is right that it plays at his location: Audio.Manager.PlayInsidePlayerHead parents the
+     AudioSource to the local player's transform and sets its position to the player's. That method
+     never calls SignalAI, so on the code that can be read it should emit no AI noise, and the
+     mechanism is NOT proven. But an explicit zero costs nothing and a claim in a comment is worth
+     nothing, so both scales are now 0 rather than absent. Absent means "whatever the default is".
+     Zero means zero.
+
+     IF THE BELL STILL WAKES SLEEPERS after this, the SoundDataNode is not the cause and the next
+     two candidates are the world ding rung at reception (Audio.Manager.BroadcastPlay, vanilla's own
+     elevator_ding1, whose noise properties this mod does not control) and the eight entrance doors
+     the mod forces open on the same tick. Neither is at the player, so neither fits the symptom as
+     described, which is why they are second and third rather than first. -->
 <configs>
-    
+    <!-- v2.0.0: removes only the mod's OWN radio nodes, so a reinstall is idempotent.
+         The xpath is deliberately narrow: it cannot match occArmouryAlarm or occupancyBell. -->
     <remove xpath="/Sounds/SoundDataNode[starts-with(@name, 'occRadio')]" />
 
     <append xpath="/Sounds">
 
+        <!-- v1.89.0: THE ARMOURY CHEST ALARM. Vanilla's own alarm clip, deliberately WITHOUT
+             Loop="true" (vanilla's alarm1 has it, alarm1_oneshot does not): Alarm.cs plays this
+             again every couple of seconds for thirty, so the burst ends by running out rather
+             than by something having to find and stop a looping AudioSource.
+             AudioSource_VO_Announce is the loud source, the same one the check-in bell uses
+             after the quiet Interact source turned out to be easy to miss.
+             The Noise element is copied from vanilla's alarm_house_biz_lp1 so the figures are
+             vanilla's rather than invented. Alarm.cs ALSO calls AIDirector.NotifyNoise with the
+             player as instigator, because the mod's own hearing model ignores any noise whose
+             instigator is not an EntityPlayer. -->
         <SoundDataNode name="occArmouryAlarm"> <AudioSource name="@:Sounds/Prefabs/AudioSource_VO_Announce.prefab"/>
             <Noise ID="4" noise="60" time="2" heat_map_strength="0.2" heat_map_time="90"/>
             <AudioClip ClipName="@:Sounds/Electricity/Alarms/alarm1_lp.wav"/>
@@ -16,13 +49,48 @@
             <AudioClip ClipName="@:Sounds/TriggeredEvents/elevator_ding1.wav"/>
             <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0"/> <NoiseScale value="0"/> <MaxVoices value="10"/> <MaxRepeatRate value="0"/>
         </SoundDataNode>
+    
 
+        <!-- ===========================================================================
+             v2.0.0, 9 Oct 2026: THE RADIO BROADCASTS. 80 clips across 14 SoundDataNodes.
+
+             THIS FILE ALREADY EXISTED AND I OVERWROTE IT. The bell and the alarm above were
+             destroyed by a blind write at 22:27 and recovered from the v1.99.2 zip twenty
+             minutes later, only because Fril asked "Does the sounds you just sent me include
+             the occupancyBell and the ArmouryAlarm??". Shipped, it would have silenced the
+             check-in bell, which the entire night cycle hangs off, and the armoury alarm.
+             CHECK WHETHER A CONFIG EXISTS BEFORE WRITING ONE. Appending is the default; a
+             fresh file is the exception and needs the old one read first.
+
+             COPIED FROM A WORKING EXAMPLE, NOT INVENTED. The structure below is lifted from
+             Frils_Drone_Voices_Mod's Sounds.xml, which loads today: the vanilla
+             AudioSource_VO.prefab, the "#@modfolder:Resources/<bundle>.unity3d?<folder>/<clip>"
+             ClipName form with no extension, and one folder per key inside the bundle.
+
+             RANDOM SELECTION IS FREE. Vanilla's own sounds.xml documents it: "a wave file to
+             play at random when this SoundDataNode is called. Multiple entries will add to the
+             list of possible sounds to play." 1081 vanilla nodes work this way. So Radio.cs asks
+             for "occRadioTwo" and the game picks one of the six.
+
+             IT DOES NOT GIVE US Fril's "never repeated": vanilla random can hand you the same
+             clip twice running. Accepted for now. If it grates, the fix is one node per TAKE and
+             the choosing moved into Radio.cs, and no recording changes.
+
+             TWO DELIBERATE DIFFERENCES FROM THE DRONE:
+               MaxVoices is 1, not 10. A drone can talk over itself; a broadcast must not.
+               NO <Noise> NODE. The drone's is noise="7", audible to the AI. A radio that draws
+               the stalker to the roof is a real idea and might be a good one, but it is a
+               GAMEPLAY change nobody asked for. Left out and flagged rather than slipped in.
+             =========================================================================== -->
+        <!-- RADIO NODES: GENERATED by tools/make_subtitles.py, do not hand edit -->
+    <!-- occRadioFirst -->
     <SoundDataNode name="occRadioFirst_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirst/occRadioFirst_01"/>
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioTwo -->
     <SoundDataNode name="occRadioTwo_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioTwo/occRadioTwo_01"/>
@@ -54,6 +122,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioThree -->
     <SoundDataNode name="occRadioThree_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioThree/occRadioThree_01"/>
@@ -85,6 +154,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioFour -->
     <SoundDataNode name="occRadioFour_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFour/occRadioFour_01"/>
@@ -116,6 +186,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioFive -->
     <SoundDataNode name="occRadioFive_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFive/occRadioFive_01"/>
@@ -157,6 +228,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioFirstRoar -->
     <SoundDataNode name="occRadioFirstRoar_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioFirstRoar/occRadioFirstRoar_01"/>
@@ -193,6 +265,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioSeenHim -->
     <SoundDataNode name="occRadioSeenHim_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioSeenHim/occRadioSeenHim_01"/>
@@ -234,6 +307,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioGettingWorse -->
     <SoundDataNode name="occRadioGettingWorse_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingWorse/occRadioGettingWorse_01"/>
@@ -265,6 +339,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioGettingBetter -->
     <SoundDataNode name="occRadioGettingBetter_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioGettingBetter/occRadioGettingBetter_01"/>
@@ -296,6 +371,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioExplosion -->
     <SoundDataNode name="occRadioExplosion_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioExplosion/occRadioExplosion_01"/>
@@ -327,6 +403,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioHurt -->
     <SoundDataNode name="occRadioHurt_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioHurt/occRadioHurt_01"/>
@@ -358,6 +435,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioEmpty -->
     <SoundDataNode name="occRadioEmpty_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioEmpty/occRadioEmpty_01"/>
@@ -389,6 +467,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioAfterHim -->
     <SoundDataNode name="occRadioAfterHim_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioAfterHim/occRadioAfterHim_01"/>
@@ -400,6 +479,7 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occRadioRepeat -->
     <SoundDataNode name="occRadioRepeat_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occRadioRepeat/occRadioRepeat_01"/>
@@ -431,17 +511,20 @@
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occEnding -->
     <SoundDataNode name="occEnding_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occEnding/occEnding_01"/>
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
 
+    <!-- occDeskCall -->
     <SoundDataNode name="occDeskCall_01">
         <AudioSource name="@:Sounds/Prefabs/AudioSource_VO.prefab"/>
         <AudioClip ClipName="#@modfolder:Resources/frilostrichradio.unity3d?occDeskCall/occDeskCall_01"/>
         <LocalCrouchVolumeScale value="1.0"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="1"/> <MaxRepeatRate value="1.111"/>
     </SoundDataNode>
+    <!-- END RADIO NODES -->
 
     </append>
 </configs>

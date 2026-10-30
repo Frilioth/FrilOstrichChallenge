@@ -1,14 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- OstrichChallenge: HONEY IN THE DRINKS MACHINES
 
+     Honey cures infection, and in a building with no traders and no doctor it is the only cure
+     the player can reliably plan around. Putting it behind Dukes rather than behind luck makes
+     an infection a setback you can work your way out of instead of a run that quietly ends.
+
+     WHERE IT GOES, AND WHY NOT THE OBVIOUS PLACE.
+     The drinks machine is trader id 4 (is_vending="true", reset_interval="1"), and it stocks
+     from two groups:
+
+         <trader_items>
+             <item group="drinkVending" count="4,8"/>
+             <item group="drinkSpecialVending" count="4,8"/>
+         </trader_items>
+
+     drinkVending is a wrapper holding a single entry, <item group="groupDrinks"/>. Appending
+     honey THERE would have been tidier and better scoped, and I did not, deliberately: with
+     count="4,8" drawn from a group that would then hold two entries, the outcome depends on
+     whether the picker draws with replacement or simply takes everything up to the count. If it
+     is the latter, honey appears in every machine on every restock, guaranteed. I cannot read
+     that behaviour out of the XML and would be guessing, so this goes one level down instead.
+
+     Inside groupDrinks honey is one entry among eight, so it is bounded however the picker
+     works. That is the whole reason for the choice.
+
+     THE COST OF THAT CHOICE, stated plainly: groupDrinks is also referenced by groupFoodAll and
+     traderGeneral, so honey is now very slightly more likely at a general trader too. Occupancy
+     has no traders and the player cannot leave the hotel, so in this mod that is academic. It
+     would matter if this file were reused elsewhere.
+
+     THE RATE. The seven vanilla drinks carry no prob, which is a weight of 1.0 each. Honey at
+     0.5 is therefore about 0.5/7.5, near enough 7% of each pick. At 4 to 8 picks per restock
+     that is roughly one honey every other restock per working machine.
+
+     PRICE IS THE REAL GATE. foodHoney is EconomicValue 80 and trader 4 carries
+     override_buy_markup="3", so a jar costs about 240 Dukes. The player has to have cracked a
+     few safes before an infection is survivable, which is the intended shape: reachable, not free.
+
+     TO DIAL IT: raise prob towards 1.0 to match the other drinks (12.5% of picks), or drop it to
+     0.25 for roughly one honey every fourth restock.
+
+     Every xpath here was resolved against the real vanilla traders.xml before shipping.
+-->
 <configs>
 
     <append xpath="/traders/trader_item_groups/trader_item_group[@name='groupDrinks']">
         <item name="foodHoney" count="1,2" prob="0.5"/>
     </append>
 
+    <!-- ================================================================================
+         CHOC 'N' AWE IN THE SNACK MACHINES (v1.13.5)
+
+         Fril: "Add choc n awe to the vending machines but dont make it cheap. It needs to be
+         more expensive than the chili as there needs to be a premium on it not smwlling when
+         you eat it."
+
+         WHERE, AND IT IS THE SAME REASONING AS THE HONEY ABOVE. The food vending machine is
+         trader id 10, and its chain is two links:
+
+             trader_info id=10  ->  <item group="foodVending" count="4,8"/>
+             foodVending        ->  <item group="cannedfood"/>
+             cannedfood         ->  15 tinned items, no prob on any of them
+
+         Appending to foodVending would have been the tidier place and is the trap the honey
+         note describes: with count="4,8" drawn from a group that would then hold two entries,
+         the bar appears in every machine on every restock if the picker takes everything up to
+         the count rather than drawing with replacement. That behaviour still cannot be read out
+         of the XML, so this goes one level down again.
+
+         Inside cannedfood the bar is one entry among sixteen, so it is bounded however the
+         picker works. NO prob, matching the fifteen tinned items, which all carry an implicit
+         weight of 1.0. So roughly 1 in 16 of each pick, 4 to 8 picks a restock: it turns up
+         often enough to be a real option and not so often that it is the default lunch.
+
+         PRICE IS THE GATE, NOT RARITY, exactly as it is for the honey. 240 Dukes against the
+         chili's 180, which is level with the honey in the drinks machine. The full arithmetic
+         and the dial are in items.xml beside EconomicValue.
+
+         THE COST OF GOING ONE LEVEL DOWN, stated plainly the way the honey note does it:
+         cannedfood is referenced in four places in vanilla traders.xml, not just by the vending
+         chain, so the bar becomes very slightly likelier at a general trader too. The hotel has
+         no traders and the player cannot leave, so in this mod that is academic. It would matter
+         if this file were reused elsewhere.
+
+         NOT MEASURED: no machine has been bought from since this went in.
+         ================================================================================ -->
     <append xpath="/traders/trader_item_groups/trader_item_group[@name='cannedfood']">
         <item name="occChocNAwe" count="1,2"/>
     </append>
+
+    <!-- ================================================================================
+         FRILIOTH'S OWN TRADER ENTRY, WITH NOTHING IN IT (v0.80.0)
+
+         He is the end of the run, not a shop. The survivor drives across the city, finds him,
+         and the game ends. A stock list would be strange at that point, so he has none.
+
+         WHY HE NEEDS AN ENTRY AT ALL RATHER THAN NO trader_id.
+         Two reasons, both read out of the assembly rather than assumed:
+
+           1. TraderData.get_TraderInfo is
+
+                  if (TraderID == -1) return null;
+                  return traderInfoList[TraderID];
+
+              so a trader whose id has no entry behind it gets a NULL TraderInfo, and everything
+              that then asks it a question throws. The npc.xml entry and this one are a pair and
+              must always ship together.
+
+           2. EntityTrader.PostInit only sets IsGodMode inside "if (NPCInfo.TraderID > 0)". He is
+              the ending, so he must not be killable by a stray shot or a wandering horde. Keeping
+              a real, positive id is what keeps that protection.
+
+         WHY ID 11.
+         traderInfoList is a fixed ARRAY, indexed directly by the id, allocated as
+
+              ldc.i4 0x00000100 ; newarr TraderInfo
+
+         so it holds 256 slots and ids 0 to 255 are all legal. Vanilla fills 1 to 10 (1 Joel,
+         2 Jen, 3 player-owned, 4 vending, 5 rentable, 6 Bob, 7 Hugh, 8 Rekt, 9 traderTest,
+         10 vending), so 11 is the first free one. An earlier note in npc.xml said 10 was free.
+         That was wrong: it came from a list I had in my head rather than from this file.
+
+         NO OPENING HOURS HERE ON PURPOSE. Trader hours are a sandbox setting in 3.2 and Fril is
+         setting his to 24 hours, so there is nothing to declare and nothing that can shut the
+         ending behind a closed door at ten past ten at night.
+
+         reset_interval="-1" is vanilla's own "never restocks", used by ids 3 and 5. There is
+         nothing to restock, and it stops the game scheduling resets for an empty list.
+
+         allow_sell="false" is included because "no trades" cuts both ways: with it, the survivor
+         cannot sell him things either. Say the word and it comes out.
+
+         An empty self-closing trader_info is legal and vanilla does it: ids 3 and 5 both carry no
+         trader_items at all.
+         ================================================================================ -->
 
     <append xpath="/traders">
         <trader_info id="11" reset_interval="-1" allow_sell="false"/>

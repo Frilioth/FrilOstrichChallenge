@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    FrilModList - XUi
 
+    The window needs a group before anything can open it. This is the same shape the Ostrich
+    uses for its own standalone pages (occupancyNote, occupancyFailed): one group, one window,
+    opened by name from code and closed with Esc.
+
+    THE CONTROLLER IS ON THE WINDOW, NOT THE GROUP. The Ostrich learned this the hard way and
+    the note is in its own xui.xml: a group-level controller serves the group, and the bindings
+    we need are read by the labels inside the window. Declaring it on the window gives those
+    labels a controller instance that resolves where they actually live.
+-->
 <configs>
 
     <append xpath="/xui">

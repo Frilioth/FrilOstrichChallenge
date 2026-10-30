@@ -1,25 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Progression
 
+    Adopted from Fril's Hospital Challenge progression.xml (v0.8.0, the 3.2 port), which is where
+    all of this was worked out. Kept: every skill cap, the seeds-from-one-book change and the
+    generatorbank fix.
+
+    v1.96.0: THE VEHICLE SIDE IS NOT CAPPED ANY MORE, IT IS GONE. This header used to say the mod
+    kept "the removal of the vanilla vehicle display entries, which suits a mod where no vehicle
+    can be crafted at all". That is now an understatement rather than a description: perkGreaseMonkey
+    and the craftingVehicles skill are both removed outright. See the block further down.
+
+    LEFT OUT, because they are Hospital's own and would break or mislead here:
+      - the gyrocopter part unlocks (hospitalGyroControlCables, hospitalGyroTailAssembly, and
+        smallEngine, which Hospital gates on its vehicle crafting skill). The hotel's way out is
+        the 4x4, and this mod no longer has a vehicle crafting skill to gate anything on.
+      - the T1 and T2 workstation display rebuild, which moves the Dew Collector into Tier 1 and
+        needs the mod key hospitalWorkstationsT1DewCollector in Localization.csv, plus the T4
+        chemistry station removal, which depends on Hospital removing that recipe. Say the word
+        and the pair can be ported with a key of our own.
+
+    NOTE the caps are Hospital's balance, not the hotel's. Worth a pass once the hotel's own
+    loot and traders are settled.
+-->
 <configs>
 
+	<!-- ============================================================ -->
+	<!-- CAP Forge Ahead (craftingWorkstations) at 50                 -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/@max_level">50</set>
 	<set xpath="//perk[@name='perkAdvancedEngineering']/effect_group/passive_effect[@tags='workstationCSM']/requirement/@value">50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='forge']/@level">4,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='cntDewCollector']/@level">5,50</set>
-	
+	<!-- v1.33.0: THE DISPLAY CATCHES UP WITH THE DEW COLLECTOR.
+	     The move to 5 is Hospital's deliberate "Dew Collector into Tier 1" decision and it has
+	     been live here since the port. Its display row never came with it, so the perk screen
+	     has been saying 16 while the game granted it at 5. Vanilla's T2 row is
+	     icon="cntDewCollector,toolChickenCoopRun,toolAnvil,toolChickenCoopNestingBox,toolDewGatherer"
+	     unlock_level="16,18,20,24,26", so the dew collector is the 1st of five and only that
+	     position changes, 16 -> 5. The row is now out of ascending order, which is cosmetic.
+	     The header of this file says porting this needs the mod key hospitalWorkstationsT1DewCollector.
+	     It does NOT: that is only true of Hospital's full tier rebuild, which moves the item to
+	     another row. Correcting one number in the row it already sits in needs no new key. -->
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT2-1,workstationsT2-2,workstationsT2-3,workstationsT2-5,workstationsT2-6']/@unlock_level">5,18,20,24,26</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='cntChickenCoop']/@level">6,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolBellows']/@level">8,50</set>
-	
+	<!-- v1.32.0: WORKBENCH 10 -> 5. Fril: "can we reduce the number of forge ahead books you
+	     need to read to make a work bench. Currently its 10 and its not easy to get to 10."
+	     The ladder above it is Hospital's, where a chicken coop and a bellows ahead of the
+	     workbench make sense. In a hotel they do not, and the workbench is the only one of the
+	     five that matters. At 5 it lands just after the forge.
+	     THE DISPLAY ENTRY MOVES WITH IT, see below. Changing one without the other is the Area 7
+	     fault recorded in 7DTD_Modding_Notes.md, where 17 workstations advertised one level and
+	     granted at another. -->
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='workbench']/@level">5,50</set>
 
+	<!-- The workbench is the 4th of six in vanilla's T1 row, which ships as
+	     icon="forge,cntChickenCoop,toolBellows,workbench,resourceLockPick,toolChickenCoopLamp"
+	     unlock_level="4,6,8,10,12,14". Only the 4th position changes, 10 -> 5. Selected by
+	     @name_key rather than position, as the notes require, so it cannot drift if TFP reorder. -->
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT1-1,workstationsT1-2,workstationsT1-3,workstationsT1-4,workstationsT1-5,workstationsT1-6']/@unlock_level">4,6,8,5,12,14</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='resourceLockPick']/@level">12,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolChickenCoopLamp']/@level">14,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolChickenCoopRun']/@level">18,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolAnvil']/@level">20,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='chemistryStation']/@level">20,50</set>
-	
+	<!-- v1.33.0: THE DISPLAY CATCHES UP WITH THE CHEMISTRY STATION, same fault as the dew
+	     collector above. The move from 50 to 20 is Hospital's and has been live since the port;
+	     the perk screen was still advertising 50. Vanilla's T4 row is
+	     icon="toolApiaryExtractor,toolApiaryBroodBox,resourceWaterFilter,chemistryStation"
+	     unlock_level="40,44,48,50", so the chemistry station is the 4th of four and only that
+	     position changes, 50 -> 20. Note resourceWaterFilter is the 3rd and is left at 48. -->
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT4-1,workstationsT4-3,workstationsT4-5,workstationsT4-6']/@unlock_level">40,44,48,20</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolChickenCoopNestingBox']/@level">24,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolDewGatherer']/@level">26,50</set>
@@ -32,8 +83,40 @@
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolApiarySmoker']/@level">50,50</set>
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/effect_group/passive_effect[@tags='toolForgeCrucible']/@level">50,50</set>
 
+	<!-- T5 display: was 30,50 while the effects unlock at 50,50. The Apiary Smoker
+	     showed as level 30 but did not actually unlock until 50. Corrected to match
+	     the effects. Pre-existing in v0.7.1, not introduced by the port. -->
 	<set xpath="//crafting_skill[@name='craftingWorkstations']/display_entry[@name_key='workstationsT5-2,workstationsT5-5']/@unlock_level">50,50</set>
 
+	<!-- ============================================================
+	     CAP Trap Crafting (craftingTraps) at 50  -  LADDER REBUILT v1.33.0
+
+	     WHAT WAS WRONG. Vanilla ships four trap tiers evenly spread to a cap of 100:
+
+	         trapsT1   25   electricfencepost, dartTrap, bladeTrap
+	         trapsT2   50   shotgunTurret
+	         trapsT3   75   autoTurret
+	         trapsT4  100   m60Turret
+
+	     The cap pass adopted from Hospital dropped max_level to 50 and then wrote 50,50 into
+	     effects 1, 2 and 3. That is a clamp to stop values exceeding the new cap, not a rescale,
+	     and it had three consequences:
+
+	       1. Every trap in the game unlocked at the same moment, at the cap. Four tiers, one
+	          level. The ladder was gone.
+	       2. The m60 turret was never touched, so it still wanted level 100 of a skill that now
+	          stops at 50. IT COULD NEVER BE CRAFTED, and the perk screen advertised it at 100.
+	       3. Only the trapsT3 display was moved, so the perk screen still said 25 for the blade
+	          trap, dart trap and electric fence post while all three actually came at 50.
+
+	     The old block selected by passive_effect[1], [2] and [3] - the positional selector
+	     7DTD_Modding_Notes.md warns against - which is exactly how the fourth came to be missed.
+	     Every selector below is by @tags or @name_key.
+
+	     THE REBUILD is vanilla's ladder halved, which keeps its shape inside our cap:
+	         25/50/75/100  ->  12/25/37/50
+	     Both halves move together for all four tiers. Fril agreed 3 Oct.
+	     ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingTraps']/@max_level">50</set>
 	<set xpath="//perk[@name='perkAdvancedEngineering']/effect_group/passive_effect[@tags='trapsCSM']/requirement/@value">50</set>
 
@@ -47,6 +130,9 @@
 	<set xpath="//crafting_skill[@name='craftingTraps']/display_entry[@name_key='trapsT3']/@unlock_level">37</set>
 	<set xpath="//crafting_skill[@name='craftingTraps']/display_entry[@name_key='trapsT4']/@unlock_level">50</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Electrician (craftingElectrician) at 50                  -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingElectrician']/@max_level">50</set>
 	<set xpath="//perk[@name='perkAdvancedEngineering']/effect_group/passive_effect[@tags='electricianCSM']/requirement[@operation='LT']/@value">50</set>
 	<set xpath="//perk[@name='perkAdvancedEngineering']/effect_group/passive_effect[@tags='electricianCSM']/requirement[@operation='Equals']/@value">50</set>
@@ -55,14 +141,38 @@
 	<set xpath="//crafting_skill[@name='craftingElectrician']/effect_group/passive_effect[3]/@level">50,50</set>
 	<set xpath="//crafting_skill[@name='craftingElectrician']/display_entry[@name_key='electricianT3']/@unlock_level">50</set>
 	<set xpath="//crafting_skill[@name='craftingElectrician']/effect_group/passive_effect[4]/@level">5,50</set>
-	
+	<!-- Fix: generatorbank RecipeTagUnlocked was still at 25,100 — display_entry showed 5 but actual unlock was gated at 25 -->
 	<set xpath="//crafting_skill[@name='craftingElectrician']/effect_group/passive_effect[@tags='generatorbank,electricwirerelay,switch,tripwirepost,ceilingLight01_player,industrialLight01_player,industrialLight02_player,ceilingLight07_player']/@level">5,50</set>
 	<set xpath="//crafting_skill[@name='craftingElectrician']/display_entry[@name_key='electricianT1']/unlock_entry/@item">generatorbank,electricwirerelay,switch,tripwirepost,ceilingLight01_player,industrialLight01_player,industrialLight02_player,ceilingLight07_player,carBattery</set>
 	<set xpath="//crafting_skill[@name='craftingElectrician']/display_entry[@name_key='electricianT1']/@unlock_level">5</set>
 	<remove xpath="//crafting_skill[@name='craftingElectrician']/display_entry[@name_key='electricianT4']"/>
 
+	<!-- v1.33.0: THE CAR BATTERY'S QUALITY LADDER, which the cap left stranded.
+
+	     This is a different fault from the carBattery display entry handled four lines above,
+	     and it hid for a different reason. The lines above move the car battery's
+	     RecipeTagUnlocked down to 5 so it can be made from the start, and that works. What
+	     nobody looked at is the SECOND effect on the same item:
+
+	         <passive_effect name="CraftingTier" tags="carBattery" level="60,70,80,90,100"/>
+
+	     Vanilla caps the electrician at 100, so that ladder reaches top quality exactly at the
+	     cap. We capped the skill at 50 and left the ladder at 60-100, entirely above it.
+
+	     The battery still CRAFTS, which is why no test ever caught it. What it can never do is
+	     improve. items.xml gives carBattery ShowQuality="true" and DegradationMax="1000,6000",
+	     so every car battery the player makes for the whole run has 1000 durability out of a
+	     possible 6000, for ever.
+
+	     Rescaled into the cap, same five steps: 60,70,80,90,100 -> 20,28,36,44,50.
+	     This is the only CraftingTier in craftingElectrician, so nothing else is left behind.
+	     Found by the full effect sweep added to tools/validate_progression.py on 3 Oct, which
+	     checks EVERY passive_effect against its skill cap and not just RecipeTagUnlocked. -->
 	<set xpath="//crafting_skill[@name='craftingElectrician']/effect_group/passive_effect[@name='CraftingTier'][@tags='carBattery']/@level">20,28,36,44,50</set>
 
+	<!-- ============================================================ -->
+	<!-- Seeds: 1 book unlocks everything                             -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingSeeds']/@max_level">1</set>
 	<set xpath="//crafting_skill[@name='craftingSeeds']/display_entry[1]/@unlock_level">1,1,1,1,1</set>
 	<set xpath="//crafting_skill[@name='craftingSeeds']/display_entry[2]/@unlock_level">1,1,1,1,1</set>
@@ -77,9 +187,44 @@
 	<set xpath="//crafting_skill[@name='craftingSeeds']/effect_group/passive_effect[9]/@level">1,1</set>
 	<set xpath="//crafting_skill[@name='craftingSeeds']/effect_group/passive_effect[10]/@level">1,1</set>
 
+	<!-- ============================================================ -->
+	<!-- v1.96.0: GREASE MONKEY AND VEHICLE CRAFTING ARE GONE ENTIRELY -->
+	<!-- ============================================================ -->
+	<!--
+	     Fril, 8 Oct 2026: "remove the Grease Monkey skill tree. Putting points in there is
+	     pointless as you cannot craft any vehicles?"
+
+	     He is right, and this file already agreed with him in its own header: "a mod where no
+	     vehicle can be crafted at all". recipes.xml removes all twelve vehicle recipes, and the
+	     4x4 is spawned by the DLL rather than built. The old lines below only CAPPED the skill
+	     at 50 and stripped five display entries, which left a tree a player could still sink
+	     points into for nothing.
+
+	     WHAT GREASE MONKEY ACTUALLY GATED, read out of vanilla's progression.xml rather than
+	     assumed. Exactly two craftables carry tags="perkGreaseMonkey": resourceOil and
+	     vehicleWheels.
+	       - vehicleWheels is useless here, there is nothing to put them on.
+	       - resourceOil is a chemistry station recipe costing 24 resourceOilShale, which means
+	         mining, which a hotel does not offer. Oil appears in thirteen places in vanilla's
+	         loot.xml, so the lootable route is untouched and is the only route that was ever
+	         going to be used.
+	     So nothing playable is lost.
+
+	     NOTHING ELSE DEPENDS ON EITHER. All seven references to perkGreaseMonkey in vanilla's
+	     progression.xml sit inside the perk's own block, and the perk's own level requirements
+	     are what reference craftingVehicles, so the two come out together. The fifteen
+	     references in items.xml and three in recipes.xml are bare tags="perkGreaseMonkey"
+	     attributes, which are inert once no perk carries that tag.
+
+	     THE 4x4 IS NOT AT RISK. Escape.cs makes it indestructible and it needs no fuel, battery
+	     or repair, so the way out does not touch any of this.
+	-->
 	<remove xpath="//perk[@name='perkGreaseMonkey']"/>
 	<remove xpath="//crafting_skill[@name='craftingVehicles']"/>
 
+	<!-- ============================================================ -->
+	<!-- CAP Robotics (craftingRobotics) at 50                        -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingRobotics']/@max_level">50</set>
 	<set xpath="//perk[@name='perkElectrocutioner']/effect_group/passive_effect[@tags='roboticsCSM']/requirement[@operation='LT']/@value">50</set>
 	<set xpath="//perk[@name='perkElectrocutioner']/effect_group/passive_effect[@tags='roboticsCSM']/requirement[@operation='Equals']/@value">50</set>
@@ -99,6 +244,9 @@
 	<set xpath="//crafting_skill[@name='craftingRobotics']/effect_group/passive_effect[9]/@level">30,35,40,45,50,50</set>
 	<set xpath="//crafting_skill[@name='craftingRobotics']/effect_group/passive_effect[10]/@level">50,50,50,50,50</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Medical (craftingMedical) at 50                          -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingMedical']/@max_level">50</set>
 	<set xpath="//perk[@name='perkPhysician']/effect_group/passive_effect[@tags='medicalCSM']/requirement[@operation='LT']/@value">50</set>
 	<set xpath="//perk[@name='perkPhysician']/effect_group/passive_effect[@tags='medicalCSM']/requirement[@operation='Equals']/@value">50</set>
@@ -114,6 +262,9 @@
 	<set xpath="//crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT2-1,medicalT2-2,medicalT2-3']/@unlock_level">15,25,30</set>
 	<set xpath="//crafting_skill[@name='craftingMedical']/display_entry[@name_key='medicalT3-1,medicalT3-2,medicalT3-3']/@unlock_level">20,40,50</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Harvesting Tools (craftingHarvestingTools) at 45         -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingHarvestingTools']/@max_level">45</set>
 	<set xpath="//perk[@name='perkMiner69r']/effect_group/passive_effect[@tags='harvestingToolsCSM']/requirement[@operation='LT']/@value">45</set>
 	<set xpath="//perk[@name='perkMiner69r']/effect_group/passive_effect[@tags='harvestingToolsCSM']/requirement[@operation='Equals']/@value">45</set>
@@ -129,6 +280,9 @@
 	<set xpath="//crafting_skill[@name='craftingHarvestingTools']/display_entry[@name_key='harvestToolsSteel']/@unlock_level">18,20,24,28,32,35</set>
 	<set xpath="//crafting_skill[@name='craftingHarvestingTools']/display_entry[@name_key='harvestToolsMechanical']/@unlock_level">35,37,39,41,43,45</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Salvage Tools (craftingSalvageTools) at 45               -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingSalvageTools']/@max_level">45</set>
 	<set xpath="//perk[@name='perkSalvageOperations']/effect_group/passive_effect[@tags='salvageToolsCSM']/requirement[@operation='LT']/@value">45</set>
 	<set xpath="//perk[@name='perkSalvageOperations']/effect_group/passive_effect[@tags='salvageToolsCSM']/requirement[@operation='Equals']/@value">45</set>
@@ -142,6 +296,9 @@
 	<set xpath="//crafting_skill[@name='craftingSalvageTools']/display_entry[@item='meleeToolSalvageT2Ratchet']/@unlock_level">18,20,24,28,32,35</set>
 	<set xpath="//crafting_skill[@name='craftingSalvageTools']/display_entry[@item='meleeToolSalvageT3ImpactDriver']/@unlock_level">35,37,39,41,43,45</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Knuckles (craftingKnuckles) at 35                        -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingKnuckles']/@max_level">35</set>
 	<set xpath="//perk[@name='perkBrawler']/effect_group/passive_effect[@tags='knucklesCSM']/requirement[@operation='LT']/@value">35</set>
 	<set xpath="//perk[@name='perkBrawler']/effect_group/passive_effect[@tags='knucklesCSM']/requirement[@operation='Equals']/@value">35</set>
@@ -154,6 +311,9 @@
 	<set xpath="//crafting_skill[@name='craftingKnuckles']/display_entry[@item='meleeWpnKnucklesT1IronKnuckles']/@unlock_level">8,10,14,18,22,25</set>
 	<set xpath="//crafting_skill[@name='craftingKnuckles']/display_entry[@item='meleeWpnKnucklesT3SteelKnuckles']/@unlock_level">25,27,29,31,33,35</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Blades (craftingBlades) at 35                            -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingBlades']/@max_level">35</set>
 	<set xpath="//perk[@name='perkDeepCuts']/effect_group/passive_effect[@tags='bladesCSM']/requirement[@operation='LT']/@value">35</set>
 	<set xpath="//perk[@name='perkDeepCuts']/effect_group/passive_effect[@tags='bladesCSM']/requirement[@operation='Equals']/@value">35</set>
@@ -166,6 +326,9 @@
 	<set xpath="//crafting_skill[@name='craftingBlades']/display_entry[@item='meleeWpnBladeT1HuntingKnife']/@unlock_level">8,10,14,18,22,25</set>
 	<set xpath="//crafting_skill[@name='craftingBlades']/display_entry[@item='meleeWpnBladeT3Machete']/@unlock_level">25,27,29,31,33,35</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Clubs (craftingClubs) at 35                              -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingClubs']/@max_level">35</set>
 	<set xpath="//perk[@name='perkPummelPete']/effect_group/passive_effect[@tags='clubsCSM']/requirement[@operation='LT']/@value">35</set>
 	<set xpath="//perk[@name='perkPummelPete']/effect_group/passive_effect[@tags='clubsCSM']/requirement[@operation='Equals']/@value">35</set>
@@ -178,6 +341,9 @@
 	<set xpath="//crafting_skill[@name='craftingClubs']/display_entry[@item='meleeWpnClubT1BaseballBat']/@unlock_level">8,10,14,18,22,25</set>
 	<set xpath="//crafting_skill[@name='craftingClubs']/display_entry[@item='meleeWpnClubT3SteelClub']/@unlock_level">25,27,29,31,33,35</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Sledgehammers (craftingSledgehammers) at 35              -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingSledgehammers']/@max_level">35</set>
 	<set xpath="//perk[@name='perkSkullCrusher']/effect_group/passive_effect[@tags='sledgehammersCSM']/requirement[@operation='LT']/@value">35</set>
 	<set xpath="//perk[@name='perkSkullCrusher']/effect_group/passive_effect[@tags='sledgehammersCSM']/requirement[@operation='Equals']/@value">35</set>
@@ -190,6 +356,9 @@
 	<set xpath="//crafting_skill[@name='craftingSledgehammers']/display_entry[@item='meleeWpnSledgeT1IronSledgehammer']/@unlock_level">8,10,14,18,22,25</set>
 	<set xpath="//crafting_skill[@name='craftingSledgehammers']/display_entry[@item='meleeWpnSledgeT3SteelSledgehammer']/@unlock_level">25,27,29,31,33,35</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Spears (craftingSpears) at 35                            -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingSpears']/@max_level">35</set>
 	<set xpath="//perk[@name='perkJavelinMaster']/effect_group/passive_effect[@tags='spearsCSM']/requirement[@operation='LT']/@value">35</set>
 	<set xpath="//perk[@name='perkJavelinMaster']/effect_group/passive_effect[@tags='spearsCSM']/requirement[@operation='Equals']/@value">35</set>
@@ -202,6 +371,9 @@
 	<set xpath="//crafting_skill[@name='craftingSpears']/display_entry[@item='meleeWpnSpearT1IronSpear']/@unlock_level">8,10,14,18,22,25</set>
 	<set xpath="//crafting_skill[@name='craftingSpears']/display_entry[@item='meleeWpnSpearT3SteelSpear']/@unlock_level">25,27,29,31,33,35</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Bows (craftingBows) at 50                                -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingBows']/@max_level">50</set>
 	<set xpath="//perk[@name='perkArchery']/effect_group/passive_effect[@tags='bowsCSM']/requirement[@operation='LT']/@value">50</set>
 	<set xpath="//perk[@name='perkArchery']/effect_group/passive_effect[@tags='bowsCSM']/requirement[@operation='Equals']/@value">50</set>
@@ -220,6 +392,9 @@
 	<set xpath="//crafting_skill[@name='craftingBows']/display_entry[@item='gunBowT3CompoundBow']/@unlock_level">24,26,30,33,36,38</set>
 	<set xpath="//crafting_skill[@name='craftingBows']/display_entry[@item='gunBowT3CompoundCrossbow']/@unlock_level">38,40,42,45,48,50</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Handguns (craftingHandguns) at 50                        -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingHandguns']/@max_level">50</set>
 	<set xpath="//perk[@name='perkGunslinger']/effect_group/passive_effect[@tags='handgunsCSM']/requirement[@operation='LT']/@value">50</set>
 	<set xpath="//perk[@name='perkGunslinger']/effect_group/passive_effect[@tags='handgunsCSM']/requirement[@operation='Equals']/@value">50</set>
@@ -238,6 +413,9 @@
 	<set xpath="//crafting_skill[@name='craftingHandguns']/display_entry[@item='gunHandgunT3SMG5']/@unlock_level">28,30,33,36,38,40</set>
 	<set xpath="//crafting_skill[@name='craftingHandguns']/display_entry[@item='gunHandgunT3DesertVulture']/@unlock_level">40,42,44,46,48,50</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Shotguns (craftingShotguns) at 45                        -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingShotguns']/@max_level">45</set>
 	<set xpath="//perk[@name='perkBoomstick']/effect_group/passive_effect[@tags='shotgunsCSM']/requirement[@operation='LT']/@value">45</set>
 	<set xpath="//perk[@name='perkBoomstick']/effect_group/passive_effect[@tags='shotgunsCSM']/requirement[@operation='Equals']/@value">45</set>
@@ -253,6 +431,9 @@
 	<set xpath="//crafting_skill[@name='craftingShotguns']/display_entry[@item='gunShotgunT2PumpShotgun']/@unlock_level">18,20,24,28,32,35</set>
 	<set xpath="//crafting_skill[@name='craftingShotguns']/display_entry[@item='gunShotgunT3AutoShotgun']/@unlock_level">35,37,39,41,43,45</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Rifles (craftingRifles) at 45                            -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingRifles']/@max_level">45</set>
 	<set xpath="//perk[@name='perkDeadEye']/effect_group/passive_effect[@tags='riflesCSM']/requirement[@operation='LT']/@value">45</set>
 	<set xpath="//perk[@name='perkDeadEye']/effect_group/passive_effect[@tags='riflesCSM']/requirement[@operation='Equals']/@value">45</set>
@@ -268,6 +449,9 @@
 	<set xpath="//crafting_skill[@name='craftingRifles']/display_entry[@item='gunRifleT2LeverActionRifle']/@unlock_level">18,20,24,28,32,35</set>
 	<set xpath="//crafting_skill[@name='craftingRifles']/display_entry[@item='gunRifleT3SniperRifle']/@unlock_level">35,37,39,41,43,45</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Machine Guns (craftingMachineGuns) at 45                 -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingMachineGuns']/@max_level">45</set>
 	<set xpath="//perk[@name='perkMachineGunner']/effect_group/passive_effect[@tags='machineGunsCSM']/requirement[@operation='LT']/@value">45</set>
 	<set xpath="//perk[@name='perkMachineGunner']/effect_group/passive_effect[@tags='machineGunsCSM']/requirement[@operation='Equals']/@value">45</set>
@@ -283,6 +467,9 @@
 	<set xpath="//crafting_skill[@name='craftingMachineGuns']/display_entry[@item='gunMGT2TacticalAR']/@unlock_level">18,20,24,28,32,35</set>
 	<set xpath="//crafting_skill[@name='craftingMachineGuns']/display_entry[@item='gunMGT3M60']/@unlock_level">35,37,39,41,43,45</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Explosives (craftingExplosives) at 50                    -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingExplosives']/@max_level">50</set>
 	<set xpath="//perk[@name='perkDemolitionsExpert']/effect_group/passive_effect[@tags='explosivesCSM']/requirement[@operation='LT']/@value">50</set>
 	<set xpath="//perk[@name='perkDemolitionsExpert']/effect_group/passive_effect[@tags='explosivesCSM']/requirement[@operation='Equals']/@value">50</set>
@@ -304,6 +491,9 @@
 	<set xpath="//crafting_skill[@name='craftingExplosives']/display_entry[@name_key='explosivesT4']/@unlock_level">36</set>
 	<set xpath="//crafting_skill[@name='craftingExplosives']/display_entry[@name_key='explosivesT5']/@unlock_level">42,44,46,48,49,50</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Armor (craftingArmor) at 20                              -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingArmor']/@max_level">20</set>
 	<set xpath="//perk[@name='perkLightArmor']/effect_group/passive_effect[@tags='armorCSM']/requirement[@operation='LT']/@value">20</set>
 	<set xpath="//perk[@name='perkLightArmor']/effect_group/passive_effect[@tags='armorCSM']/requirement[@operation='Equals']/@value">20</set>
@@ -319,6 +509,9 @@
 	<set xpath="//crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT3']/@unlock_level">8,10,13,16,18,20</set>
 	<set xpath="//crafting_skill[@name='craftingArmor']/display_entry[@name_key='armorT4']/@unlock_level">8,10,13,16,18,20</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Food (craftingFood) at 50                                -->
+	<!-- ============================================================ -->
 	<set xpath="//crafting_skill[@name='craftingFood']/@max_level">50</set>
 	<set xpath="//perk[@name='perkMasterChef']/effect_group/passive_effect[@tags='foodCSM']/requirement[@operation='LT']/@value">50</set>
 	<set xpath="//perk[@name='perkMasterChef']/effect_group/passive_effect[@tags='foodCSM']/requirement[@operation='Equals']/@value">50</set>
@@ -346,6 +539,56 @@
 	<set xpath="//crafting_skill[@name='craftingFood']/display_entry[@name_key='foodT3-1,foodT3-2,foodT3-3,foodT3-4,foodT3-5']/@unlock_level">24,28,32,36,40</set>
 	<set xpath="//crafting_skill[@name='craftingFood']/display_entry[@name_key='foodT4-1,foodT4-2,foodT4-3,foodT4-4,foodT4-5']/@unlock_level">42,44,46,48,50</set>
 
+	<!-- ============================================================ -->
+	<!-- CAP Backpacks (craftingBackpack) at 50, and rebuild the      -->
+	<!-- ladder. NEW IN V3.3 AND v1.85.0.                             -->
+	<!-- ============================================================ -->
+	<!-- 3.3 added Pack Rat, a magazine line unlocking craftable
+	     backpack upgrades. It arrived after every other cap in this
+	     file was written, so until v1.85.0 it was THE ONLY CRAFTING
+	     SKILL IN THE MOD ABOVE 50, sitting at vanilla's 100. Measured,
+	     not assumed: 24 crafting skills, 23 at 50 or below, this one
+	     at 100. craftingRepairTools is also unpatched but vanilla
+	     already ships it at 50, so there is nothing to cap there.
+
+	     WHY IT MATTERS MORE HERE THAN IN AREA 7. Area 7 measured the
+	     magazine dilution at about 4% and left the whole thing alone.
+	     The magazines are not the point in a hotel: the BACKPACK is.
+	     This is a building emptied floor by floor, and carrying
+	     capacity is the loop. Area 7's call does not transfer.
+
+	     FRIL'S LADDER, 6 Oct: small 5, medium 25, large 50. Vanilla
+	     gives each tier an unlock plus five quality steps, so the
+	     steps are spaced to land the whole line exactly on 50:
+
+	                      unlock   quality 1  2  3  4  5
+	       backpackSmall      5        9  13  17  21  25
+	       backpackMedium    25       30  35  40  45  50
+	       backpackLarge     50       none, see below
+
+	     THE LARGE BACKPACK UNLOCKS AT THE CAP AND CAN NEVER BE
+	     UPGRADED. Every quality step would have to sit above 50.
+	     That is deliberate, agreed with Fril, and it makes the big
+	     bag the capstone of the skill rather than a mid-run upgrade:
+	     the last point you spend is the one that gives it to you, at
+	     base quality, and that is all you ever get.
+
+	     Vanilla for comparison was 5 / 40 / 75 with the large bag
+	     fully upgraded at 100, so this both compresses the line into
+	     half the levels and moves the large bag from late-game to
+	     end-of-skill.
+
+	     SELECTORS ARE BY NAME AND TAG, NEVER BY POSITION. Both
+	     passive_effects in each tier carry the same tags value, so
+	     @tags alone matches two elements and @name alone matches
+	     three. Only the pair is unambiguous. This is the Area 7
+	     passive_effect[15]/[16] lesson: a positional selector here
+	     would silently hit the wrong recipe if TFP reorder.
+
+	     EVERY display_entry LEVEL MATCHES ITS passive_effect LEVEL.
+	     Capping one without the other is what made Area 7's perk
+	     screen advertise 17 workstations at a level that never
+	     granted them. Checked by tools/validate_progression.py. -->
 	<set xpath="//crafting_skill[@name='craftingBackpack']/@max_level">50</set>
 
 	<set xpath="//crafting_skill[@name='craftingBackpack']/effect_group/passive_effect[@name='RecipeTagUnlocked'][@tags='backpackSmall']/@level">5,50</set>
@@ -355,6 +598,12 @@
 	<set xpath="//crafting_skill[@name='craftingBackpack']/effect_group/passive_effect[@name='CraftingTier'][@tags='backpackSmall']/@level">9,13,17,21,25,50</set>
 	<set xpath="//crafting_skill[@name='craftingBackpack']/effect_group/passive_effect[@name='CraftingTier'][@tags='backpackMedium']/@level">30,35,40,45,50,50</set>
 
+	<!-- The large bag's CraftingTier is REMOVED, not retuned. It
+	     unlocks on the cap, so there is no level at which a quality
+	     step could ever fire. Leaving it in place with levels above
+	     50 would be exactly the dead entry this file exists to
+	     prevent. Its display_entry drops to the single unlock level
+	     for the same reason. -->
 	<remove xpath="//crafting_skill[@name='craftingBackpack']/effect_group/passive_effect[@name='CraftingTier'][@tags='backpackLarge']"/>
 
 	<set xpath="//crafting_skill[@name='craftingBackpack']/display_entry[@item='backpackSmall']/@unlock_level">5,9,13,17,21,25</set>

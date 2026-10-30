@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configs>
 
+	<!-- ============================================================
+	     FrilCleanDoors  v1.2.2  -  blocks.xml
+
+	     Removes the boarded-up / planked appearance from doors that
+	     show it at full health. Doors render clean when fully repaired
+	     and as they take damage, instead of looking barricaded.
+
+	     How it works: 7DTD doors have a boarded mesh state (DMG0) and a
+	     clean mesh state (DMG1). MeshDamage thresholds decide which mesh
+	     shows at a given HP. This mod sets the DMG0 threshold above the
+	     door's MaxDamage so the boarded mesh is never reached, and sets
+	     DMG1 to MaxDamage so the clean mesh covers full health. Lower
+	     damage states (DMG2/DMG3) are left at vanilla values.
+
+	     Formula: DMG0 = ceil(MaxDamage * 1.25), DMG1 = MaxDamage.
+	     MaxDamage itself is NOT changed - door HP is vanilla.
+
+	     Patches 30 base door blocks. Colour variants (blue, oak, red,
+	     etc.) inherit via Extends - 255 doors covered in total.
+
+	     v1.1.0: added iron garage doors (metal-panel barricade state).
+	     v1.2.0: added shapes.xml - player-crafted window glass no
+	             longer shatters on the first hit (see shapes.xml).
+	     v1.2.1: tuned window Full multiplier 0.5 -> 0.1 - windows
+	             survive a hit or two without significant durability
+	             inflation (see shapes.xml).
+	     v1.2.2: window shapes can now be upgraded normally (vanilla
+	             10000-item upgrade trap removed - see shapes.xml).
+
+	     Excluded (no boarded mesh state - confirmed in-game):
+	       wooden fence doors, wooden garage doors, large wood gate,
+	       trailer doors, and all metal/elevator/closet doors.
+	     ============================================================ -->
+
+	<!-- House doors -->
 	<set xpath="/blocks/block[@name='exteriorHouseDoorWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 313, Door/DMG1, 250, Door/DMG2, 120, Door/DMG3, 80, -, 1</set>
 	<set xpath="/blocks/block[@name='exteriorHouseDoorDoubleWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 313, Door/DMG1, 250, Door/DMG2, 120, Door/DMG3, 80, -, 1</set>
 	<set xpath="/blocks/block[@name='exteriorHouseDoorOldWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 313, Door/DMG1, 250, Door/DMG2, 120, Door/DMG3, 80, -, 1</set>
@@ -12,9 +47,11 @@
 	<set xpath="/blocks/block[@name='interiorDoorOldWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 313, Door/DMG1, 250, Door/DMG2, 120, Door/DMG3, 80, -, 1</set>
 	<set xpath="/blocks/block[@name='interiorDoorOldDoubleWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 313, Door/DMG1, 250, Door/DMG2, 120, Door/DMG3, 80, -, 1</set>
 
+	<!-- French doors -->
 	<set xpath="/blocks/block[@name='frenchDoorWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 313, Door/DMG1, 250, Door/DMG2, 120, -, 1</set>
 	<set xpath="/blocks/block[@name='frenchDoorDoubleWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 313, Door/DMG1, 250, Door/DMG2, 120, -, 1</set>
 
+	<!-- Commercial doors -->
 	<set xpath="/blocks/block[@name='commercialDoorV1White']/property[@name='MeshDamage']/@value">Door/DMG0, 1250, Door/DMG1, 1000, Door/DMG2, 500, Door/DMG3, 250, -, 1</set>
 	<set xpath="/blocks/block[@name='commercialDoorV2White']/property[@name='MeshDamage']/@value">Door/DMG0, 1250, Door/DMG1, 1000, Door/DMG2, 500, Door/DMG3, 250, -, 1</set>
 	<set xpath="/blocks/block[@name='commercialDoorV3White']/property[@name='MeshDamage']/@value">Door/DMG0, 1250, Door/DMG1, 1000, Door/DMG2, 500, Door/DMG3, 250, -, 1</set>
@@ -24,18 +61,22 @@
 	<set xpath="/blocks/block[@name='commercialDoorDoubleV3White']/property[@name='MeshDamage']/@value">Door/DMG0, 1250, Door/DMG1, 1000, Door/DMG2, 500, Door/DMG3, 250, -, 1</set>
 	<set xpath="/blocks/block[@name='commercialDoorDoubleV4White']/property[@name='MeshDamage']/@value">Door/DMG0, 1250, Door/DMG1, 1000, Door/DMG2, 500, Door/DMG3, 250, -, 1</set>
 
+	<!-- Glass and sliding doors -->
 	<set xpath="/blocks/block[@name='commercialGlassDoor']/property[@name='MeshDamage']/@value">Door/DMG0, 125, Door/DMG1, 100, Door/DMG2, 25, Door/DMG3, 10, -, 1</set>
 	<set xpath="/blocks/block[@name='commercialGlassDoorDouble']/property[@name='MeshDamage']/@value">Door/DMG0, 125, Door/DMG1, 100, Door/DMG2, 25, Door/DMG3, 10, -, 1</set>
 	<set xpath="/blocks/block[@name='commercialSlidingDoor']/property[@name='MeshDamage']/@value">Door/DMG0, 125, Door/DMG1, 100, Door/DMG2, 10, -, 1</set>
 	<set xpath="/blocks/block[@name='houseSlidingDoorWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 125, Door/DMG1, 100, Door/DMG2, 10, -, 1</set>
 
+	<!-- Bulletproof doors -->
 	<set xpath="/blocks/block[@name='commercialBulletproofGlassDoor']/property[@name='MeshDamage']/@value">Door/DMG0, 4063, Door/DMG1, 3250, Door/DMG2, 2000, Door/DMG3, 1000, -, 1</set>
 	<set xpath="/blocks/block[@name='commercialBulletproofGlassDoorDouble']/property[@name='MeshDamage']/@value">Door/DMG0, 4063, Door/DMG1, 3250, Door/DMG2, 2000, Door/DMG3, 1000, -, 1</set>
 	<set xpath="/blocks/block[@name='commercialBulletproofSlidingDoor']/property[@name='MeshDamage']/@value">Door/DMG0, 4063, Door/DMG1, 3250, Door/DMG2, 1000, -, 1</set>
 
+	<!-- Old wood doors -->
 	<set xpath="/blocks/block[@name='oldWoodDoor']/property[@name='MeshDamage']/@value">Door/DMG0, 1250, Door/DMG1, 1000, Door/DMG2, 500, Door/DMG3, 250, -, 1</set>
 	<set xpath="/blocks/block[@name='oldWoodDoorDouble']/property[@name='MeshDamage']/@value">Door/DMG0, 1250, Door/DMG1, 1000, Door/DMG2, 500, Door/DMG3, 250, -, 1</set>
 
+	<!-- Iron garage doors -->
 	<set xpath="/blocks/block[@name='ironGarageDoorWhite']/property[@name='MeshDamage']/@value">Door/DMG0, 12500, Door/DMG1, 10000, Door/DMG2, 5000, Door/DMG3, 2500</set>
 
 </configs>

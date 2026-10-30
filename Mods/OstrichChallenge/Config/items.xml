@@ -1,10 +1,36 @@
 <configs>
-    
+    <!-- Read books/magazines show a plain green tick once read (vanilla ui_game_symbol_check, tinted green). -->
     <insertafter xpath="/items/item/property[@name='AltItemTypeIcon' and @value='book_read']">
         <property name="AltItemTypeIconColor" value="0,200,0,255" />
     </insertafter>
     <set xpath="/items/item/property[@name='AltItemTypeIcon' and @value='book_read']/@value">check</set>
 
+    <!-- ============================================================
+         VENDING MACHINE REPAIR KIT
+
+         Dukes are the hotel's only currency and the vending machines are the only place to
+         spend them, so a floor whose machines all spawned broken is a floor with no shop.
+         This is the way back: strip broken machines for parts, build a kit, revive one.
+
+         The kit exists because a block upgrade can ask for ONE item and one count, and the
+         parts a machine gives up are a mixed pile. A single crafted item lets the recipe ask
+         for the spread while the upgrade stays simple.
+
+         Extends resourceMechanicalParts rather than declaring properties from scratch, so it
+         inherits whatever a vanilla resource needs and only the icon, stack and value differ.
+
+         v1.221.0: IT HAS ITS OWN ART NOW. Fril's purple toolbox, occVendingRepairKit.png,
+         160x160 with alpha, in UIAtlases/ItemIconAtlas/. Two things changed with it:
+
+         CustomIcon is the FILE NAME, not the item name. The game looks for a sprite called
+         exactly what this value says, so occVendingRepairKit.png and this string have to stay
+         spelled the same or the slot comes out blank.
+
+         CustomIconTint IS GONE, and that is deliberate. The tint multiplies over whatever
+         sprite it is given. It was there to stop vanilla's borrowed mechanical parts reading
+         as a pile of loose parts in the belt, and 6ec6ff over his purple would have washed
+         the toolbox blue. Art of its own does not need colouring to look like itself.
+         ============================================================ -->
     <append xpath="/items">
         <item name="occVendingRepairKit">
             <property name="Extends" value="resourceMechanicalParts"/>
@@ -14,31 +40,110 @@
         </item>
     </append>
 
+    <!-- ============================================================
+         LETTING A REPAIR TOOL ACCEPT THE KIT
+
+         A repair tool carries Allowed_upgrade_items, a whitelist of the upgrade materials it
+         will accept. ItemActionRepair.CanRemoveRequiredResource tests the block's upgrade item
+         against that list and returns false BEFORE it ever counts what the player is carrying:
+
+             if (allowedUpgradeItems.Length > 0 && !allowedUpgradeItems.Contains(name))
+                 return false;
+
+         So a player holding the kit is told they still need one. Nothing is wrong with the
+         block, the item or the recipe: the tool simply does not recognise the material.
+
+         v0.68.2: THIS WAS A BLANKET REMOVE AND IS NOW THREE TARGETED SETS. Deleting the
+         property left the list empty, which skips the test entirely and let ANY upgrade
+         material through on every repair tool. These three lines put vanilla's own list back,
+         verbatim, with one entry added.
+
+         WHY THE WHOLE LIST IS REPEATED. 7DTD's XML patching can replace an attribute but not
+         append to one, so the vanilla value has to be restated in full. All three tools carry
+         an IDENTICAL 23 entry list in vanilla, checked with lxml against the real file rather
+         than assumed, and each is set by name so a fourth tool added later is left alone.
+
+         NOTE THE Action1 IN THE PATH. The whitelist is NOT a direct child of the item, it sits
+         inside property[@class='Action1']. The obvious item/property xpath matches nothing and
+         fails silently, which is exactly how the safes went unnoticed. Every xpath in this file
+         was resolved against the real vanilla items.xml before it shipped, and the result of
+         applying them was checked: 3 whitelists, 24 entries each, kit present in all three.
+
+         ONLY THE UPGRADE PATH IS GATED, so the mechanical-parts repair in blocks.xml is not
+         affected by any of this. From the IL of ItemActionRepair: CanRemoveRequiredResource
+         opens with Block.GetUpgradeItemName() and tests the whitelist against THAT, while
+         ExecuteAction's repair branch goes through CanRepair and RepairItems and never reaches
+         it. Worth knowing, because restoring the whitelist looked at first like it would break
+         the hammer again.
+         ============================================================ -->
     <set xpath="//item[@name='meleeToolRepairT0StoneAxe']/property[@class='Action1']/property[@name='Allowed_upgrade_items']/@value">resourceWood,resourceClayLump,resourceSnowBall,resourceScrapIron,resourceForgedIron,resourceForgedSteel,resourceConcreteMix,resourceCobblestones,ironDoorBlockVariantHelper,ironDoorDoubleBlockVariantHelper,vaultDoor01,vaultDoor01Double,ironHatchBlockVariantHelper,vaultHatch01,cellarDoorDoubleIron,cellarDoorDoubleSteel,shuttersIronBlockVariantHelper,shuttersSteelBlockVariantHelper,resourceYuccaFibers,resourceCloth,resourceScrapPolymers,resourceNail,glassBulletproofBlockVariantHelper,occVendingRepairKit</set>
     <set xpath="//item[@name='meleeToolRepairT1ClawHammer']/property[@class='Action1']/property[@name='Allowed_upgrade_items']/@value">resourceWood,resourceClayLump,resourceSnowBall,resourceScrapIron,resourceForgedIron,resourceForgedSteel,resourceConcreteMix,resourceCobblestones,ironDoorBlockVariantHelper,ironDoorDoubleBlockVariantHelper,vaultDoor01,vaultDoor01Double,ironHatchBlockVariantHelper,vaultHatch01,cellarDoorDoubleIron,cellarDoorDoubleSteel,shuttersIronBlockVariantHelper,shuttersSteelBlockVariantHelper,resourceYuccaFibers,resourceCloth,resourceScrapPolymers,resourceNail,glassBulletproofBlockVariantHelper,occVendingRepairKit</set>
     <set xpath="//item[@name='meleeToolRepairT3Nailgun']/property[@class='Action1']/property[@name='Allowed_upgrade_items']/@value">resourceWood,resourceClayLump,resourceSnowBall,resourceScrapIron,resourceForgedIron,resourceForgedSteel,resourceConcreteMix,resourceCobblestones,ironDoorBlockVariantHelper,ironDoorDoubleBlockVariantHelper,vaultDoor01,vaultDoor01Double,ironHatchBlockVariantHelper,vaultHatch01,cellarDoorDoubleIron,cellarDoorDoubleSteel,shuttersIronBlockVariantHelper,shuttersSteelBlockVariantHelper,resourceYuccaFibers,resourceCloth,resourceScrapPolymers,resourceNail,glassBulletproofBlockVariantHelper,occVendingRepairKit</set>
 
+    <!-- ==================================================================
+         ZOMBIE REACH (v0.98.0)
+
+         From the Hospital Challenge, Config/items.xml v1.3.0, where Fril has played it and
+         confirmed it: "zombies no longer feel like they have go go gadget arms." The hotel's
+         corridors and stairwells are as tight as the hospital's, and being hit from outside
+         your own swing is what makes a doorway feel unfair.
+
+         One monotonic rule, applied to every zombie melee item:
+
+             new = 1.20 + (vanilla - 1.20) x 0.5
+
+         Compression toward a floor rather than flattening to fixed values. Tall zombies lose
+         the most, short ones barely change, and THE ORDER CAN NEVER INVERT because it is one
+         function. The spread narrows from a 1.69 ratio to 1.36, so Cops stop feeling
+         disproportionate, and nothing lands below 1.25 so nobody flails at air. The two knobs
+         are the FLOOR (1.20) and the FACTOR (0.5); lower the factor to compress further.
+
+         meleeHandMaster IS DELIBERATELY NOT SET. meleeHandPlayer extends it, so a single tidy
+         set on Master would cut THE PLAYER'S OWN bare-hand reach by the same amount. The seven
+         items that inherit from it are therefore handled individually below. Do not simplify.
+
+         SET for a property an item declares, APPEND for one it inherits: a <set> cannot touch
+         a node that does not exist, and seven of these carry no Range of their own.
+
+         VERIFIED AGAINST THIS GAME'S OWN items.xml BEFORE PASTING, not taken on trust: all 23
+         ops match exactly one node each, none match nothing, every <set> target declares its
+         own Range and every <append> target inherits one, and afterwards meleeHandMaster is
+         still 1.65 with meleeHandPlayer still inheriting it.
+
+         Untouched on purpose: meleeHandZombieBoar (2.2, Fril's call), all meleeHandAnimal*
+         wildlife (bears 3.1, dire wolves 2.2, wolves 1.7, coyotes, snakes, swarms), and
+         meleeHandZombieTest. Only the zombie-animals, dogs and vultures, are included.
+         ================================================================== -->
+
+    <!-- vanilla 1.75 -> 1.48 -->
     <set xpath="/items/item[@name='meleeHandZombieChuck']/property[@class='Action0']/property[@name='Range']/@value">1.48</set>
     <set xpath="/items/item[@name='meleeHandZombieCop']/property[@class='Action0']/property[@name='Range']/@value">1.48</set>
     <set xpath="/items/item[@name='meleeHandZombieRancher']/property[@class='Action0']/property[@name='Range']/@value">1.48</set>
 
+    <!-- vanilla 1.70 -> 1.45 -->
     <set xpath="/items/item[@name='meleeHandzombieMutated']/property[@class='Action0']/property[@name='Range']/@value">1.45</set>
     <set xpath="/items/item[@name='meleeHandzombieMutatedCharged']/property[@class='Action0']/property[@name='Range']/@value">1.45</set>
     <set xpath="/items/item[@name='meleeHandzombieMutatedFeral']/property[@class='Action0']/property[@name='Range']/@value">1.45</set>
     <set xpath="/items/item[@name='meleeHandzombieMutatedInfernal']/property[@class='Action0']/property[@name='Range']/@value">1.45</set>
     <set xpath="/items/item[@name='meleeHandzombieMutatedRadiated']/property[@class='Action0']/property[@name='Range']/@value">1.45</set>
 
+    <!-- vanilla 1.60 -> 1.40 -->
     <set xpath="/items/item[@name='meleeHandZombie01']/property[@class='Action0']/property[@name='Range']/@value">1.4</set>
 
+    <!-- vanilla 1.40 -> 1.30 -->
     <set xpath="/items/item[@name='meleeHandZombieBurning']/property[@class='Action0']/property[@name='Range']/@value">1.3</set>
     <set xpath="/items/item[@name='meleeHandZombieBurningFeral']/property[@class='Action0']/property[@name='Range']/@value">1.3</set>
     <set xpath="/items/item[@name='meleeHandZombieShort']/property[@class='Action0']/property[@name='Range']/@value">1.3</set>
     <set xpath="/items/item[@name='meleeHandZombieShortFeral']/property[@class='Action0']/property[@name='Range']/@value">1.3</set>
 
+    <!-- vanilla 1.30 -> 1.25 -->
     <set xpath="/items/item[@name='meleeHandZombie02']/property[@class='Action0']/property[@name='Range']/@value">1.25</set>
     <set xpath="/items/item[@name='meleeHandZombie02Feral']/property[@class='Action0']/property[@name='Range']/@value">1.25</set>
     <set xpath="/items/item[@name='meleeHandZombieBurningCrawler']/property[@class='Action0']/property[@name='Range']/@value">1.25</set>
 
+    <!-- vanilla 1.65 -> 1.42. These seven have NO Range node of their own: they inherit 1.65
+         from meleeHandMaster, so the property is APPENDED into their Action0 block. This is
+         why they are separate from the sets above, and why setting Master is not an option. -->
     <append xpath="/items/item[@name='meleeHandAnimalZombieDog']/property[@class='Action0']">
         <property name="Range" value="1.42"/>
     </append>
@@ -61,6 +166,80 @@
         <property name="Range" value="1.42"/>
     </append>
 
+    <!-- ==================================================================
+         THE GUARD'S 9mm AND HUNTING KNIFE NEVER WEAR OUT (v0.99.0)
+
+         Fril's call. Both are starting-kit items the run is balanced around, there is no trader
+         in the hotel and repair kits are scarce, so a degrading sidearm quietly turns into a
+         resource problem the design never intended. DegradationPerUse 0 means they never lose
+         durability; they can still be damaged by other means, this only stops wear from use.
+
+         Verified against this game's items.xml: each xpath matches exactly ONE node, both sitting
+         in the effect_group named after the item itself (the Power Attack and sneak-damage groups
+         on the knife carry no DegradationPerUse, so they are untouched).
+         ================================================================== -->
+    <!-- v1.70.0: THESE TWO LINES ARE GONE, AND THAT IS A DELIBERATE REMOVAL, FLAGGED.
+         They edited the ITEM CLASS, so every T1 hunting knife and every T1 pistol in the world
+         was indestructible, not just the pair the guard starts with. Fril, 5 Oct: "we may have
+         made all knives and pistols indestructable." Narrower than that (the bone knife, machete,
+         magnum and desert vulture were never touched) but wider than intended.
+
+         Replaced by occGuardPistol and occGuardKnife in the append block below, handed out by
+         gameevents.xml instead of the vanilla pair. A looted T1 now wears out normally. -->
+
+    <!-- ==================================================================
+         CHOC 'N' AWE, the starting ration (v0.99.0)
+
+         Brought over from the Higashi Challenge. A food-only sibling of foodCanChili: the same
+         nutrition, 15 food and 7 health, through an identical "Food Tier 0" group, but the SMELL
+         IS REMOVED so it does not draw anything to you while you eat it.
+
+         WHY Action0 IS REDECLARED. It extends foodCanBeef, whose inherited Eat action carries
+         SmellUse="25". Redeclaring the action swaps the canned-food sound for an ordinary
+         eating one. The dSmellUse display value is deliberately absent, so the item card shows
+         no smell.
+
+         SmellUse="0" IS EXPLICIT, AND v0.99.0 TO v1.13.2 SHIPPED WITHOUT IT. That was a real
+         bug, found by Fril on 30 Sep: "I've just eaten one and I had 5m of smell range."
+
+         REDECLARING A class= BLOCK DOES NOT REPLACE THE INHERITED ONE. IT MERGES. The comment
+         here used to claim the opposite and it was an assumption, never checked.
+         ItemClassesFromXml.parseItem builds a fresh DynamicProperties, does CopyFrom(parent),
+         then CopyFrom(child). At the Classes level CopyFrom RECURSES rather than replacing, and
+         DynamicProperties.Parse on a <property class="..."> calls GetOrCreateClass, which hands
+         back the dict already copied from the parent. So only the keys the child names are
+         overwritten. Class, Delay and Sound_start were named. SmellUse was not, so 25 survived.
+
+         WHY IT READ AS 5 AND NOT 25, which is the part that made it look like something else.
+         PlayerStealth.SmellUpdateItemsAndBlood ends with:
+
+             if (playerLocal.shelterPercent > 0) { smellRadiusTarget *= 0.2f; smellSheltered = true; }
+
+         25 x 0.2 = 5. Fril was indoors, as you always are in this mod. Outdoors the same bar
+         would have put out 25m. ItemActionEat.consume only calls SetSmellEat when smellUse > 0,
+         so 0 now means genuinely none.
+
+         THE WORST PART WAS THE SILENCE. Because dSmellUse was left off the effect_group, the
+         item card advertised no smell while the item had one, for 90 seconds per bar
+         (smellEatTicks = 1800 at 20 ticks/s). A hidden smell in a tower full of sleepers is a
+         worse bug than a visible one. If a smell is ever wanted here, set both SmellUse and
+         dSmellUse, never one.
+
+         RENAMED from Higashi's higashiChocNAwe to the occ prefix, matching occVendingRepairKit,
+         so the two mods cannot collide if both are ever loaded. The id carries no space or
+         apostrophe; the display name lives in Localization.csv.
+
+         THE ICON is UIAtlases/ItemIconAtlas/occChocNAwe.png, built from Fril's wrapper artwork:
+         trimmed to its content, centred on a square canvas with a small margin and resized to
+         160x160 with the alpha kept.
+
+         THE PATH, because I got this wrong first time. A MOD adds icons through
+         <ModFolder>/UIAtlases/<AtlasName>/, and the atlas for item icons is ItemIconAtlas.
+         LoadUiAtlases takes mod.Path + "/UIAtlases", enumerates the SUBFOLDERS and uses each
+         folder name as the atlas name, logging "[MODS] Creating new atlas '<name>' for mod". The
+         ItemIcons folder I used first is the VANILLA-only path from LoadIcons (Data/ItemIcons);
+         a mod dropping icons there gets nothing. Fril caught it.
+         ================================================================== -->
     <append xpath="/items">
         <item name="occChocNAwe">
             <property name="Extends" value="foodCanBeef"/>
@@ -71,19 +250,58 @@
             <property name="Meshfile" value="@:Other/Items/Food/parcelGenericPrefab.prefab"/>
             <property name="DropMeshfile" value="@:Other/Items/Misc/sack_droppedPrefab.prefab"/>
             <property name="TintColor" value="120, 72, 40"/>
-            
+            <!-- CHANGED IN v1.13.5, 30 -> 100, THEN TO 80 IN v1.13.6. Fril, putting it in the
+                 vending machines: "dont make it cheap. It needs to be more expensive than the
+                 chili as there needs to be a premium on it not smelling when you eat it." Then,
+                 on the number: "Can you make the choc n awe 80 x 3 = 240".
+
+                 The 30 came over from the Higashi mod and was never reasoned about here. The
+                 comparison it now has to beat is foodCanChili, which inherits EconomicValue 60
+                 from foodCanBeef, the same parent this item uses.
+
+                 WHAT 100 BUYS, read out of XUiM_Trader.GetBuyPrice rather than assumed. For an
+                 item with no quality the price is:
+
+                     price = EconomicValue * markup
+                     price -= price * <Barter perk, passive 148, matched on the item's tags>
+                     price = (int)(price * count / EconomicBundleSize)
+                     price = CeilToInt(price * GetFloat(131))     // the trader price sandbox stat
+
+                 EconomicBundleSize is unset on this whole family, so it is 1 and the count term
+                 drops out. Vending machines are trader ids 4 and 10, both carrying
+                 override_buy_markup="3". So before perks:
+
+                     foodCanChili   60 x 3 = 180 Dukes
+                     foodHoney      80 x 3 = 240 Dukes
+                     occChocNAwe    80 x 3 = 240 Dukes
+
+                 Fril's number, and it is a third more than the chili for the same 15 food and
+                 7 health, so the whole difference is the silence.
+
+                 IT IS LEVEL WITH THE HONEY, AND THAT IS WORTH KNOWING RATHER THAN HIDING. My
+                 v1.13.5 draft used 100 to sit the bar above the cure; Fril set it level instead.
+                 So a player with 240 Dukes in a hotel with an infection is choosing between the
+                 cure and a silent meal at exactly the same price, which is a sharper decision
+                 than the one I had built. The player starts with 200, so neither is the first
+                 thing they can afford.
+
+                 TO DIAL IT: the number below is the only knob, and the machine price is always
+                 three times it. EconomicValue is global, so it also sets the sell price, which
+                 is academic here because the hotel has no trader to sell to. -->
             <property name="EconomicValue" value="80"/>
             <property name="CustomIcon" value="occChocNAwe"/>
             <property name="SoundPickup" value="drug_atomjunkies_grab"/>
             <property name="SoundPlace" value="drug_atomjunkies_place"/>
-            
+            <!-- SmellUse MUST be named explicitly. Omitting it inherits foodCanBeef's 25,
+                 because a redeclared class= block merges with the parent's. -->
             <property class="Action0">
                 <property name="Class" value="Eat"/>
                 <property name="Delay" value="1.0"/>
                 <property name="Sound_start" value="player_eating"/>
                 <property name="SmellUse" value="0"/>
             </property>
-            
+            <!-- Same nutrition as foodCanChili. Named "Food Tier 0" so it replaces the
+                 inherited group exactly as chili does. No dSmellUse: no smell. -->
             <effect_group tiered="false" name="Food Tier 0">
                 <triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="$foodAmountAdd" operation="add" value="15"/>
                 <triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar="foodHealthAmount" operation="add" value="7"/>
@@ -92,7 +310,23 @@
                 <triggered_effect trigger="onSelfPrimaryActionEnd" action="AddBuff" buff="buffProcessConsumables"/>
             </effect_group>
         </item>
+    
+        <!-- ==================================================================
+             THE KEY FOB (v1.9.0). The stalker carries it and gives it up only when he stays
+             down for good. It unlocks the 4x4 and powers the car park shutter.
 
+             DEFINED FROM SCRATCH rather than Extends, modelled on vanilla resourceDuctTape,
+             because nothing in vanilla is close enough to inherit from and a wrong base brings
+             an inherited Action0 with it. Stacknumber 1: there is exactly one.
+
+             THE ICON WAS A PLACEHOLDER UNTIL v1.221.0, pointing at vanilla's
+             resourceElectricParts so the slot was not blank. The art exists now: Fril's black
+             flip key, occKeyFob.png, 160x160 with alpha, in UIAtlases/ItemIconAtlas/.
+
+             CustomIcon is the FILE NAME rather than the item name. They happen to match here,
+             which is tidy but not required, and what matters is that this string and the png
+             stay spelled the same or the slot goes blank again.
+             ================================================================== -->
         <item name="occKeyFob">
             <property name="HoldType" value="45"/>
             <property name="Tags" value="junk"/>
@@ -108,6 +342,40 @@
             <property name="DescriptionKey" value="occKeyFobDesc"/>
         </item>
 
+    
+        <!-- ==================================================================
+             THE WOODEN ARROW (v1.12.1). Fril: "Give it the same properties as the
+             ammoArrowStone but deals out slightly less damage."
+
+             Extends ammoArrowStone, so mesh, sticky collider, projectile action, stack size,
+             trader template and the whole piercing-precision effect group all come across.
+
+             THE EFFECT GROUP IS REDECLARED WITH THE SAME NAME ON PURPOSE. A group named
+             "ammoArrowStone" REPLACES the inherited one; a differently named group would sit
+             ALONGSIDE it and two base_set on EntityDamage would fight. Same trick occChocNAwe
+             uses with "Food Tier 0" a few hundred lines up. Because it replaces rather than
+             merges, every line of the original is repeated here, with only the damage changed:
+             35 -> 30.
+
+             THE ICON IS FRIL'S OWN AS OF v1.17.3. It was the stone arrow's until the wooden
+             arrow moved to the front of the ammo radial in v1.17.1 and ended up sitting next
+             to the stone one wearing its face. He drew the replacement himself and supplied
+             the whole atlas folder.
+
+             UIAtlases/ItemIconAtlas/ammoArrowWood.png, 160x160 RGBA. THERE IS NO CustomIcon
+             LINE, and that is the whole mechanism: ItemClass.GetIconName returns CustomIcon
+             when it is set and non-empty, and falls back to the item's own name otherwise.
+             His file is named after the item, so the item finds it. Adding CustomIcon back
+             would override his art and silently serve the stone arrow again.
+
+             THE ATLAS FOLDER IS FRIL'S, NOT OURS. Fril: "it contains the correct pngs and it
+             should stop you overwriting them when we update." Nothing in this build generates
+             or edits anything under UIAtlases/. A new drop from him replaces the folder whole.
+
+             The MESH is still the stone arrow's, which reads fine for a crude arrow;
+             @:...Arrows/arrow_ironPrefab is the other option if the in-world model should
+             differ too. Only the inventory and radial icon changed here.
+             ================================================================== -->
         <item name="ammoArrowWood">
             <property name="Extends" value="ammoArrowStone"/>
             <property name="EconomicValue" value="8"/>
@@ -120,9 +388,22 @@
                 <passive_effect name="DamageModifier" operation="perc_set" value="0" tags="earth,cloth"/>
                 <passive_effect name="ProjectileVelocity" operation="base_set" value="45" tags="perkArchery"/>
             </effect_group>
-            
+            <!-- v1.74.0: PIERCING PRECISION, PUT BACK.
+                 ammoArrowStone has TWO effect_groups and v1.12.0 copied one. This second,
+                 unnamed group is the Agility Mastery 5 payoff: a fully drawn shot sets
+                 $perkPiercingPrecision, which bypasses armour (TargetArmor perc_add -1) and
+                 adds 25% damage, then clears on impact. Every other arrow in the game has it;
+                 the wooden one silently did not, from 30 Sep to 5 Oct.
+
+                 Fril's instruction on the day was "give the wooden arrow the same attributes as
+                 the stone one but make it deal slightly less damage". Damage is the ONLY thing
+                 that should differ, and now it is. Copied verbatim from vanilla 3.2.0 (b10).
+
+                 Effect_groups are NOT inherited through Extends (parseItem passes a null
+                 parentNode to MinEffectController.ParseXml), so every group the parent has must
+                 be restated here. See the modding notes. -->
             <effect_group tiered="false">
-            
+            <!-- Fully drawn bow shots bypass enemy armor, dealing full damage and deal an extra 25% damage. -->
             <triggered_effect trigger="onProjectilePreImpact" action="ModifyCVar" cvar="$perkPiercingPrecision" operation="set" value="1">
             <requirement name="ProgressionLevel" progression_name="perkAgilityMastery" operation="Equals" value="5"/>
             <requirement name="CatapultStrainAmount" operation="GTE" value="1"/>
@@ -137,6 +418,31 @@
             </effect_group>
         </item>
 
+    
+        <!-- ==================================================================
+             THE WOODEN BOLT (v1.13.0). The crossbow half of the wooden arrow, same idea and
+             the same proportion: vanilla's stone bolt does 50, this does 43, which is the same
+             ~14% drop the wooden arrow takes from the stone arrow's 35.
+
+             Extends ammoCrossbowBoltStone, and the effect group is redeclared WITH THE SAME
+             NAME so it replaces rather than stacks. See the wooden arrow above for why that
+             matters. The bolt has no second effect group (the piercing-precision block is on
+             arrows only), so this one group is the whole of it.
+
+             PreviousTechItem points at ammoArrowWood rather than ammoArrowStone, so the tech
+             progression reads wood arrow -> wood bolt the way vanilla reads stone -> stone.
+
+             THE ICON IS FRIL'S OWN AS OF v1.17.3, and it needs CustomIcon where the arrow
+             does not. His file is UIAtlases/ItemIconAtlas/ammoBoltWood.png, and this item is
+             called ammoCrossbowBoltWood. ItemClass.GetIconName falls back to the ITEM NAME
+             when CustomIcon is absent, so with no line here the game would look for
+             "ammoCrossbowBoltWood", not find it, and quietly keep showing the stone bolt
+             while his art sat unused in the atlas. CustomIcon bridges the two names.
+
+             DO NOT "TIDY" THIS BY RENAMING HIS PNG. The atlas folder is his, not ours.
+
+             The mesh is still the stone bolt's. Only the icon changed.
+             ================================================================== -->
         <item name="ammoCrossbowBoltWood">
             <property name="Extends" value="ammoCrossbowBoltStone"/>
             <property name="PreviousTechItem" value="ammoArrowWood"/>
@@ -155,6 +461,53 @@
 
     </append>
 
+    <!-- ==============================================================================
+         PUTTING THE WOODEN ARROW AND BOLT IN THE AMMO RADIAL (v1.17.0, reordered v1.17.1)
+
+         Fril: "during the test last night when it came to using them the bows ammo
+         selection radial didnt have them. We need to add the arrows so they are
+         selectable with all bows and the same for the bolts"
+
+         Declaring an ammo item is not enough. A ranged weapon can only fire what is
+         named in its OWN Action0 Magazine_items list, and the radial is built straight
+         off that array. ItemActionAttack::SetupRadial, read from the 3.2 assembly:
+
+             string[] names = player.inventory.GetHoldingGun().MagazineItemNames;
+             for (i = 0; i < names.Length; i++) { ... CreateRadialEntry(...) }
+
+         Every entry gets a slot whatever the player is carrying: a count of zero shows
+         as zero rather than being hidden, and the only skips are an unresolvable item
+         class and an underwater-unusable one. So appearing in the list is both
+         necessary AND sufficient. There was nothing else to fix.
+
+         FIVE WEAPONS, NOT TWO. Grepping the 3.2 config dump for a Magazine_items value
+         containing "arrow" or "bolt" returns exactly five, and none of them inherits
+         the property through Extends, so each needs its own set:
+
+             gunBowT0PrimitiveBow      gunBowT1IronCrossbow
+             gunBowT1WoodenBow         gunBowT3CompoundCrossbow
+             gunBowT3CompoundBow
+
+         FIRST IN THE LIST, ON FRIL'S CALL, AND THE ONE-TIME COST IS KNOWN. v1.17.0 put
+         the wooden arrow last to avoid disturbing saved weapons. Fril: "Id prefer the
+         wood arrow to sit before the stone one", so it now leads the list and the whole
+         radial reads as a progression: wood, stone, iron, steel AP, flaming, exploding.
+
+         WHY THAT IS NOT FREE. The selected ammo is ItemValue.SelectedAmmoTypeIndex, a
+         byte, and it is an INDEX INTO THIS ARRAY rather than an item id - SwapAmmoType
+         does MagazineItemNames[itemValue.SelectedAmmoTypeIndex], and ItemValue::ReadData
+         and ::Write carry it in and out of the save. Shifting every name one place right
+         therefore re-points every index already written: a saved bow set to Iron comes
+         back reading Stone, one set to Exploding comes back on Flaming, and so on down.
+
+         NOTHING RE-SYNCS IT BY ITSELF. setSelectedAmmoById is the only code that maps a
+         loaded round back to an index, and the only caller in the whole assembly is
+         SwapAmmoType, which runs when the PLAYER changes ammo. So a bow carried across
+         this version keeps the wrong selection until its radial is opened once.
+
+         That is a one-time nuisance on existing weapons, not a fault, and nothing throws:
+         the array only ever gets longer, so no saved index can fall out of range.
+         ============================================================================== -->
     <set xpath="/items/item[@name='gunBowT0PrimitiveBow']/property[@class='Action0']/property[@name='Magazine_items']/@value">ammoArrowWood,ammoArrowStone,ammoArrowIron,ammoArrowSteelAP,ammoArrowFlaming,ammoArrowExploding</set>
     <set xpath="/items/item[@name='gunBowT1WoodenBow']/property[@class='Action0']/property[@name='Magazine_items']/@value">ammoArrowWood,ammoArrowStone,ammoArrowIron,ammoArrowSteelAP,ammoArrowFlaming,ammoArrowExploding</set>
     <set xpath="/items/item[@name='gunBowT3CompoundBow']/property[@class='Action0']/property[@name='Magazine_items']/@value">ammoArrowWood,ammoArrowStone,ammoArrowIron,ammoArrowSteelAP,ammoArrowFlaming,ammoArrowExploding</set>
@@ -162,12 +515,61 @@
     <set xpath="/items/item[@name='gunBowT1IronCrossbow']/property[@class='Action0']/property[@name='Magazine_items']/@value">ammoCrossbowBoltWood,ammoCrossbowBoltStone,ammoCrossbowBoltIron,ammoCrossbowBoltSteelAP,ammoCrossbowBoltFlaming,ammoCrossbowBoltExploding</set>
     <set xpath="/items/item[@name='gunBowT3CompoundCrossbow']/property[@class='Action0']/property[@name='Magazine_items']/@value">ammoCrossbowBoltWood,ammoCrossbowBoltStone,ammoCrossbowBoltIron,ammoCrossbowBoltSteelAP,ammoCrossbowBoltFlaming,ammoCrossbowBoltExploding</set>
 
+    <!-- ============================================================
+         THE DUTY MANAGER'S HANDOVER NOTE (v1.37.0)
+
+         WHY IT EXISTS, and it is one reason only. Nothing in the game tells the player the
+         basement exists. By design the T5 chest down there is the hotel's only real weapon,
+         holding a fixed-quality 6 AK, 300 rounds of 7.62 and the medicine for the finale, all
+         guaranteed rather than rolled. Fril, 3 Oct: "There is nowhere that tells the player
+         about the T5 loot chest in the basement. That means there is no reason for a new
+         player, playing for the first time, to venture down there." The devlog calls raiding
+         the armoury early "a real choice", and a choice nobody knows about is not a choice.
+
+         It is ALSO the only thing guaranteed to be in the player's hands at spawn, so it is
+         where the pointer to the ESC briefing lives. A new player presses ESC to quit, not to
+         read.
+
+         IT DELIBERATELY DOES NOT RESTATE THE OBJECTIVE. The ESC window already says "Clear
+         rooms, floor by floor" and "Kill him, take the fob, open the shutter, and drive".
+         Repeating that here would be the same mistake as the four challenges cancelled on
+         3 Oct: a second copy of the briefing in a worse place.
+
+         WHY Class=Eat AND NOT Class=Quest, WHICH IS WHAT THE HOSPITAL USES.
+         The Hospital's hospitalSurvivalGuide fires quest_HospitalSurvivalGuide and shows its
+         briefing from the quest. That cannot work here:
+           * QUESTS ARE OFF. All six presets in occupancy_presets.xml carry QuestsEnabled 0,
+             along with the trader, buried and POI options.
+           * ItemActionQuest.ExecuteInstantAction calls OpenQuestOfferWindow and writes to the
+             quest journal. Even if it fired, the player would get a quest offer and a journal
+             entry in a mod that deliberately has neither.
+           * It needs a quests.xml we do not have.
+
+         Vanilla had already solved it in the note this mod deleted. noteDuke01 extends the same
+         blankNoteMaster and shows its text with no quest at all, through PromptTitle and
+         PromptDescription on an Eat action. ItemActionEat.ReadFrom reads Consume, PromptTitle
+         and PromptDescription, confirmed in IL, so Consume="false" gives a note that can be
+         read as many times as the player likes rather than vanishing like Duke's did.
+
+         Nothing is eaten: food and water come from the item's own properties and
+         blankNoteMaster has none.
+
+         THE WORDING LIVES IN TWO PLACES AND MUST MOVE TOGETHER. The note's text is baked into
+         Fril's artwork (Resources/hotelNote.unity3d, and the icon), and repeated in
+         occHandoverNoteBody so it can be read at a comfortable size. Change one without the
+         other and they drift, which is exactly the fault fixed in v1.36.1 where the ESC text
+         still pointed at a Register tab removed eleven versions earlier. RE-EXPORT THE ART IF
+         YOU REWORD THIS, OR DO NOT REWORD IT.
+         ============================================================ -->
     <append xpath="/items">
         <item name="occHandoverNote">
             <property name="Extends" value="blankNoteMaster"/>
             <property name="HoldType" value="31"/>
             <property name="Meshfile" value="#@modfolder:Resources/hotelNote.unity3d?noteOstrichRules.Prefab"/>
-            
+            <!-- v1.38.2: THE SAME MESH WHEN IT IS ON THE FLOOR. Fril: "Ive added a dropmeshfile
+                 to the note so it looks like the note when you throw it away and not a scabby
+                 bag." blankNoteMaster inherits DropMeshfile sack_droppedPrefab, which is the
+                 scabby bag in question, so this has to be stated to override it. -->
             <property name="DropMeshfile" value="#@modfolder:Resources/hotelNote.unity3d?noteOstrichRules.Prefab"/>
             <property name="CreativeMode" value="None"/>
             <property name="CustomIcon" value="noteOstrichRules"/>
@@ -177,7 +579,16 @@
             <property name="SellableToTrader" value="false"/>
             <property name="SoundPickup" value="map_grab"/>
             <property name="SoundPlace" value="map_place"/>
-            
+            <!-- v1.38.0: NO PromptTitle OR PromptDescription ANY MORE, DELIBERATELY.
+                 Those two made ItemClass.ExecuteAction raise vanilla's message box, which is a
+                 single shared window 1200x400 whose label carries overflow="shrinkcontent", so a
+                 long note rendered small and could not be enlarged without enlarging every quit
+                 prompt and delete confirmation in the game. The note now opens its own window
+                 instead. See HandoverNote.cs for the whole investigation.
+
+                 The Eat action STAYS, and is still Consume="false" with no effects, so all it
+                 does is play the paper sound and the reading animation. HandoverNote's postfix
+                 rides on it. -->
             <property class="Action0">
                 <property name="Class" value="Eat"/>
                 <property name="Delay" value="1.0"/>
@@ -187,28 +598,125 @@
             </property>
         </item>
 
+        <!-- ==============================================================
+             THE GUARD'S OWN SIDEARM AND KNIFE (v1.70.0)
+
+             Two items that are the vanilla pair in every respect except that they never wear out.
+             Fril's original call stands: both are starting-kit items the run is balanced around,
+             there is no trader in the hotel and repair kits are scarce, so a degrading sidearm
+             quietly turns into a resource problem the design never intended. What changes is the
+             SCOPE: only the two he is handed, not every one in the world.
+
+             THE PATTERN IS VANILLA'S OWN, not invented. `gunHandgunPistolAdmin` does exactly this:
+
+                 <passive_effect name="DegradationMax"    operation="base_set" value="9999" tags="admin"/>
+                 <passive_effect name="DegradationPerUse" operation="base_set" value="0"    tags="admin"/>
+
+             v1.71.0 - WHAT v1.70.0 GOT WRONG, AND WHY THE GROUPS BELOW ARE SO LONG.
+
+             v1.70.0 gave each child a ONE-LINE effect_group holding only DegradationPerUse. That
+             shipped two broken weapons: the pistol would not load ammunition and the knife swung
+             at a crawl. Fril found both within minutes of loading it.
+
+             A CHILD'S OWN effect_group REPLACES THE PARENT'S ENTIRELY. IT DOES NOT MERGE.
+
+             So the one-line group threw away everything else the parent declared. The pistol lost
+             24 passive effects including MagazineSize (hence no ammunition), RoundsPerMinute,
+             EntityDamage, MaxRange and every spread and kick value. The knife lost 12 including
+             AttacksPerMinute (hence the slow swing), EntityDamage, MaxRange and StaminaLoss.
+
+             The v1.70.0 note claimed this was checked. It was half checked. Overriding was
+             verified; what the overriding children CONTAINED was not. Narrowed to weapon children
+             that extend a weapon parent there are only four in the whole of vanilla items.xml,
+             and THREE OF THEM RESTATE THE PARENT'S GROUP IN FULL, twelve effects for twelve:
+
+                 meleeWpnSpearT1IronSpear        extends meleeWpnSpearT0StoneSpear
+                 meleeWpnSpearT3SteelSpear       extends meleeWpnSpearT1IronSpear
+                 meleeWpnKnucklesT3SteelKnuckles extends meleeWpnKnucklesT1IronKnuckles
+
+             The fourth, gunBowT1DevCrossbow, overrides six of twenty-five, and it is a
+             CreativeMode Dev weapon whose stats being wrong is the point. It is not a precedent.
+
+             SO THE GROUPS BELOW ARE VERBATIM COPIES of each parent's effect_group from vanilla
+             3.2.0 (b10) with exactly ONE line changed, the DegradationPerUse value, marked with
+             an OCC comment. They were generated from vanilla items.xml by script, not retyped,
+             and tools/check_extends.py diffs them against the parents at package time and fails
+             the build if a single passive_effect goes missing.
+
+             IF THE FUN PIMPS EVER RETUNE EITHER PARENT, THESE COPIES GO STALE AND SILENTLY HOLD
+             THE OLD NUMBERS. The checker reports that too, as a mismatch rather than a loss.
+
+             tiered="false" IS ALSO GONE. That came off gunHandgunPistolAdmin, which is a
+             standalone item with ShowQuality false and no Extends at all. On a tiered weapon it
+             has no business being there. The three real precedents above carry name="..." only.
+
+             STILL TRUE FROM v1.70.0, both verified:
+
+               * items.xml inherits with a PROPERTY, not an attribute. 1,144 items use
+                 <property name="Extends" value="..."/> and NOT ONE uses extends="...".
+               * gunHandgunPistolAdmin is the vanilla precedent for the DegradationPerUse base_set
+                 0 line itself, and the perk tags are copied from each parent exactly.
+             ============================================================== -->
         <item name="occGuardPistol">
             <property name="Extends" value="gunHandgunT1Pistol"/>
             <property name="CustomIcon" value="gunHandgunT1Pistol"/>
-            
+            <!-- v1.198.0: no durability bar. ItemClass::Init parses ShowQuality into
+                 ItemClass.ShowQualityBar, which gates the durability display in nine XUi places
+                 (item stack, stack slot, equipment stack, item info, crafting info, combine
+                 grid x3, trader entry, quest turn-in) and GameSenseManager. It is NOT the tier
+                 label; that is the "tiered" attribute on the effect_group, and from v1.228.0
+                 the two have gone different ways: the tier is back and the bar stays hidden.
+                 Safe here because this weapon has DegradationPerUse base_set 0 and never wears
+                 out, so the bar only ever showed full. -->
             <property name="ShowQuality" value="false"/>
+            <!-- ALL 1 of gunHandgunT1Pistol's effect_groups, verbatim from vanilla
+                 3.2.0 (b10), 29 passive_effects, ONE line changed. v1.72.0 copied only
+                 the FIRST group and lost the rest. See the note above. -->
+            <!-- v1.228.0: THE QUALITY TIER IS BACK, and that is what makes this weapon
+                 moddable again. Fril, 30 Oct, choosing it over keeping the label hidden.
 
-            <effect_group name="occGuardPistol" tiered="false">
+                 THE HISTORY, because the two properties are easy to confuse.
+                 v1.197.0 put tiered="false" here to remove the quality label. It worked, and it
+                 cost the mod slots: the game counts slots as (Quality - 1) plus the item's own
+                 ModSlots effect, and with no quality the first term is 0 and the tier-scaled
+                 second term had no tier to resolve against, so the weapon got none and the
+                 Modify option disappeared. v1.227.0 tried a flat untiered slot count instead,
+                 which is how vanilla's own tierless gunHandgunPistolAdmin declares its slots,
+                 and it did not work. The reason was never found.
+                 So the tier attribute is simply gone from here and from the ModSlots line below
+                 is back to vanilla's, which is the state this weapon was in before 23 October.
+
+                 THE DURABILITY BAR IS A DIFFERENT PROPERTY AND STAYS HIDDEN. ShowQuality above
+                 maps to ItemClass.ShowQualityBar and gates the durability display in nine XUi
+                 places; it is not the tier label. Removing tiered="false" does not bring the bar
+                 back. It does make the info panel show a Max Durability figure again (300 at
+                 quality 1), which is cosmetic: DegradationPerUse is 0 and this never wears out.
+
+                 For the record on how tiering is read: ItemClass.HasQuality is
+                 "Effects != null && Effects.IsOwnerTiered", MinEffectController.IsOwnerTiered is
+                 true if ANY of the item's effect_groups has OwnerTiered, MinEffectGroup's
+                 constructor defaults OwnerTiered to TRUE (ldc.i4.1), and ParseXml only overrides
+                 it when a "tiered" attribute is present. A group that says nothing is tiered.
+                 Vanilla uses tiered="false" 740 times and tiered="true" not once. -->
+            <effect_group name="occGuardPistol">
             <passive_effect name="MaxRange" operation="base_set" value="50" tags="perkGunslinger,9mmGun"/>
             <passive_effect name="DamageFalloffRange" operation="base_set" value="17" tags="perkGunslinger,9mmGun"/>
-            <passive_effect name="DamageFalloffRange" operation="perc_add" value="-.2,.2" tier="1,6" tags="perkGunslinger,9mmGun"/> 
+            <passive_effect name="DamageFalloffRange" operation="perc_add" value="-.2,.2" tier="1,6" tags="perkGunslinger,9mmGun"/> <!-- random effective rng -->
             <passive_effect name="RoundsPerMinute" operation="base_set" value="180" tags="perkGunslinger"/>
             <passive_effect name="BurstRoundCount" operation="base_set" value="1" tags="perkGunslinger"/>
             <passive_effect name="MagazineSize" operation="base_set" value="15" tags="perkGunslinger"/>
-            
-            <passive_effect name="ModSlots" operation="base_set" value="2,2,2,3,3,4" tier="1,2,3,4,5,6"/>
+            <!--<passive_effect name="ReloadSpeedMultiplier" operation="base_set" value="1" tags="perkGunslinger"/> 2s -->
+            <passive_effect name="ModSlots" operation="base_set" value="2,2,2,3,3,4" tier="1,2,3,4,5,6"/>   <!-- v1.228.0: back to vanilla's
+                 gunHandgunT1Pistol line, verbatim. v1.227.0's flat untiered "2" is gone; it never
+                 worked. The weapons are issued at quality 1 from gameevents.xml, so this resolves
+                 to 2 slots, which is what the pistol had before 23 October. -->
             <passive_effect name="ModPowerBonus" operation="perc_add" value=".10" tags="EntityDamage,BlockDamage"/>
             <passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue"/>
-            <passive_effect name="EntityDamage" operation="base_add" value="5" tags="perkGunslinger"/> 
-            <passive_effect name="EntityDamage" operation="perc_add" value=".05,.25" tier="2,6" tags="perkGunslinger"/> 
-            <passive_effect name="BlockDamage" operation="perc_add" value="-.08,.08" tags="perkGunslinger"/> 
-            <passive_effect name="BlockDamage" operation="perc_add" value=".15,.75" tier="2,6" tags="perkGunslinger"/> 
-            <passive_effect name="WeaponHandling" operation="perc_add" value="-.08,.08" tags="perkGunslinger"/> 
+            <passive_effect name="EntityDamage" operation="base_add" value="5" tags="perkGunslinger"/> <!-- damage offset -->
+            <passive_effect name="EntityDamage" operation="perc_add" value=".05,.25" tier="2,6" tags="perkGunslinger"/> <!-- tier bonus -->
+            <passive_effect name="BlockDamage" operation="perc_add" value="-.08,.08" tags="perkGunslinger"/> <!-- random BlockDmg -->
+            <passive_effect name="BlockDamage" operation="perc_add" value=".15,.75" tier="2,6" tags="perkGunslinger"/> <!-- tier bonus -->
+            <passive_effect name="WeaponHandling" operation="perc_add" value="-.08,.08" tags="perkGunslinger"/> <!-- random WeaponHandling -->
             <passive_effect name="SpreadDegreesVertical" operation="base_set" value="1.5" tags="perkGunslinger"/>
             <passive_effect name="SpreadDegreesHorizontal" operation="base_set" value="1.5" tags="perkGunslinger"/>
             <passive_effect name="SpreadMultiplierAiming" operation="base_set" value=".4" tags="perkGunslinger"/>
@@ -220,46 +728,63 @@
             <passive_effect name="KickDegreesHorizontalMin" operation="base_set" value="-.25" tags="perkGunslinger"/>
             <passive_effect name="KickDegreesHorizontalMax" operation="base_set" value=".25" tags="perkGunslinger"/>
             <passive_effect name="IncrementalSpreadMultiplier" operation="base_set" value="2.0" tags="perkGunslinger,9mmGun"/>
-            <passive_effect name="WeaponHandling" operation="base_set" value=".95" tags="perkGunslinger"/> 
+            <passive_effect name="WeaponHandling" operation="base_set" value=".95" tags="perkGunslinger"/> <!-- crosshair reset speed -->
             <passive_effect name="DegradationMax" operation="base_set" value="300,400" tier="1,6" tags="perkGunslinger,9mmGun"/>
-            <passive_effect name="DegradationPerUse" operation="base_set" value="0" tags="perkGunslinger,9mmGun"/>   
+            <passive_effect name="DegradationPerUse" operation="base_set" value="0" tags="perkGunslinger,9mmGun"/>   <!-- OCC: the only changed line -->
             </effect_group>
         </item>
 
         <item name="occGuardKnife">
             <property name="Extends" value="meleeWpnBladeT1HuntingKnife"/>
             <property name="CustomIcon" value="meleeWpnBladeT1HuntingKnife"/>
-            
+            <!-- v1.198.0: no durability bar. See the pistol for the full reading.
+                 THIS ONE IS AN OVERRIDE, NOT A NEW VALUE: vanilla's
+                 meleeWpnBladeT1HuntingKnife sets ShowQuality="true" explicitly, so this has to
+                 beat it. It does, because ItemClassesFromXml::parseItem builds a child as
+                 new DynamicProperties().CopyFrom(parent, excludes).CopyFrom(ownProps, null),
+                 so the child's own value is written last and wins. Plain properties DO inherit
+                 and DO override through Extends; it is effect_groups that do not inherit. -->
             <property name="ShowQuality" value="false"/>
-
-            <effect_group name="occGuardKnife" tiered="false">
+            <!-- ALL 3 of meleeWpnBladeT1HuntingKnife's effect_groups, verbatim from vanilla
+                 3.2.0 (b10), 25 passive_effects, ONE line changed. v1.72.0 copied only
+                 the FIRST group and lost the rest. See the note above. -->
+            <!-- v1.228.0: THE QUALITY TIER IS BACK ON ALL THREE OF THIS ITEM'S GROUPS, which is
+                 what makes the knife moddable again. See the pistol for the full reading and the
+                 history. It had to come off all three in v1.197.0 and go back on all three now,
+                 because IsOwnerTiered returns true if ANY group is tiered: doing one alone would
+                 look like the property had not worked. The other two are "Power Attack" and
+                 "sneak damage bonus" below. The durability bar stays hidden; that is the separate
+                 ShowQuality property above and it is untouched. -->
+            <effect_group name="occGuardKnife">
             <passive_effect name="AttacksPerMinute" operation="base_set" value="120" tags="perkDeepCuts,perkFlurryOfAgility"/>
             <passive_effect name="StaminaLoss" operation="base_set" value="10.5" tags="primary"/>
             <passive_effect name="DegradationMax" operation="base_set" value="500,1000" tier="1,6" tags="perkDeepCuts"/>
-            <passive_effect name="DegradationPerUse" operation="base_set" value="0" tags="perkDeepCuts"/>   
+            <passive_effect name="DegradationPerUse" operation="base_set" value="0" tags="perkDeepCuts"/>   <!-- OCC: the only changed line -->
             <passive_effect name="MaxRange" operation="base_set" value="2.0" tags="perkDeepCuts"/>
             <passive_effect name="BlockRange" operation="base_set" value="2.5" tags="perkDeepCuts"/>
-            <passive_effect name="ModSlots" operation="base_set" value="2,2,2,3,3,4" tier="1,2,3,4,5,6"/>
+            <passive_effect name="ModSlots" operation="base_set" value="2,2,2,3,3,4" tier="1,2,3,4,5,6"/>   <!-- v1.228.0: back to vanilla's
+                 meleeWpnBladeT1HuntingKnife line, verbatim. v1.227.0's flat untiered "2" is gone;
+                 it never worked. Issued at quality 1, so this resolves to 2 slots. -->
             <passive_effect name="ModPowerBonus" operation="perc_add" value=".10" tags="EntityDamage,BlockDamage"/>
             <passive_effect name="ModPowerBonus" operation="base_add" value="300" tags="EconomicValue"/>
-            <passive_effect name="EntityDamage" operation="base_set" value="12" tags="perkDeepCuts,knife"/> 
-            <passive_effect name="EntityDamage" operation="perc_add" value=".1,.5" tier="2,6" tags="perkDeepCuts"/> 
+            <passive_effect name="EntityDamage" operation="base_set" value="12" tags="perkDeepCuts,knife"/> <!-- meleeWpnBladeT1HuntingKnife -->
+            <passive_effect name="EntityDamage" operation="perc_add" value=".1,.5" tier="2,6" tags="perkDeepCuts"/> <!-- tier bonus -->
             <passive_effect name="BlockDamage" operation="base_set" value="6.5" tags="perkDeepCuts"/>
-            <passive_effect name="BlockDamage" operation="perc_add" value=".1,.5" tier="2,6" tags="perkDeepCuts"/> 
+            <passive_effect name="BlockDamage" operation="perc_add" value=".1,.5" tier="2,6" tags="perkDeepCuts"/> <!-- tier bonus -->
             <passive_effect name="DamageModifier" operation="perc_add" value="-.8" tags="earth"/>
             <passive_effect name="DamageModifier" operation="perc_add" value="-.8" tags="stone"/>
             <passive_effect name="DamageModifier" operation="perc_add" value="-.8" tags="metal"/>
             <passive_effect name="DamageModifier" operation="perc_add" value=".6" tags="organic"/>
             <passive_effect name="HarvestCount" operation="base_set" value="1" tags="butcherHarvest"/>
             </effect_group>
-            <effect_group name="Power Attack" tiered="false">
+            <effect_group name="Power Attack">
             <passive_effect name="EntityDamage" operation="base_add" value="6" tags="secondary"/>
             <passive_effect name="EntityDamage" operation="perc_add" value="1" tags="secondary"/>
             <passive_effect name="BlockDamage" operation="perc_add" value="1" tags="secondary"/>
             <passive_effect name="AttacksPerMinute" operation="base_add" value="-60" tags="secondary"/>
             <passive_effect name="StaminaLoss" operation="base_set" value="13.5" tags="secondary"/>
             </effect_group>
-            <effect_group name="sneak damage bonus" tiered="false">
+            <effect_group name="sneak damage bonus">
             <requirement name="CVarCompare" cvar="_crouching" operation="Equals" value="1"/>
             <requirement name="CVarCompare" cvar="_notAlerted" operation="GT" value="0" target="other"/>
             <passive_effect name="DamageBonus" operation="base_add" value="4"/>
@@ -268,12 +793,5 @@
             </effect_group>
         </item>
     </append>
-
-  
-  <set xpath="/items/item/property[@name='CreativeMode']/@value">None</set>
-
-  <append xpath="/items/item[not(property[@name='CreativeMode'])]">
-    <property name="CreativeMode" value="None"/>
-  </append>
 
 </configs>

@@ -1,5 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- OstrichChallenge: FRILIOTH
 
+     The survivor on the radio, and the trader at the end of the drive. He is Fril, deliberately:
+     the broadcast introduces him by name on day one, so the player knows who they are hearing long
+     before they ever see him.
+
+     WHERE THE FACE VALUES CAME FROM. Not from a screenshot, and not from me guessing. The character
+     creator shows the parts as NUMBERS ("Face 04", "Eyes 24") while archetypes.xml wants NAMES
+     ("Green04"), and nothing in the config maps one to the other: that list lives in the game's own
+     resources. So the mod grew an "occ archetype" command that reads the player's live archetype
+     out of EModelSDCS and prints it in this format, and this line is its output with the name
+     changed from BaseMale to Frilioth.
+
+         Face 04  -> variant="4"
+         Eyes 24  -> eye_color="Green04"
+         Hair Style 00, Mustache 00, Chops 00, Beard 00 -> omitted entirely
+
+     THE OMISSIONS ARE DELIBERATE. Vanilla's bald archetypes (James, Denzel, Chong) simply have no
+     hair attribute rather than an empty one, and only the archetypes with facial hair declare it.
+
+     ==================================================================================
+     THE CLOTHES (v0.76.1), AND WHY THEY ARE NOT THE ROGUE OUTFIT FRIL ASKED FOR
+     ==================================================================================
+     Fril wanted armorRogueOutfit and armorPreacherBoots. Three attempts went at that the direct
+     way and all three failed, each one measured rather than assumed:
+
+       armour slots     Equipment.SetSlotItem put both items on him, confirmed in the log, and
+                        nothing rendered.
+       cosmetic slots   UnlockCosmeticItem + SetCosmeticSlot both succeeded, "2 cosmetic(s) set",
+                        and nothing rendered.
+       the rebuild      not the cause. The log showed emodel EModelSDCS, a live animator with
+                        enabled=True, and three forced UpdateEquipment calls.
+
+     So worn armour and cosmetics do not render on a non-player SDCS NPC. What DOES work is this
+     file's own <equipment>, because it is the same machinery that already gives him Fril's face.
+
+     AND THE ROGUE OUTFIT HAS NO GEAR PREFAB. The "occ gear" command asks the game to load all 43
+     candidate names taken from items.xml, and exactly 17 resolve, which is the sixteen sets vanilla
+     archetypes use (Lumberjack answering to both spellings). Rogue is not among them: it exists as
+     armour and cosmetic art only. The full found list is
+
+         Assassin, Biker, Commando, Enforcer, Farmer, Fiber, Fitness, Lumberjack, Miner, Nerd,
+         Nomad, Preacher, Raider, Ranger, Scavenger, Stealth
+
+     Fril chose LumberJack for the body and Preacher for the boots. Both strings below are copied
+     from prefabs the game confirmed it can load, not typed from memory.
+
+     NO HANDS LINE, DELIBERATELY. Fril asked for a body and boots. I added LumberJack hands on the
+     grounds that vanilla fills all three slots, he told me to take them off, and he was right: it
+     was scope he had not asked for. His hands are bare, which vanilla does too (Jesse and Jade
+     carry the Fiber set with empty excludes on hands and feet for exactly that).
+
+     {sex} is vanilla's own token and resolves per archetype; every vanilla entry uses it.
+     excludes hides the body part underneath so it cannot poke through, and vanilla sets it to the
+     slot's own name 30 times out of 32.
+-->
 <configs>
 
     <append xpath="/archetypes">

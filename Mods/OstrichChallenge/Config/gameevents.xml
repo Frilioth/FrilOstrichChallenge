@@ -1,6 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Game Events
 
+    THE SECURITY GUARD'S KIT. Replacing game_first_spawn wholesale removes what vanilla hands out,
+    the noob coat included, and puts the guard's own things in the toolbelt instead: his sidearm
+    and one box of rounds, the baton off his belt, a knife, and the torch he walks the floors with.
+
+    Nothing else. He was doing a night shift, not packing for the apocalypse, and everything after
+    this comes out of the hotel.
+
+    Taken from the Hospital Challenge's gameevents.xml (v1.3.0), including its hard-won timing:
+    game_first_spawn fires AFTER OnPlayerSpawned, so anything handed out earlier is overwritten by
+    SetItemSlots. The 5 second Delay is vanilla's and stays.
+
+    ITEM IDS: all five checked against the game's own items.xml. Three were wrong in v0.47.x and
+    ActionSetItemSlots threw a null reference 448 times rather than naming them, so the kit was
+    never handed out at all:
+        ammo9mmBullet           -> ammo9mmBulletBall   (there is no plain "Bullet"; Ball, AP, HP)
+        meleeWpnClubT0PipeBaton -> meleeWpnBatonT0PipeBaton (batons are their own line, not clubs)
+        flashlight02            -> meleeToolFlashlight02
+    The torch is the electric one a guard carries rather than meleeToolTorch, the burning stick,
+    which would be an odd thing to walk a carpeted hotel with.
+
+    ADDED v0.82.0 (Fril): two first aid bandages and 200 Dukes. Both ids checked against the game's
+    own items.xml the same way, and both exist exactly as written. Note medicalFirstAidBandage is
+    the First Aid Bandage; medicalBandage is the plain one and is a different item.
+
+    WHY THEY ARE ON THE TOOLBELT RATHER THAN IN THE BACKPACK, which was a real choice.
+    items_location takes exactly three values, read off the ItemLocations enum rather than guessed:
+    Toolbelt, Backpack, Equipment. So the coins COULD go in a pocket where they arguably belong,
+    since nobody quick-selects money.
+
+    They are here because that would mean a second SetItemSlots action in this sequence, and at the
+    time I had not tested whether two of them run cleanly together. v1.13.4 ANSWERS THAT: they do.
+    See THE UNIFORM below. The coins could move to the backpack now if the belt ever feels crowded:
+    a second <action class="SetItemSlots"> with items_location="Backpack" and its own slot_numbers
+    starting at 0.
+
+    THE UNIFORM (v1.13.4). Fril: "Id like the player to be spawned it with lvl 1 armour and lvl1
+    boots. They wouldnt be at work naked now would they" — then, asked which set, "Id actually like
+    Rogue outfit and preacher boots".
+
+    THREE THINGS READ OUT OF ActionSetItemSlots.OnClientPerform BEFORE WRITING IT, because all
+    three would have been wrong if guessed:
+
+    1. FOR A QUALITY ITEM, item_counts IS THE QUALITY, NOT THE COUNT. The code reads
+       quality = GetIntValue(player, itemCounts[i], 1), and if itemClass.HasQuality it builds
+       new ItemValue(id, quality, quality, ...) and FORCES the stack count to 1. So "1" here means
+       quality 1, which is what was asked for. It also means the existing toolbelt line has been
+       handing out quality-1 tools all along, which is correct but was never stated.
+       HasQuality itself is Effects.IsOwnerTiered() — true for anything with tier="..." passive
+       effects, which both armour pieces have.
+
+    2. items_location="Equipment" IGNORES slot_numbers, so none are given. The method's opening
+       guard is: if Items is null return; if ItemLocation != Equipment AND SlotNumbers is null,
+       return. Equipment is the one location exempt. It then calls
+       xui.PlayerEquipment.EquipItem(stack), which routes by the item's own EquipSlot (Chest,
+       Feet), so a slot number would be read and thrown away.
+
+    3. TWO SetItemSlots ACTIONS IN ONE SEQUENCE ARE FINE. GameEventActionSequence.Update loops
+       every action whose Phase equals CurrentPhase and calls PerformAction on each, and
+       BaseAction.SetActionKeyData builds each action's key from its INDEX in the sequence, so two
+       actions of the same class get distinct keys and neither shadows the other in sLookupByKey.
+       The new action deliberately carries no phase property, exactly like the one above it, so it
+       sits in the same phase as the line already known to work.
+
+    WHY THESE TWO PIECES, mechanically. Both extend armorLightMaster. At quality 1 they give
+    8 physical resist, 8 heat/electrical, 250 durability and 2 mod slots each, and both carry
+    armorLightSkill so the Light Armour perk scales them. The Rogue outfit adds the stealth line:
+    -5% light, -3% noise, +2% crouch speed, +5% enemy search duration at Q1. The Preacher boots
+    add nothing beyond the base at Q1; their armorPreacherBootsHealing tag is referenced nowhere
+    else in the configs.
+
+    NO SET BONUS. buffRogueSetBonus and buffPreacherSetBonus both need four matching pieces, and
+    this is two pieces from two different sets, so neither fires. That is a deliberate consequence
+    of the mix rather than an oversight: the guard is wearing what he owns, not a matched kit.
+
+    NOT MEASURED: unplayed. The three findings above are read from IL, but the first spawn with
+    both actions in the sequence has not happened yet.
+-->
 <configs>
+
+    <!-- The green "the Duke left you a note" banner is a BUFF, buffDukeNote, added by this same
+         sequence five seconds after spawn. It fires whether or not the player has the note, and
+         with the note gone nothing can ever clear it, so it would sit there for the whole run.
+         Replacing the sequence below removes that action with everything else, and this line is
+         kept as the record of why the banner is not a mystery. -->
 
     <set xpath="/gameevents/action_sequence[@name='game_first_spawn']">
         <property name="allow_user_trigger" value="false" />
@@ -9,21 +94,60 @@
             <property name="phase" value="1" />
             <property name="time" value="5" />
         </action>
-        
+        <!-- v0.95.0: THE WRENCH, slot 7. Fril, after the first full play-through: "We need to
+             start with a wrench in the loadout." The id is meleeToolSalvageT1Wrench, checked
+             against the game's items.xml; the only other wrench in the game is
+             meleeToolSalvageWrenchAdmin, which is a creative-menu item. -->
         <action class="SetItemSlots">
             <property name="items_location" value="Toolbelt" />
+            <!-- v1.37.1: THE HANDOVER NOTE IS IN SLOT 0, so the player is holding it the
+                 moment they spawn and reads it without being told to. v1.37.0 put it in slot 9,
+                 the last free one, which worked but left it as the thing you find rather than
+                 the thing you are given. Fril, after seeing it in game: "Can the note be in the
+                 first slot so the player is holding it when they spawn in."
 
+                 EVERYTHING ELSE SHIFTED DOWN ONE, nothing dropped. The toolbelt is ten slots
+                 and the kit is ten items, so this is now exactly full. Anything added later
+                 has to displace something.
+
+                 Note the pistol is no longer the item in hand at spawn. That is the point, and
+                 it is safe: the run starts on the roof with nothing hostile in reach.
+                 See items.xml for why the note exists at all. -->
+            <!-- v1.70.0: occGuardPistol and occGuardKnife replace the vanilla pair. Same weapons,
+                 but only the guard's two never wear out; a looted T1 degrades normally again.
+                 See items.xml. Slot order and counts are unchanged. -->
             <property name="items" value="occHandoverNote,occGuardPistol,ammo9mmBulletBall,meleeWpnBatonT0PipeBaton,occGuardKnife,meleeToolFlashlight02,medicalFirstAidBandage,casinoCoin,meleeToolSalvageT1Wrench,occChocNAwe" />
             <property name="item_counts" value="1,1,30,1,1,1,2,200,1,1" />
             <property name="slot_numbers" value="0,1,2,3,4,5,6,7,8,9" />
         </action>
 
+        <!-- v1.13.4: THE UNIFORM. Equipped, not carried. item_counts is the QUALITY for these,
+             and no slot_numbers because Equipment routes by the item's own EquipSlot. -->
         <action class="SetItemSlots">
             <property name="items_location" value="Equipment" />
             <property name="items" value="armorRogueOutfit,armorPreacherBoots" />
             <property name="item_counts" value="1,1" />
         </action>
 
+        <!-- NO SKILL POINTS ARE GRANTED HERE, AND THAT IS DELIBERATE (v0.95.1).
+
+             v0.95.0 added an <action class="AddSkillPoints"> here, on my reasoning that a sandbox
+             setting lives in one save and nobody downloading the mod would get it. Fril asked the
+             right question: "We have the occupancy_presets.xml that I'll add the starter points
+             to. No?" He was right and I was wrong.
+
+             StarterSkillPoints IS a sandbox option (SandboxOptions.StarterSkillPoints), so it
+             bakes into the preset codes in occupancy_presets.xml, ships with the mod exactly like
+             every other tier setting, and can differ per difficulty tier, which an action here
+             never could. Leaving both in place would have stacked them.
+
+             AND THE REAL FIND: the presets are what removed the points in the first place. The
+             first play-through's applied options read
+
+                 Option StarterSkillPoints: 0/None (default: 4/4)
+
+             Vanilla gives four. Every Ostrich tier currently sets it to None, so regenerating the
+             codes is not adding a bonus, it is putting back what the preset took away. -->
     </set>
 
 </configs>

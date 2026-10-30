@@ -1,19 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Entity Classes
 
+    NO VANILLA STARTING KIT.
+
+    The noob coat, the torch and the Duke's note do NOT come from game_first_spawn. They are
+    granted at source by playerMale's ItemsOnEnterGame, which is a CLASS with three children, one
+    per game mode. game_first_spawn runs afterwards and can only bury what it hands out; it can
+    never remove it, which is why v0.47 and v0.48 replaced the kit and the coat and note were
+    still there.
+
+    Removing the children rather than blanking their values leaves the parser nothing to read.
+
+    playerFemale extends playerMale and does not re-declare these, so one set of lines covers
+    both; a second set aimed at playerFemale would match nothing and log "did not apply".
+-->
 <configs>
 
     <remove xpath="//entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvival']"/>
     <remove xpath="//entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalSP']"/>
     <remove xpath="//entity_class[@name='playerMale']/property[@class='ItemsOnEnterGame']/property[@name='GameModeSurvivalMP']"/>
 
+    <!-- ============================================================
+         THE TRADER ON THE RADIO (v0.72.0)
+
+         The voice that has been talking to the player since day one, met at last. He wears Fril's
+         own face, which turns out to be a config job rather than a modelling one: a 7DTD character
+         is an ARCHETYPE, a handful of named parts the game assembles at runtime, and an entity
+         class can name one. See Config/archetypes.xml for Frilioth himself.
+
+         HOW THE MODEL IS WIRED, AND WHY IT COPIES playerMale RATHER THAN A TRADER.
+         Of the six vanilla traders only Jen is on the character system, and she overrides Mesh with
+         a bespoke TraderJen.prefab, so she is no use as a pattern for a face we are supplying. The
+         only thing in the game genuinely built from an archetype is playerMale, which carries:
+
+             ModelType        SDCS
+             PhysicsBody      PlayerSDCS
+             AvatarController AvatarSDCSController
+             (and NO Mesh property at all)
+
+         So this class takes its BEHAVIOUR from npcTraderTemplate, which is where EntityTrader, the
+         trader faction, the greetings and the nav object live, and its BODY from playerMale's
+         wiring plus our archetype.
+
+         WHY HE DOES NOT EXTEND npcTraderTemplate, WHICH WAS THE FIRST ATTEMPT AND FAILED.
+         The template sets Mesh="Player/Male/player_maleRagdoll", entity_class has no exclusion
+         mechanism on extends, and ModelType="SDCS" does NOT make the game ignore an inherited
+         Mesh. It tries to load it and falls over:
+
+             ERR Could not load mesh 'Entities/Player/Male/player_maleRagdoll'
+                 for entity_class 'npcTraderFrilioth'
+             ERR CreateEntityOperation cannot complete npcTraderFrilioth,
+                 emodel assets did not load successfully
+             NullReferenceException
+
+         So the template's properties are reproduced here by hand instead, MINUS the Mesh. That is
+         not as fragile as it looks: every vanilla trader already overrides Mesh with its own
+         prefab, so the template's value is a placeholder none of them use, and the rest of what it
+         provides is a flat list of properties with no logic in it.
+
+         ONLY FOUR THINGS DIFFER from the template, and all four are about the body rather than the
+         behaviour: no Mesh, ModelType SDCS instead of Npc, the SDCS avatar controller, and the SDCS
+         physics body. Everything else below is the template verbatim.
+
+         >>> IF HE STILL WILL NOT SPAWN, TRY Prefab AND HasRagdoll NEXT.
+         The template says Prefab="NPC" HasRagdoll="false"; playerMale, the only thing in the game
+         actually built from an archetype, says Prefab="Player" HasRagdoll="true". I have kept the
+         template's values because they are the trader-correct ones and I would rather change the
+         minimum, but if the model still fails to build those two are the next suspects.
+
+         IsEnemyEntity="true" is copied as-is. It reads oddly for a trader, but every vanilla trader
+         has it and this is not the moment to find out why.
+
+         UserSpawnType is Menu so he can be spawned from the creative menu for testing, the way Jen
+         is, before there is a POI to put him in.
+         ============================================================ -->
     <append xpath="/entity_classes">
         <entity_class name="npcTraderFrilioth">
 
+            <!-- The four that differ from npcTraderTemplate: his body, not his behaviour. -->
             <property name="Archetype"        value="Frilioth"/>
             <property name="ModelType"        value="SDCS"/>
             <property name="AvatarController" value="AvatarSDCSController"/>
             <property name="PhysicsBody"      value="PlayerSDCS"/>
+            <!-- and deliberately NO Mesh property at all, exactly as playerMale has none -->
 
+            <!-- Everything from here down is npcTraderTemplate verbatim. -->
             <property name="Class"            value="EntityTrader"/>
             <property name="UserSpawnType"    value="Menu"/>
             <property name="Tags"             value="entity,npc,human,humanSDCS,trader"/>
@@ -67,6 +139,16 @@
             </effect_group>
         </entity_class>
 
+        <!-- THE FOB BAG (v1.9.0). Extends EntityLootContainerBoss, whose Mesh is ALREADY
+             zpackRedPrefab, so the red bag comes for free with no override. That is also the bag
+             zombieDemolition would have dropped in vanilla and never does, because he ends
+             himself with SetDead() after the explosion and DropBagServer is never entered.
+             Finale.HeStaysDown spawns this one directly instead.
+
+             TimeStayAfterDeath is 86400 against vanilla's 3600. This bag holds the only way out
+             of the building, so it must not expire while the player fights back down to it.
+             Escape.cs respawns it anyway if it goes missing uncollected, so this is the first of
+             two guards rather than the only one. -->
         <entity_class name="occBagFob" extends="EntityLootContainerBoss">
             <property name="LootList" value="occBagFob"/>
             <property name="OverrideName" value="occBagFob"/>
@@ -77,7 +159,255 @@
 
     </append>
 
+    <!-- ==================================================================
+         HOW FAR A ZOMBIE CAN HEAR YOU: THE v1.1.0 CHANGE, AND WHY v1.1.1 TOOK IT BACK OUT
+
+         NOTHING IS SET HERE ANY MORE. This block is kept because the reasoning cost most of a
+         morning and the next person to reach for this dial needs to know why it is not a dial.
+
+         v1.1.0 rewrote this template's AITarget triple from EntityPlayer,0,0 to EntityPlayer,20,0
+         to cut hearing from "fifty metres" to twenty. The 50 is real:
+         EAISetNearestEntityAsTarget.SetData parses the class list as TRIPLES of name, hearDistMax,
+         seeDistMax and ends with
+
+             if (hearDistMax == 0f) hearDistMax = 50f;      // zero means fifty
+
+         BUT FIFTY WAS NEVER REACHABLE, and v1.1.0 shipped before that was checked.
+         PlayerStealth.TickServer picks the candidate list FIRST:
+
+             num8 = rawNoise * 0.6f;
+             num8 *= 1f + CalcSenseScale() * 1.6f;
+             num8 = FastMin(num8, 40f + 15f * CalcSenseScale());
+             world.GetEntitiesAround(EntityFlags.AIHearing, player.position, num8, list);
+
+         With Feral Sense off that is min(rawNoise * 0.6, 40). No entity past 40m is ever even
+         considered, so hearDistMax only matters below 40, and 50 was inert.
+
+         AND FOOTSTEPS CANNOT GET LOUD. PlayerStealth.CalcVolume sums the noise list weighted by
+         0.6 per entry, loudest first, so N identical noises of volume v converge to v / 0.4 no
+         matter how many. From sounds.xml a player step is noise="10" on wood, stone and metal and
+         noise="3" on cloth, with muffled_when_crouched="0.507":
+
+             wood/stone upright     raw 25    -> 15m
+             wood/stone crouched    raw 12.7  -> 7.6m
+             cloth/carpet upright   raw 7.5   -> 4.5m
+
+         So sprinting has never carried past about 15 metres and the 20 could not touch it. The
+         only thing it did touch was GUNFIRE (noise 60 and 120 exist), cutting the 9mm's pull from
+         about 36m to 20m. Fril wants the 36m, so the op is removed and vanilla stands.
+
+         IF YOU EVER DO WANT THIS DIAL: it is only meaningful between about 4m and 40m, it hits
+         loud events rather than movement, and it would hit the demolisher too since he inherits
+         this template through zombieSoldier.
+
+         TWO THINGS WORTH KNOWING THAT CAME OUT OF THE SAME READ:
+
+         1. senseScale is 1.0 + CalcSenseScale() * AIFeralSense, and this template sets
+            AIFeralSense to 1.5. CalcSenseScale returns 0 with the Feral Sense sandbox option
+            Disabled (which is its default, and what Fril runs) and 1.0 when it is active. So
+            turning Feral Sense on multiplies BOTH the hearing radius cap and sightRange by 2.5.
+            That is a tier decision for occupancy_presets.xml, not something to inherit.
+
+         2. Crouching does not reduce heard RANGE. DetectUsScale returns 1.0 in ordinary play; its
+            0.3 case is a quest-prefab rule. What crouching does is muffle the noise itself
+            (muffled_when_crouched in sounds.xml) and gate SIGHT via CanSeeStealth.
+         ================================================================== -->
+
+    <!-- ==================================================================
+         CHECK-IN GUESTS CARRY THEIR BAGS (v1.5.4)
+
+         THE FICTION IS FRIL'S AND IT DOES THE DESIGN WORK. The 380-odd sleepers in the rooms
+         have already checked in: luggage stowed, valuables in the room safe. The guests arriving
+         at the lobby each night still have their bags, wallets and purses on them. So the bag
+         drop belongs to the arrivals, not to the building.
+
+         That also fixes the real complaint. Bags felt thin not because the run is short of them
+         but because they were spread evenly over a very large population: at vanilla's 4% across
+         roughly 32 sleepers a floor, a floor of thirty-odd rooms pays ONE bag. Moving the supply
+         onto the nightly wave turns it into a rhythm you can feel instead of a rounding error.
+
+         THE SPLIT IS MEASURED, NOT GUESSED. From Fril's day 1-2 log on save 298:
+
+             day 1   40 arrived   19 killed   14 checked in   7 still walking
+             day 2   44 arrived    7 killed   12 checked in  25 still walking
+
+         Of the guests whose fate resolved, 26 died and 26 checked in: fifty percent intercepted,
+         though the two days were 58% and 37%, so it swings hard with how the night is played.
+         22 of the 26 deaths were External Piercing, i.e. Fril shot them. These are earned kills.
+
+         Over a full run (about 810 arrivals, 380 starting sleepers, ~1200 kills all told) 15% on
+         the intercepted half comes to roughly 60 bags, against vanilla's flat 4% giving about 48.
+         So this barely inflates the economy, it RELOCATES it: about the same total, arriving from
+         the fights that cost something, two or three a night early and more as the waves grow.
+
+         WHY NEW ENTITY CLASSES AND NOT A DLL PATCH. CheckIn.GuestClasses is referenced in exactly
+         one place in the whole codebase (CheckIn.cs, in LoadGuestClassIds). Pointing it at our own
+         classes makes a check-in guest genuinely a different class from a room sleeper, which is
+         what the fiction says it is, and the drop then needs no code at all: vanilla's own
+         Entity.DropBagServer reads lootDropProb and entityClass.lootDrops off whatever class the
+         entity actually is.
+
+         PROPERTY NAMES VERIFIED IN THE ASSEMBLY, not assumed. The #US heap contains LootList,
+         LootDropProb and LootDropEntityClass. It does NOT contain LootListOnDeath, which is the
+         landmine recorded in the Hospital's own entityclasses header: that name does not exist in
+         3.x, fails SILENTLY, and leaves the bag inheriting its parent's list.
+
+         THE SLEEPERS ARE DELIBERATELY UNTOUCHED IN THIS VERSION. Dropping them from 4% to about
+         2% is the other half of the fiction and it is NOT done here, because it means patching
+         vanilla's zombie template and this container has no copy of vanilla entityclasses.xml to
+         read first. Guessing at that file is exactly the habit this devlog keeps warning about.
+
+         ==================================================================
+         v1.14.0: THE BOOK BAG WAS TOO RARE TO EXIST. .15/8,2 -> .25/6,4
+         ==================================================================
+         Fril, after a two-day run: "Can you check book bags. I dont remember seeing one drop."
+
+         THE MECHANISM IS FINE, AND I CHECKED IT RATHER THAN ASSUMING. EntityClass.Init splits
+         "occBagHoldall,6,occBagBooks,4" on commas into (class, weight) pairs, then SUMS the
+         weights and DIVIDES each by the total before storing them. So the numbers are relative,
+         not absolute, and LootDropPick's 0-to-1 roll walks the normalised list correctly. Worth
+         confirming, because unnormalised weights of 8 and 2 against a 0-1 roll would have made
+         the FIRST entry win every single time and the book bag would never have dropped at all.
+
+         IT WAS SIMPLY BUILT TOO RARE. The old numbers were 0.15 x (2/10) = 3% per check-in guest
+         killed. That run stopped THIRTEEN check-in guests (37 checked in, 13 STOPPED, 2 gave up),
+         so the expected count was 0.39 bags and there was roughly a two in three chance of seeing
+         none. Nothing was broken; the rate was below the threshold where a player can tell the
+         feature exists.
+
+         NOW: 0.25 x (4/10) = 10%, about one book bag per ten guests stopped. That is a rate a
+         player can actually notice and plan around.
+
+         THE OTHER 60% IS UNCHANGED IN KIND. Raising LootDropProb to .25 also makes the ordinary
+         luggage bags commoner, which is the intended side effect rather than an accident: the
+         v0.8x note above argues the guest bags RELOCATE the economy into the fights that cost
+         something, and this leans further into that.
+
+         NOT MEASURED: no run yet at the new rate. The 3% figure is arithmetic plus a log count,
+         not an observed drop rate, and the same will be true of the 10% until someone counts.
+         ================================================================== -->
+
     <append xpath="/entity_classes">
+
+        <!-- THE BAGS. Five, split by what the guest was carrying when they walked in, which is
+             the same way the Hospital splits its five. Each is a plain EntityLootContainerRegular
+             with its own list.
+
+             SIZESCALE ONLY WORKS BECAUSE WE SPAWN THESE OURSELVES (v1.5.10). Vanilla's
+             Entity.DropBagServer stamps transform.localScale = 1.25 onto the bag AFTER spawning
+             it, throwing SizeScale away entirely. Area 7's bags obey their values because Area 7
+             spawns from its own DLL and never reaches that method. BagProbe.cs now does the same
+             for ours. Before that patch no value here had any effect at all, which is why v1.5.9
+             lowering the book bag from 0.75 to 0.5 changed nothing.
+
+             0.75 IS FRIL'S NUMBER and it is the value Area 7's book bag uses. v1.5.9 dropped it
+             to 0.5 on a wrong theory about the scale being too weak; with the spawn fixed, 0.5
+             read as too small in play and it is back to what was asked for.
+
+             SOUNDSPAWN, AND OUR BAGS HAD NONE. All ten Area 7 bags carry
+             SoundSpawn="zpack_spawn"; ours carried nothing, so every bag this mod has ever
+             dropped landed in silence. The Hospital plays the same sound by hand from its DLL
+             (Audio.Manager.BroadcastPlay ... "zpack_spawn") because its drop runs through code;
+             ours is pure config, so it needs the property. Both names verified present in the
+             3.2 assembly. -->
+
+        <!-- EVERY BAG HAS ITS OWN LOOK NOW (v1.40.0). Until this version five of the seven were
+             the yellow zpackPrefab, because no Mesh was set and that is what
+             EntityLootContainerRegular inherits.
+
+             THE LUGGAGE PREFABS WERE THERE ALL ALONG. The 30 September entry claimed
+             Entities/LootContainers/ held "no suitcase, no holdall, no luggage of any kind" and
+             scoped a custom Unity bundle off that. It was wrong: that list was every Mesh value
+             appearing in vanilla entityclasses.xml, which is only the prefabs some ENTITY class
+             references, and it got written up as a directory listing. Twelve luggage prefabs sit
+             in that same folder referenced only by BLOCKS. Fril's vanilla blocks.xml named them.
+
+             AND A BLOCK MODEL AND AN ENTITY MESH ARE THE SAME THING TO THE LOADER, read out of
+             the assembly before the above was known: EntityClass::Init puts Mesh into meshPath
+             and EModelInstanceAssets::Load passes it to LoadManager::LoadAsset;
+             BlockShapeModelEntity::getPrefab passes Model to DataLoader::LoadAsset, a wrapper
+             round the same method. DataLoader::IsInResources is "no '#' and no '@'", and the
+             loader branches to bundle, Addressables ("@:") or Resources. The one asymmetry is
+             that EntityClass prepends "Entities/" to a BARE path and the block code prepends
+             nothing, so only a path carrying @ or # copies across verbatim. Every vanilla one
+             does, including all of these.
+
+             SIZESCALE VALUES ARE UNCHANGED AND ARE NOW UNTUNED. Each was picked against the
+             yellow zpack. These prefabs are different base sizes, so expect at least one to need
+             a number after Fril has seen them. Said here so a wrong-looking bag is read as an
+             untuned value rather than a broken mesh.
+
+             PILES ARE DELIBERATELY NOT USED. luggagePileClosedA/B and luggagePileEmptyA/B are
+             props of SEVERAL cases, which would read wrong as one dropped bag.
+
+             v1.41.0: THREE SWAPS, FROM FRIL'S OWN SHORTLIST. He stood in reception in god mode
+             and read the block names off the props around him, which turned up three prefabs
+             that no entity class references and that v1.40.0 therefore never saw:
+             duffle01Prefab, pursePrefab and metalToolBoxClosedPrefab. Each replaces a v1.40.0
+             guess with the prefab that actually means the thing: a holdall IS a duffle, a
+             handbag IS a purse, and a staff tool bag should be a tool box rather than a gun
+             case. sports_bag01, sports_bag02, weapon_bags_small, weapon_bags_large and
+             luggageBigClosed are now all spare.
+
+             THE COLOURS ARE NOT AVAILABLE, and it is worth recording why so nobody tries.
+             cntSportsBag01Red/Orange/Yellow/Green/Blue/Purple/Pink are ONE prefab plus a block
+             property, TintColor="A72D34" and so on, a hex multiplier the BLOCK renderer applies.
+             The six cntToolBoxClosed colours are the same trick. An entity has no TintColor. Its
+             nearest relative is MatColor, and MatColor is not a tint: EModelBase::createModel
+             looks the value up BY NAME in EntityClass.sColors, which EntityClassesFromXml.Load
+             fills from <color name="..." value="..."/> elements in entityclasses.xml (vanilla
+             declares three: radiated, charged, infernal, as linear RGB with emissive power in
+             the alpha), and then walks a skinnedRendererList and calls
+             Material.SetColor("_EmissiveColor", c). It is the radiated GLOW on SKINNED meshes,
+             and a static bag prop carries a plain MeshRenderer with nothing for it to touch.
+             Declaring our own <color> would not change either half of that.
+
+             So coloured luggage needs a bundle, and that is the one thing in this whole area
+             that a bundle would actually buy. Fril has since bought a Unity luggage pack. -->
+
+        <!-- cntSuitcase, which looks like a fourth new option, is NOT one: it resolves to
+             luggageMediumClosedPrefab, the same prefab the Briefcase below already uses. -->
+
+        <!-- EVERY BAG'S LOOK, SETTLED (v1.45.0). Fril chose the assignments; the reasoning
+             for each is beside it below.
+
+             THE BUNDLE ROUTE IS PROVEN. v1.42.0 wired one suitcase, v1.43.0 moved the test to
+             a bag that actually drops, v1.44.0 fixed a scale that was out by 2.4x because a
+             bounding box of 1.32 m was read as the case when 0.54 m of it is the extended
+             trolley handle. Fril, 18:49: "They are now the perfect size." A third-party
+             Standard-shader prefab from a bought Unity pack renders as a dropped bag.
+
+             LOOK VARIANTS ARE SEPARATE CLASSES, NOT A MESH SWAP. EntityClass.meshPath is per
+             CLASS: EModelInstanceAssets::Load reads _ec.meshPath and hands it to
+             LoadManager::LoadAsset, asynchronously. Mutating it around a spawn would race the
+             loader and change every bag of that class in flight. So each look is its own
+             entity_class named "<base>_NN", extending the base and overriding ONLY Mesh and
+             SizeScale; LootList and OverrideName are inherited, so a look cannot drift from
+             its base's loot or its name in the UI. BagProbe.PickLook finds them by name at
+             spawn, which means adding a look is an XML edit and never a code edit.
+
+             SCALES, measured from the meshes rather than guessed. See the block above the
+             look variants below for the full table and the rule that produces it. The slim
+             shapes (a, d) go to the Briefcase and the large ones (b, c, e) to the Holdall.
+
+             v1.51.0 SUPERSEDES AN EARLIER NOTE HERE that quoted 0001a at 0.78 m body and
+             0001b at 1.13 m with a scale of 0.85. Re-measuring all nineteen shapes by mesh
+             slicing gave 0.74 m and 1.08 m, and the scale rule gives 0.79 rather than 0.85.
+             Fril confirmed the earlier numbers in play, so the difference is slicing method
+             and not a change of intent; the table below is the measured one.
+
+             THE VANILLA SCALES ARE UNTUNED GUESSES and are flagged as such: 0.75 on both
+             vanilla cases and 0.9 on weapon_bags_smallPrefab are carried over from neighbours,
+             not measured, because those prefabs live in the game's Addressables where this
+             repo cannot read them.
+
+             duffle01Prefab is now SPARE. It was the Holdall's mesh in v1.41.0 and the Holdall
+             has suitcases instead. So are sports_bag01, sports_bag02, weapon_bags_largePrefab,
+             backpack_droppedPrefab, backpack_vehicleDroppedPrefab and all four zpack colours
+             except the red one the fob inherits.
+
+             PILES ARE STILL DELIBERATELY NOT USED: luggagePileClosedA/B and luggagePileEmptyA/B
+             are props of SEVERAL cases and would read wrong as one dropped bag. -->
 
         <entity_class name="occBagHoldall" extends="EntityLootContainerRegular">
             <property name="LootList" value="occBagHoldall"/>
@@ -119,6 +449,16 @@
             <property name="SoundSpawn" value="zpack_spawn"/>
         </entity_class>
 
+        <!-- THE BOOK BAG (v1.5.8). backpack_vehicleDroppedPrefab.prefab is the BLUE RUCKSACK,
+             confirmed from the Hospital devlog, which records it as "blue rucksack, confirmed
+             from Area 7".
+
+             IT WAS THE ONLY BAG WITH ITS OWN LOOK UNTIL v1.40.0, when the other five got theirs
+             and the yellow zpackPrefab left the mod entirely. Its job has changed accordingly:
+             it used to be the one bag that did not look like the default, and now it is the one
+             bag that does not look like LUGGAGE. A guest's own things are cases and holdalls;
+             this is a rucksack, and it is not theirs. Same point from across a room, reached the
+             other way round. -->
         <entity_class name="occBagBooks" extends="EntityLootContainerRegular">
             <property name="LootList" value="occBagBooks"/>
             <property name="OverrideName" value="occBagBooks"/>
@@ -127,8 +467,26 @@
             <property name="SoundSpawn" value="zpack_spawn"/>
         </entity_class>
 
+
+        <!-- THE SOLDIER'S KITBAG (v1.46.0). Fril: "can we get the soldier to only
+             drop the large weapons bag?"
+
+             It needs a class of its own because a LOOK is per class: there is no way
+             to pin one guest to one mesh while others share the bag. Giving him
+             occBagWeapons and no "_NN" variants means BagProbe.PickLook finds no
+             alternates and returns the class unchanged, so it is ALWAYS this mesh.
+             The absence of variant classes is what makes "only" true.
+
+             LootList is occBagHoldall ON PURPOSE: that is exactly what the soldier
+             dropped before, so this version changes his look and nothing about his
+             loot. A weapons bag arguably wants ammunition in it, but that is a loot
+             decision and belongs with the parked loot session, not slipped in under
+             a mesh change.
+
+             0.9 is carried from weapon_bags_smallPrefab and is not measured. -->
         <entity_class name="occBagWeapons" extends="EntityLootContainerRegular">
-            
+            <!-- v1.55.0: was occBagHoldall, which is why the soldier dropped food and vitamins
+                 instead of ammo. See groupOccBagWeapons in loot.xml. -->
             <property name="LootList" value="occBagWeapons"/>
             <property name="OverrideName" value="occBagWeapons"/>
             <property name="Mesh" value="@:Entities/LootContainers/weapon_bags_largePrefab.prefab"/>
@@ -136,6 +494,120 @@
             <property name="SoundSpawn" value="zpack_spawn"/>
         </entity_class>
 
+        <!-- v1.47.0: THE BASE MESHES ARE NOW DELIBERATELY OUTSIDE THEIR OWN POOLS.
+
+             Fril: "the big vanilla case turns up too frequently".
+
+             He is right that it should not, and the reason it was impossible to tell why is
+             mine. A base class's Mesh is used ONLY when BagProbe.PickLook returns the base
+             unchanged, which happens if no variants were found or if anything throws. I had set
+             occBagHoldall's base mesh to luggageBigClosedPrefab, which is ALSO occBagHoldall_13,
+             and occBagBriefcase's to luggageMediumClosedPrefab, which is also its _13. So a
+             total failure of the variant system was disguised as one ordinary look appearing
+             too often, which is exactly the report.
+
+             The bases are now duffle01Prefab and backpack_vehicleDroppedPrefab, both spare and
+             in NO pool. If either turns up on a dropped bag, PickLook is not working and the
+             bag is falling back. A fallback now announces itself.
+
+             GameRandom::RandomRange(int n) was checked in the assembly rather than assumed: it
+             is a straight call to Next(n), so the index is exclusive and PickLook cannot run
+             off the end of the array. That possible cause is eliminated.
+
+             ================= LOOK VARIANTS (v1.45.0) =================
+             Named <base>_NN and found by BagProbe.PickLook at spawn. Each overrides only
+             Mesh and SizeScale; everything else is inherited from the base above. -->
+
+        <!-- v1.50.0: THE DIRTY-ONLY BUNDLE. Fril: "I think the clean ones will look out
+             of place so we'll go with just the dirty ones". The bundle is now
+             hotelLuggageDirty.unity3d, 118 prefabs across 19 shapes, no clean variants.
+
+             v1.51.0: NOW THE RIDGED FAMILIES. Fril spotted that 0002 and 0003 have ridges
+             modelled in where 0001 is smooth, and preferred them: "I think they might look
+             better than the smooth ones we've been doing so far". They were held back in
+             v1.50.0 only because they had not had the texture pass; they have now, so the
+             thirty mesh paths moved from 0001 to 0002 and 0003 and NOTHING ELSE CHANGED.
+
+             THE RIDGES ARE GEOMETRY, not a normal map, checked rather than assumed:
+             0001a is 10,469 verts, 0002a 11,414, 0003a 16,386, all in the same bounding
+             box. 0003 is the deepest ridged, 0.267 m against 0.254, and carries the most
+             geometry, so it takes three of the five shapes here.
+
+             THE UV LAYOUT IS SHARED ACROSS THE WHOLE PACK, which is why this cost nothing:
+             0001 against 0002 overlaps 100.0%, against 0003 99.9%, and even the 0004
+             attache 97.1%. Fril's hand-painted grime therefore lands in exactly the same
+             places on every shape, and the facing and height maps in the scratchpad stay
+             valid for all nineteen. Any future family needs the texture pass and no remap.
+
+             FAMILIES ARE MIXED ON PURPOSE so the pool is not visibly one set: shapes a and
+             c come from 0002, shapes b, d and e from 0003.
+
+             SIZESCALE IS MEASURED from the LOD0 meshes in the bundle, not guessed:
+             the cap is min(1.0, 0.85/body height, 0.95/widest horizontal). Body height
+             is found by slicing the mesh in 2 cm bands and taking the run where the
+             footprint stays wide, which separates the case from its trolley handle.
+             The rule reproduces the 0001a and 0001b numbers Fril already confirmed.
+
+                 shape   box W x H x D (m)    body   measured   shipped
+                 a       0.49 x 1.32 x 0.25   0.74     1.00      0.850   0.58 m is handle
+                 b       0.80 x 1.42 x 0.40   1.08     0.79      0.671
+                 c       1.06 x 0.80 x 0.40   0.76     0.90      0.765   capped on width
+                 d       0.49 x 0.77 x 0.25   0.74     1.00      0.850
+                 e       0.80 x 1.12 x 0.40   1.10     0.77      0.654
+
+             v1.53.0: SHIPPED IS THE MEASURED SCALE x 0.85. Fril asked for 10-15% off the
+             ridged set, v1.52.0 shipped the midpoint at 12.5%, and he then asked for the
+             full 15%. Note the factor is applied to the MEASURED column each time, never
+             compounded onto the previous shipped value. This is a judgement on top of the measurement, not a correction to it, so
+             both columns are kept: the measured one is what the meshes say, the shipped one
+             is what Fril wants them to look like. The vanilla fallbacks are NOT scaled, since
+             those sizes were signed off separately and the vanilla case is the reference the
+             new ones are being judged against.
+
+             v1.59.0: SHAPE b DROPPED FOR 0002a. Fril, looking at a pile of dropped bags:
+             "The ones on the left look the same as the ones on the right but with the handles
+             extended". Measured, he was exactly right. 0003b and 0003e are the SAME CASE:
+
+                 suitcase_0003b   17,352 verts   0.80 x 1.42 x 0.42   body 1.08   handle 0.34
+                 suitcase_0003e   17,302 verts   0.80 x 1.12 x 0.42   body 1.10   handle 0.02
+
+             Same width, same depth, same body, fifty vertices apart. The only difference is
+             whether the trolley handle is out. TWO OF THE HOLDALL'S THREE SHAPES WERE ONE
+             SHAPE, and nothing in my own measuring caught it, because I had been comparing
+             bounding boxes, and the handle makes those differ by 0.30 m. The body height
+             column was sitting right there saying 1.08 against 1.10.
+
+             0002a replaces b rather than e because 0002a also has its handle extended, 0.58 m
+             of it. Swapping b keeps exactly one handled upright in the pool and leaves three
+             distinct silhouettes; swapping e would have left two handled uprights differing
+             only in width. Scale 0.85, being measured 1.00 x the 15%.
+
+             THE HOLDALL'S THREE SHAPES ARE NOW:
+                 suitcase_0002a   0.49 wide, handle out   slim upright
+                 suitcase_0002c   1.06 wide, lies flat    wide case
+                 suitcase_0003e   0.80 wide, handle down  large upright
+
+             SPLIT BY SIZE. The slim upright and the wide flat and the large upright, which is
+             three different silhouettes rather than two. Shape d remains spare, as does b. -->
+
+        <!-- occBagBriefcase: the 0004d ATTACHE, seven colourways, and nothing else.
+
+             v1.54.0, after auditing which guest drops what. The Briefcase pool is
+             reachable by ONE class, occGuestBusinessMan, so at 0.25 drop probability and
+             weight 6 of 10 it is 2.4% of all bags. That is also why the v1.42.0 bundle
+             test looked like a failure: it had been put on the rarest bag in the mod.
+
+             Fril chose to leave it rare rather than widen it, which makes the shape worth
+             spending on: this is the businessman's signature drop, not wallpaper. An
+             attache is what the class has always been called and what he would carry.
+
+             NO VANILLA FALLBACK IN THIS POOL. luggageMediumClosedPrefab was dropped from
+             it, because a wheeled case standing among attaches is exactly the jarring
+             note the ridged swap was meant to remove. The base class below still has its
+             own out-of-pool Mesh so a PickLook failure still announces itself.
+
+             SizeScale 0.85 = measured 1.00 x Fril's 15%. The attache measures
+             0.74 x 0.49 x 0.27 m with a 0.48 m body, so it needs no cap of its own. -->
         <entity_class name="occBagBriefcase_01" extends="occBagBriefcase">
             <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0004d_dirty_a.prefab"/>
             <property name="SizeScale" value="0.85"/>
@@ -165,6 +637,8 @@
             <property name="SizeScale" value="0.85"/>
         </entity_class>
 
+        <!-- occBagHoldall: the three large ridged shapes, six colourways each, plus the
+             big vanilla case and the two sports bags. -->
         <entity_class name="occBagHoldall_01" extends="occBagHoldall">
             <property name="Mesh" value="#@modfolder:Resources/hotelLuggageDirty.unity3d?suitcase_0002a_dirty_a.prefab"/>
             <property name="SizeScale" value="0.85"/>
@@ -242,6 +716,10 @@
             <property name="SizeScale" value="0.75"/>
         </entity_class>
 
+        <!-- v1.46.0: the two sports bags join the Holdall. Fril: "The sports bags
+             feature a lot in the poi so it would be nice to have guests drop those".
+             0.9 is carried from its neighbours and is NOT measured: these prefabs are
+             in the game's Addressables where this repo cannot read them. -->
         <entity_class name="occBagHoldall_20" extends="occBagHoldall">
             <property name="Mesh" value="@:Entities/LootContainers/sports_bag01Prefab.prefab"/>
             <property name="SizeScale" value="0.9"/>
@@ -251,16 +729,51 @@
             <property name="SizeScale" value="0.9"/>
         </entity_class>
 
+        <!-- v1.57.0: the vanilla medium case restored. v1.54.0 took it out of the Briefcase
+             when that pool became attaches, which was right for that pool and wrong overall,
+             because it removed it from the game entirely. Fril: "It needs to be shown in the
+             same pool as cntLaggageBigClosed", so it sits here beside luggageBigClosedPrefab
+             where the wheeled cases belong, and it now appears far more often than it ever did
+             in the Briefcase: the Holdall is 33.6% of all bags against the Briefcase's 2.4%.
+
+             cntSuitcase and cntLuggageMediumClosed are the SAME MESH, luggageMediumClosedPrefab,
+             checked in vanilla blocks.xml rather than guessed. Fril could not remember which of
+             the two we had used; it did not matter. -->
         <entity_class name="occBagHoldall_22" extends="occBagHoldall">
             <property name="Mesh" value="@:Entities/LootContainers/luggageMediumClosedPrefab.prefab"/>
             <property name="SizeScale" value="0.75"/>
         </entity_class>
 
+        <!-- occBagMedkit: the attache as a first aid case (v1.58.0). Fril painted
+             suitcase_0004c_dirty_g green with a white cross on BOTH big faces, which is better
+             than the one I proposed: a dropped case shows a cross whichever way up it lands.
+             Cross centre measured at (383, 332) against the target (382, 334), so two pixels.
+
+             WHY 0004c AND NOT 0004d. Fril spotted it: 0004c has no buckle hardware, and brass
+             buckles say luggage rather than medical. It is also the simpler mesh (5,963 verts
+             against 7,173) with a flatter lid (0.1% of the island carries normal-map relief
+             against 0.3%), and the UV islands sit in the same place, so nothing had to move.
+
+             SizeScale 0.425 = measured 1.00 x Fril's 15% x his 50%. That gives a case
+             0.31 x 0.21 x 0.11 m: a first aid box, not luggage. The texture does not shrink
+             with it, so detail per metre doubles, 808 texels/m against the attache's 404.
+             Text was considered and rejected on that basis: FIRST AID would be a 24 px cap
+             height on a 21 cm panel, which is a smudge at the distance you see a dropped bag.
+
+             IT IS IN ITS OWN BUNDLE. Fril exported hotelLuggageFirstaid.unity3d, 568 KB with
+             the one prefab and its three textures, rather than rebuilding the 20 MB luggage
+             bundle for a single case. So Resources now holds TWO luggage bundles and a change
+             to the first aid case does not mean re-exporting the other thirty looks.
+
+             The base below keeps backpack01Prefab as its out-of-pool fallback, so a PickLook
+             failure still announces itself rather than silently looking correct. -->
         <entity_class name="occBagMedkit_01" extends="occBagMedkit">
             <property name="Mesh" value="#@modfolder:Resources/hotelLuggageFirstaid.unity3d?suitcase_0004c_dirty_g.prefab"/>
             <property name="SizeScale" value="0.425"/>
         </entity_class>
 
+        <!-- occBagToolbag: a metal tool box or a soft tool bag. Fril: "There are 2
+             toolbags, the tool box and cntWeaponsBagSmall (this looks like a tool bag)". -->
         <entity_class name="occBagToolbag_01" extends="occBagToolbag">
             <property name="Mesh" value="@:Entities/LootContainers/metalToolBoxClosedPrefab.prefab"/>
             <property name="SizeScale" value="0.9"/>
@@ -269,6 +782,11 @@
             <property name="Mesh" value="@:Entities/LootContainers/weapon_bags_smallPrefab.prefab"/>
             <property name="SizeScale" value="0.9"/>
         </entity_class>
+
+        <!-- THE GUESTS. One per entry in CheckIn.GuestClasses, each extending the vanilla class
+             it replaces so appearance, sounds and behaviour are untouched. The ONLY difference
+             between a check-in guest and the identical zombie asleep upstairs is that this one
+             still has its luggage. -->
 
         <entity_class name="occGuestBusinessMan" extends="zombieBusinessMan">
             <property name="LootDropProb" value=".25"/>
@@ -340,6 +858,46 @@
             <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
         </entity_class>
 
+        <!-- ==================================================================
+             TWELVE MORE GUESTS (v1.15.0). Fril: "All other zombies should be available
+             to check in."
+
+             THE HOTEL WAS TAKING FOURTEEN OF VANILLA'S THIRTY-EIGHT base zombie classes, on a
+             flat 1-in-14, and every arrival was one of the same fourteen faces from night 1 to
+             the end of the run. Counted from the game's own entityclasses, not guessed.
+
+             WHO IS EXCLUDED AND WHY, because the list matters more than the additions:
+
+               Fril's own seven   Screamer, FatCop, Chuck, Spider, PlagueSpitter, Rancher,
+                                  Mutated. His call, no further reasoning needed here. The
+                                  screamer still spawns from HEAT as vanilla intends; this only
+                                  stops her walking in the front door as a guest.
+
+               zombieDemolition   He is the stalker. Letting one check in would put a second
+                                  demolisher in the building and the finale reads the tracked id.
+                                  Safe as it stands either way: DemoTracker matches the exact
+                                  CLASS NAME "zombieDemolition", so occGuestSoldier cannot be
+                                  mistaken for him even though the demo extends zombieSoldier.
+
+               the 3 templates    zombieTemplateMale / Short / SlimFemale are bases, not people.
+
+               zombieFrostclaw    NOT FRIL'S CALL, MINE, AND FLAGGED FOR THAT REASON. It extends
+                                  zombieChuck, which he excluded, and carries the same
+                                  snow/special/coverWorthy tags at mass 230. Excluding Chuck and
+                                  keeping his variant would have been an odd reading. One line to
+                                  add if that is wrong.
+
+             THE BAGS follow the person, same rule as the original fourteen: a lab worker carries
+             a case, tradesmen carry the toolbag, Big Mama carries a handbag, everyone else has a
+             holdall. Every one keeps the v1.14.0 rate, .25 with a 6/4 split to the book bag.
+
+             STEVE CRAWLER IS OUT, v1.15.1. He shipped in v1.15.0 and Fril cut him one message
+             later: "The crawler needs to come off the list." I had flagged him as the one to
+             watch, CanClimbLadders="false" and tagged "crawler", so no route to a room that
+             needs a ladder was available to him. Class, localisation line and array entry all
+             removed together rather than leaving an orphan class behind.
+             ================================================================== -->
+
         <entity_class name="occGuestBiker"        extends="zombieBiker">
             <property name="LootDropProb" value=".25"/>
             <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
@@ -355,6 +913,7 @@
             <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
         </entity_class>
 
+        <!-- The one class that needed no justification for a hotel. -->
         <entity_class name="occGuestFatHawaiian"  extends="zombieFatHawaiian">
             <property name="LootDropProb" value=".25"/>
             <property name="LootDropEntityClass" value="occBagHoldall,6,occBagBooks,4"/>
@@ -397,12 +956,184 @@
 
     </append>
 
+    <!-- ==================================================================
+         THE DEMOLISHER CAN SEE YOU AT RANGE (v1.65.0)
+
+         Fril: "There have been occassions where Ive been in the open, about 20m away, and Im sure
+         he's seen me but he's run off in a different direction... rounded the corner with me in
+         full view and then ran up another flight of steps."
+
+         He HAD seen him. He was not allowed to care.
+
+         READ OUT OF Assembly-CSharp, not guessed. EAISetNearestEntityAsTarget.FindTargetPlayer
+         gates acquisition on:
+
+             if (theEntity.CanSee(player) && !player.IsIgnoredByAI
+                 && theEntity.GetSleeperDisturbedLevel(dist, player.Stealth.lightLevel) >= 2)
+
+         IsSleeperPassive is the ONLY exemption in that method and IsSleeper is never tested, so
+         the demolisher, wide awake and roaming, acquires through the sleeper sight curve.
+
+         GetSleeperDisturbedLevel is 38 instructions of light against a distance-scaled threshold:
+
+             t = distance / sightRangeBase;                 // SightRange 30
+             if (t > 1) return 0;                           // past 30m: never, at any light
+             wake = Lerp(sightWakeThresholdAtRange.x, sightWakeThresholdAtRange.y, t);
+             if (lightLevel > wake) return 2;               // TARGET
+
+         Line of sight is already true by then. It buys nothing.
+
+         THE NUMBERS HE INHERITED. zombieDemolition extends zombieSoldier and declares no sight
+         properties of its own, so the whole curve comes down from zombieTemplateMale:
+         SleeperSightToWakeMin -40,5 and SleeperSightToWakeMax 340,480 against SightRange 30.
+         That is a required light of roughly -17 + 16.6d:
+
+             4m -> 49      8m -> 116     12m -> 182     20m -> 314     30m -> 480
+
+         The brightest light reading in 347 sighting frames of his 4 Oct log was 194.6. Past about
+         12.7m the demolisher could not acquire him at any light the hotel is able to produce.
+
+         CONFIRMED AGAINST THAT LOG rather than asserted. Measured conversion by distance band:
+         0-4m 97%, 4-8m 54%, 8-12m 10%, and 0 of 144 frames beyond 12m. The formula predicts all
+         four.
+
+         WHY HERE AND NOT ON THE TEMPLATE. The same curve is what makes sneaking past sleepers
+         work, and that is the hotel's core stealth mechanic. zombieTemplateMale must not move.
+         zombieDemolition is its own class with no variants, and the only one in the building is
+         ours, so this changes him and nothing else.
+
+         120,150 puts the required light at 20m near 100, which is ordinary lit-corridor light in
+         his log, and still asks for more the further out he is. SightRange stays 30, so 30m
+         remains a hard ceiling whatever the lighting. One change, not two: the railings are
+         see-through now and a demolisher who acquires across the atrium would be a different
+         animal again.
+
+         ==================================================================
+         v1.141.0, 16 Oct. ONLY THE SECOND NUMBER OF THIS PROPERTY DOES ANYTHING.
+
+         Read out of EntityAlive::CopyPropertiesFromEntityClass, IL_021E to IL_0239:
+
+             sightWakeThresholdAtRange.x = rand.RandomRange(SleeperSightToWakeMin.x,
+                                                            SleeperSightToWakeMin.y)
+             sightWakeThresholdAtRange.y = rand.RandomRange(SleeperSightToWakeMax.y,
+                                                            SleeperSightToWakeMax.y)
+
+         The Min pair is read .x then .y, as you would expect. The Max pair is read .y TWICE.
+         It looks like a typo in their code, but it is what ships, so the FIRST number of
+         SleeperSightToWakeMax has never had any effect and the pair is not a random range at
+         all. It is always exactly the second value.
+
+         So the near end of the curve has always come from the INHERITED SleeperSightToWakeMin
+         -40,5, which we have never touched, and which is rolled per entity at spawn. Two
+         demolishers genuinely do not see equally: at 18m the threshold varies about 17 points
+         depending on the roll. Fril was told and chose to leave that alone for now.
+
+         WHY IT IS DROPPING TO 110. Not a regression. The 5 Oct change worked exactly as the
+         figures above say, taking the requirement at 18m from 284 down to 84. It just did not
+         go far enough: the refusals in Fril's 15 Oct log sit at 18.2m with light 71.56, which
+         is 13 short of that 84. 110 clears it on even the unluckiest spawn roll, since the
+         worst case is Lerp(5, 110, 0.607) = 68.7 against his 71.56.
+
+             4m -> 0 (always)   12m -> 34    18m -> 60    20m -> 68    30m -> 110
+
+         Both numbers are written as 110 deliberately. Writing 120,110 would read as a curve
+         that falls off with distance, which it is not, and would invite someone to tune the
+         first number and watch nothing happen.
+         ================================================================== -->
     <append xpath="/entity_classes/entity_class[@name='zombieDemolition']">
         <property name="SleeperSightToWakeMax" value="110,110"/>
 
+        <!-- ============================================================================
+             v1.193.0. HE NOW SEES IN THE DARK BETTER THAN ANYTHING ELSE IN THE BUILDING.
+
+             Fril, 22 Oct: "Fix the light so he sees better than the others, especially Mo
+             as he only has 1 eye for gods sake."
+
+             THIS IS THE PROPERTY THAT GOVERNS AN AWAKE ZOMBIE, AND WE HAD NEVER SET IT.
+             All the sight tuning above went into SleeperSightToWakeMax, which fills
+             sightWakeThresholdAtRange and is read by GetSleeperDisturbedLevel. That is the
+             SLEEPING branch of EAISetNearestEntityAsTarget::FindTargetPlayer. The stalker
+             is awake, so his branch is:
+
+                 if (!p.IsAlive()) continue;
+                 if (p.IsIgnoredByAI()) continue;
+                 seeDist = manager.GetSeeDistance(p);
+                 if (seeDist >= closeTargetDist) continue;
+                 if (!theEntity.CanSee(p)) continue;
+                 if (!theEntity.CanSeeStealth(seeDist, p.Stealth.lightLevel)) continue;
+
+             and CanSeeStealth is:
+
+                 t         = dist / sightRange
+                 threshold = FastLerp(sightLightThreshold.x, sightLightThreshold.y, t)
+                 return lightLevel > threshold
+
+             sightLightThreshold comes from THIS property. Inherited vanilla is -2,150,
+             TFP's own comment on it being "how well lit you have to be for the zombie to
+             see you at min,max range". So he has been using the stock curve all along.
+
+             WHAT IT COST, from the 02:58 episode on 22 Oct. He had Fril at light 149 and
+             was chasing properly. Fril stepped into a dark room, light fell to 38, and at
+             10m the stock curve wants 50. He lost the target, fell back to a scattered
+             noise crumb 6m off, found a bulletproof window on the line to it and spent
+             twenty seconds chewing on that instead. Fril: "he can see me but loses the
+             target in low light (which he shouldnt)".
+
+             THE NUMBER. SightRange stays 30, so 30m remains the hard ceiling whatever the
+             lighting. Only the light curve moves, from -2,150 to -2,60:
+
+                 dist    vanilla     now
+                  4m        18         6
+                  8m        39        15
+                 10m        49        19
+                 15m        74        29
+                 20m        99        39
+                 30m       150        60
+
+             Against Fril's measured hotel: a dark room reads about 38, a lit corridor
+             about 100, bright areas 150 to 200. So the 38 that lost him now clears
+             comfortably out to about 18m, and he still cannot pick a man out of an unlit
+             room at thirty metres, which is the distance falloff doing its job.
+
+             WHY NOT ZERO. Setting the far end to 0 or negative would make light irrelevant
+             and turn him into a 30m radar. Darkness is still a tool, it is just no longer
+             a better tool against him than against a one-eyed shambler.
+
+             THE SCATTER IS NOT TOUCHED, deliberately. Fril, 22 Oct: "The noise can never
+             give him our exact location or we'll never be able to hide." DEVLOG:3183 calls
+             the scatter "the one that makes hiding work without making them stupid" and
+             DEVLOG:13448 has Fril closing that question himself. Better eyes are the fix
+             here; the crumb stays vague.
+             ============================================================================ -->
         <property name="SightLightThreshold" value="-2,60"/>
     </append>
 
+    <!-- ================================================================================
+         v1.187.0. HIS BLAST NO LONGER REDESIGNS THE BUILDING.
+
+         Fril, 21 Oct: "Currently when the demo explodes he does a lot of damage to blocks.
+         Im thinking that maybe we dial that down so he only damages me and the mobs",
+         then "drop to 500".
+
+         Vanilla 3.3 keeps the two damages and the two radii completely separate on the
+         Explosion property, which is why this needs no DLL change at all:
+
+             RadiusBlocks    5
+             RadiusEntities  6
+             BlockDamage     5000     ** the only thing touched here **
+             EntityDamage    800
+
+         So he still hits the player for 800 over a 6 block radius, and still hits other
+         zombies, exactly as before. Only what he does to the hotel changes.
+
+         500 RATHER THAN 0, which was Fril's call out of three options put to him. Zero
+         would have left the Ostrich structurally untouched for a whole run, and it would
+         also have made any barricade the player builds permanent, since his blast is the
+         thing that currently punishes turtling. 500 keeps him able to scar and crack what
+         is next to him while stopping him opening new routes between floors.
+
+         The vanilla figure was 5000, so this is a tenth.
+         ================================================================================ -->
     <set xpath="/entity_classes/entity_class[@name='zombieDemolition']/property[@class='Explosion']/property[@name='BlockDamage']/@value">500</set>
 
 </configs>

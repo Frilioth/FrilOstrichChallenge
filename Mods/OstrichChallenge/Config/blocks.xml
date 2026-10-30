@@ -1,7 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- OstrichChallenge: REPAIRING BROKEN VENDING MACHINES
 
+     Dukes are the hotel's only money and the vending machines are the only shop, so a machine
+     that spawned broken is a dead end. Vanilla's only answer is to wrench it for scrap. This
+     lets the player put one back into service instead: wrench the dead ones, build a kit at a
+     workbench, and revive the machine you want.
+
+     WHY THIS IS A BLOCK UPGRADE AND NOT SOMETHING CLEVERER
+     The working machine is, in vanilla's own words, the broken one plus a class: cntVendingMachine2
+     carries Extends="cntVendingMachine2Broken" and adds only Class="VendingMachine", a model and a
+     TraderID. Same footprint, same material, same MultiBlockDim. So the repair is exactly what
+     UpgradeBlock is for, and it is a stock mechanism used in seventy places in vanilla blocks.xml.
+
+     WHICH MACHINES QUALIFY
+     Only the ones that cannot trade at all, which is the ones with no Class property. That is the
+     three drinks machines and the EMPTY snack machine. cntVendingMachineSnacksFullBroken keeps
+     Class="VendingMachine" and TraderID 10, so it already trades despite looking wrecked, and it is
+     deliberately left alone. Counter-intuitive but vanilla.
+
+     WHY EACH BLOCK GETS ITS OWN COPY RATHER THAN ONE ON THE PARENT
+     The energy, water and snack variants all Extend cntVendingMachine2Broken. Putting UpgradeBlock
+     only on the parent would make every one of them repair into a SODA machine. Each therefore
+     declares its own, pointing at its own working counterpart.
+     >>> WORTH ONE CHECK IN GAME: a child's own class-property should override the inherited one.
+     If a repaired water machine comes back as a soda machine, that assumption is wrong and the fix
+     is to stop putting UpgradeBlock on the parent and give the soda machine its own derived block.
+
+     NOT DELIVERED HERE, AND IT MATTERS
+     A repaired machine will be FULLY STOCKED the moment it is first opened, not empty. Trader stock
+     resets on lastInventoryUpdate + ResetIntervalInTicks, and a newly created machine has that
+     timestamp at zero, so its next reset is already long past. Making it empty on repair and
+     stocking later needs the DLL to stamp the timestamp and clear the inventory when the upgrade
+     completes. Until that exists, this file alone does NOT give the "no loot when repaired"
+     behaviour that was asked for.
+-->
 <configs>
 
+    <!-- ============================================================
+         REPAIR COST: MECHANICAL PARTS, NOT FORGED STEEL
+
+         A block has to be at full health before it will upgrade, so a machine that spawned
+         damaged has to be patched up before the kit will go in. Vanilla charges 10 forged steel
+         for that, which is the wrong currency: you are fixing a machine, not a wall.
+
+         NOTE ON REACH. Only cntVendingMachine2Broken declares RepairItems. Every other drinks
+         and snacks machine extends it, INCLUDING THE WORKING ONES, so this single change sets
+         the repair cost for all eleven of them, not just the four we make repairable. That is
+         consistent rather than accidental, but it is wider than the four blocks below.
+         cntVendingMachine, the player-placed one, declares its own and is untouched.
+
+         6 rather than 10 because the kit already costs 10 mechanical parts and patching dents
+         should not rival building the kit. This is the full-damage price; partial damage costs
+         proportionally less.
+         ============================================================ -->
     <remove xpath="//block[@name='cntVendingMachine2Broken']/property[@class='RepairItems']"/>
     <append xpath="//block[@name='cntVendingMachine2Broken']">
         <property class="RepairItems">
@@ -9,6 +60,7 @@
         </property>
     </append>
 
+    <!-- Soda -->
     <append xpath="//block[@name='cntVendingMachine2Broken']">
         <property class="UpgradeBlock">
             <property name="ToBlock" value="cntVendingMachine2"/>
@@ -18,6 +70,7 @@
         </property>
     </append>
 
+    <!-- Energy -->
     <append xpath="//block[@name='cntVendingMachineEnergyBroken']">
         <property class="UpgradeBlock">
             <property name="ToBlock" value="cntVendingMachineEnergy"/>
@@ -27,6 +80,7 @@
         </property>
     </append>
 
+    <!-- Water -->
     <append xpath="//block[@name='cntVendingMachineWaterBroken']">
         <property class="UpgradeBlock">
             <property name="ToBlock" value="cntVendingMachineWater"/>
@@ -36,10 +90,49 @@
         </property>
     </append>
 
+    <!-- ============================================================
+         ROOM SAFES POINT AT THE FIRST-CRACK LIST
+
+         An unlocked safe is where the loot actually is: the locked block is never opened, because
+         picking it downgrades it to this one and breaking it produces the same block. So this is
+         the only list that matters, and it starts rich. The DLL repoints it at occSafeRestock once
+         the safe has been opened, and lootListName persists with the save.
+
+         ONE CHANGE COVERS DESK AND WALL SAFES. cntDeskSafeInsecure extends cntWallSafeInsecure and
+         excludes only HandleFace, so it inherits these features. cntWallSafeOpen also extends it
+         but excludes CompositeFeatures entirely, so the emptied husk is untouched and stays empty.
+
+         GUN SAFES ARE DELIBERATELY NOT INCLUDED. They are a separate chain on the gunSafe list and
+         are not what goes in a hotel room. Say if the hotel has any and they should behave the same.
+         ============================================================ -->
     <set xpath="//block[@name='cntWallSafeInsecure']/property[@class='CompositeFeatures']/property[@class='TEFeatureStorage']/property[@name='LootList']/@value">occSafeFirst</set>
 
+    <!-- ============================================================
+         PICKING A SAFE HAS TO BE WORTH DOING
+
+         Vanilla sets LockPickBreakChance to 0.75, and TEFeatureLockPickable turns that into
+
+             picks needed = floor( ln(1 - nth) / ln(breakChance) ) + 1,  capped at 15
+
+         with nth rolled per safe. At 0.75 that averages FOUR lockpicks to open one safe, with a
+         tail into nine or more. A first crack returns one pick at 10%, so picking was running at
+         roughly forty times net negative and no player who noticed would ever do it. The pick
+         route existed but was a trap.
+
+         At 0.25 the median is one pick, the worst quarter is two, and the average is about 1.3.
+         Picking still costs more than it returns, which is right, picks should be a consumable
+         rather than self-sustaining. But the choice becomes real: quiet and costs you a pick, or
+         loud and free and brings the floor down on you.
+
+         LockPickTime is left at 15 seconds on purpose. Standing still for a quarter of a minute
+         in a hotel full of guests is the other half of the price, and it is the interesting half.
+
+         One change covers both safes: cntDeskSafe extends cntWallSafe.
+         Perks still apply on top, EffectManager scales both the time and the break chance.
+         ============================================================ -->
     <set xpath="//block[@name='cntWallSafe']/property[@class='CompositeFeatures']/property[@class='TEFeatureLockPickable']/property[@name='LockPickBreakChance']/@value">0.25</set>
 
+    <!-- Snacks, empty. The FULL broken one still trades and is left alone on purpose. -->
     <append xpath="//block[@name='cntVendingMachineSnacksEmptyBroken']">
         <property class="UpgradeBlock">
             <property name="ToBlock" value="cntVendingMachineSnacksFull"/>
@@ -49,16 +142,154 @@
         </property>
     </append>
 
+    <!-- ============================================================
+         FIBRE IN THE POT PLANTS (v1.5.2)
+
+         A concrete tower has no grass, so the hotel contains no plant fibre worth speaking of and
+         the opening hour stalls: you cannot make the most basic tool. Fril, after the first long
+         run: "I also barely found any stones or fibre so making a basic stone axe at the start was
+         hard."
+
+         WHY treePlant02 AND NOTHING ELSE. It is the base class for every potted plant in the
+         building. All thirteen of these carry Extends="treePlant02" (directly or one step up) and
+         all thirteen are in hotel_02's block list:
+
+             plantHouseTallPottedBlack / Brown / Grey / White
+             plantHousePottedRed, plantHousePottedCornerBlack
+             plantFernBlack, plantFernHangingBrown / White
+             plantCherryBlossomBlue / Red / White
+             treePlant02 itself
+
+         Drop inheritance is not an assumption here. BlocksFromXml.LoadExtendedItemDrops calls
+         Block.CopyDroppedFrom(parent), which walks the parent's drops per event and adds each one
+         the child does not already declare BY ITEM NAME. None of the thirteen declares a fibre
+         drop, so one edit reaches all of them and none of them can block it.
+
+         BOTH EVENTS, and this is the part my first draft got wrong. treePlant02 ships with a
+         Destroy drop (6 clay lumps) and no Harvest drop at all. Destroy alone would have missed
+         every break made with a tool. This is Fril's pattern from Area 7 and the Hospital, both
+         shipped and both working: list the drop under both events, and whichever one the break
+         resolves to pays out.
+
+         THE TRAP, worth recording because it nearly cost a session. The item is resourceYuccaFibers
+         and there is no resourcePlantFibers in 3.x, only the one fibre item in the whole game. The
+         hotel also contains plantedYucca3Harvest, which looks like the obvious source and is not:
+         it drops foodCropYuccaFruit, and its parent cropsHarvestableMaster carries a
+         resourceYuccaFibers line with count="0". Harvesting the hotel's yucca gives fruit and
+         nothing else. Before this change the ONLY fibre in hotel_02 was plantHangingIvy01 and
+         plantHangingIvy02, at 2-4 each on Destroy.
+
+         THE RATE, CHANGED IN v1.13.1 AND MY EARLIER REASONING WAS WRONG.
+
+         v1.5.2 shipped 10-15 at prob 0.1, copying Area 7, and this comment argued for it: "a
+         rare handful is a moment and a reliable one or two is a chore." Fril has now played the
+         hotel and asked for 2-6 instead, reliably.
+
+         That is not a small change. 10-15 at one in ten averages 1.25 fibres per plant; 2-6
+         always averages 4. THE HOTEL NOW YIELDS 3.2x THE FIBRE IT DID, and the feel changes
+         from a lottery to a supply. Recorded plainly because it reverses a deliberate decision
+         rather than tuning a number: the argument for rarity was made before anyone had played
+         a full opening hour in a concrete tower, and play beat it.
+
+         NOT MEASURED: how many plants a floor actually holds. hotel_02_blocks.nim is a name index,
+         so it proves the thirteen types are present and says nothing about counts. If this reads
+         thin or overflowing in play, that count is the thing to get before touching the number.
+         ============================================================ -->
     <append xpath="/blocks/block[@name='treePlant02']">
         <drop event="Harvest" name="resourceYuccaFibers" count="2,6"/>
         <drop event="Destroy" name="resourceYuccaFibers" count="2,6"/>
     </append>
 
+    <!-- ============================================================
+         FIBRE FROM SCRAPPING THE POT PLANTS TOO (v1.13.2)
+
+         Fril: "When I scrap primitive armor in my inventory it gives me back fibre. Id like the
+         same thing to happen with treePlant02."
+
+         HOW SCRAPPING ACTUALLY DECIDES WHAT YOU GET, read out of the IL rather than guessed,
+         because the obvious answer is wrong. A thing does NOT scrap into its recipe's
+         ingredients. CraftingManager.GetScrapableRecipe looks at ONE thing:
+
+             itemValue.ItemClass.MadeOfMaterial.ForgeCategory
+
+         It then walks every recipe tagged salvageScrap (the seventeen <wildcard_forge_category/>
+         recipes at the top of vanilla recipes.xml) and returns the one whose OUTPUT item has the
+         same forge_category. One category in, one resource out. Nothing else is consulted, and
+         an item can only ever scrap into a single resource.
+
+         So primitive armor gives fibre for exactly one reason: armorPrimitiveMaster carries
+         Material="Mplants", and Mplants has forge_category="plants", and the salvageScrap recipe
+         whose output sits in "plants" is resourceYuccaFibers. That is the whole mechanism.
+
+         WHAT THE PLANTS DO TODAY. Picking a potted plant up does not give you treePlant02; it
+         gives you plantPottedVariantHelper (CanPickup param1). That helper Extends treePlant02,
+         so it inherits Material="MfertilizedClayPlanter", whose forge_category is "clay" —
+         and clay's salvageScrap output is resourceClayLump. Scrapping a picked-up plant has
+         always given 6 clay lumps, which is why it looked like it did nothing interesting.
+
+         THE CHANGE IS ONE PROPERTY, and it is deliberately on the HELPER and not on treePlant02.
+         plantPottedVariantHelper is an inventory-only block: SelectAlternates + PlaceAltBlockValue
+         mean placing it always resolves to one of the 80-odd real potted plants, never to the
+         helper itself. So its Material governs scrapping and nothing else — no hardness, no step
+         sound, no stability, because the block is never in the world. Putting Mplants on
+         treePlant02 instead would have changed how every pot plant in the hotel takes damage.
+
+         It reaches all of them anyway: every potted variant inherits CanPickup from treePlant02,
+         so they all pick up into this one helper.
+
+         THE AMOUNT, and this is the part worth knowing before anyone retunes it.
+         ItemActionEntryScrap.OnActivated computes:
+
+             out = (sourceWeight * stackCount / outputWeight) * 0.75 * ScrappingOutputModifier
+
+         resourceYuccaFibers has Weight="1", so out = sourceWeight * 0.75 per plant. Weight="4"
+         below gives 3 fibre. That is not a number I invented: ItemClass.AutoCalcWeight would
+         derive exactly 4 on its own from the helper's recipe, because it sums only the
+         ingredients whose forge_category matches the OUTPUT's — with Mplants on, that is
+         resourceYuccaFibers count="4" and the 8 clay lumps stop counting. It is written out
+         explicitly so the number is ours and survives a vanilla recipe change.
+
+         To retune: Weight="6" gives 4 fibre, Weight="8" gives 6.
+
+         ScrappingOutputModifier is the "ScrappingOutput" SANDBOX OPTION, so the yield moves with
+         the preset. At 0.5 three fibre becomes one. Worth remembering when the presets get
+         rebuilt.
+
+         WHAT IS GIVEN UP. Scrap returns one resource, so the 6 clay lumps go. Smashing the plant
+         is untouched and still pays 6 clay plus the 2-6 fibre above, so breaking remains the
+         better haul and picking up stays what it is for: moving a plant, or carrying fibre home
+         in one slot.
+
+         NOT MEASURED: nothing here has been seen in play yet. The formula is read from IL and the
+         forge_category chain is read from vanilla materials.xml, but the first time a plant is
+         actually scrapped is the test.
+         ============================================================ -->
     <append xpath="/blocks/block[@name='plantPottedVariantHelper']">
         <property name="Material" value="Mplants"/>
         <property name="Weight" value="4"/>
     </append>
 
+    <!-- ============================================================
+         THE ARUK POSTER (v1.5.2)
+
+         Alzheimer's Research UK, for Game Over for Dementia. Carried over from the Hospital
+         Challenge, same block definition.
+
+         THE MODEL. #@modfolder resolves to THIS mod's folder, not the Hospital's, so the line
+         below needs OstrichChallenge/Resources/hospitalPoster.unity3d. Fril copied the bundle
+         across on 29 Sep. The alternative was #@modfolder(HospitalChallenge): to borrow the
+         Hospital's copy, rejected because it would make this mod refuse to load without that one
+         installed, which is not a trade worth making for one poster.
+
+         NOTE FOR FUTURE PACKAGING: the .unity3d bundle is NOT in the source zips, because it is
+         not in the build container. Resources/ has to survive being overwritten by a new drop.
+
+         THE ICON. CustomIcon="ARUK" needs ARUK.png in UIAtlases/ItemIconAtlas, which before this
+         held only occChocNAwe.png.
+
+         Localization.csv carries posterARUKTitle and posterARUKDesc. Placeholder wording, change
+         it to whatever the charity page says.
+         ============================================================ -->
     <append xpath="/blocks">
 
         <block name="posterARUK">
@@ -85,14 +316,122 @@
 
     </append>
 
+    <!-- ==================================================================
+         HOTEL DOOR TOUGHNESS IS NOT IN THIS FILE ANY MORE (v1.72.0)
+
+         v1.70.0 set MaxDamage to 10,000 on four door families and v1.71.0 resynced their mesh
+         thresholds to match. BOTH ARE GONE, seven <set> lines removed, nothing replaces them here.
+
+         WHY. Fril asked for "hotel doors that we sweep only, not player made doors". The second
+         half was honoured; the first is NOT EXPRESSIBLE IN THIS FILE. MaxDamage is a field on
+         Block, the TYPE, and BlockValue carries only accumulated damage, so there are no
+         per-instance hit points and any <set> here is global to that block type in every POI in
+         the world. The v1.70.0 comment that stood here KNEW that, wrote it down, and then
+         reasoned past it with "it does not matter here". It did matter.
+
+         IT WAS ALSO AIMED AT THE WRONG DOORS. Cross-referenced against The Ostrich II's own block
+         list, two of the four families are NOT IN THE BUILDING AT ALL (interiorHouseDoorWhite,
+         exteriorHouseDoorDoubleOldWhite), while the doors that ARE in it went untouched:
+
+             commercialDoorV1Brown / V1Grey / V2Brown  1000
+             commercialGlassDoor                        100   <- the snipe-through-the-door one
+             commercialBulletproofGlassDoor            3250
+             chainlinkFenceDoor                         500
+             interiorDoorOldWhite                       250   (the only one v1.70.0 actually hit)
+             trailerDoorBrown                           300
+             elevatorDoor                             10000   (already, vanilla)
+             tallCabinetDoorBlack                         1   (furniture, deliberately excluded)
+
+         AND IT COLLIDED WITH FrilCleanDoors, which derives its mesh thresholds from the vanilla
+         MaxDamage. Raising the HP made every house door in the world render boarded up again.
+
+         IT IS ALL IN CODE NOW, in DoorSweep.cs, scoped to the tower box. MaxDamage stays vanilla
+         everywhere, so FrilCleanDoors stays correct and nothing in this mod overlaps it. See
+         "DOOR TOUGHNESS" in DoorSweep.cs, and the "occ doors tough" command.
+         ================================================================== -->
+
+    <!-- ==================================================================
+         v1.194.0. THE PATHFINDER NEVER LOOKED AT THE BULLETPROOF GLASS.
+
+         Fril, 22 Oct, after a test with every other mod removed: "I swapped out the
+         bulletproof glass for other shapes and all the zombies still chose to break it",
+         and "It has only started happening this bad wuth the diag bullet proof glass
+         windows and now diag plates."
+
+         WHAT PathType ACTUALLY DOES, read out of AstarVoxelGrid::CheckHeights rather
+         than from the comment I had written about it, which was wrong:
+
+             if (block.PathType <= 0) goto skip;                     // never even asks
+             if (block.IsMovementBlocked(world, pos, bv, side)) ...  // only asked when > 0
+
+         PathType decides whether the grid bothers to ASK about the block at all. At 0 the
+         grid assumes you can walk through and never looks.
+
+         v1.213.0 CORRECTION. The next sentence used to read "Block::IsMovementBlocked
+         loops all six sides and is shape aware, so when it IS asked it gives the right
+         answer." That is wrong and it was written from the method's name, not its IL.
+         Block::IsMovementBlocked, read properly:
+
+             if (!IsCollideMovement)   return false;
+             if (BlocksMovement == 0)  return shape.IsMovementBlocked(...);
+             return BlocksMovement == 1;
+
+         and the shape it defers to:
+
+             BlockShape::IsMovementBlocked  =>  GetStepHeight(...) > 0.5f
+             BlockShape::GetStepHeight      =>  bv.Block.IsCollideMovement ? 1f : 0f
+
+         There IS a six-side loop, in the overloads that take a side mask, but every side
+         returns the same answer because the core overload never reads the side argument
+         and never looks at the model. Only BlockShapeGrass, BlockShapeWater and
+         BlockShapeBillboardCross override it, and all three are two bytes of IL returning
+         false. BlockShapeNew and BlockShapeModelEntity do not override it at all.
+
+         So for any block that collides with movement and does not set BlocksMovement,
+         "asked" and "blocked on every side" are the same thing.
+
+         So a path=0 block is a free guess, and for most shapes the guess is true: you
+         really can walk over a plate or step a half block. For a DIAGONAL pane that
+         fills the cell the guess is simply wrong, nothing corrects it, the route goes
+         straight through the glass, and the zombie then walks into a real collider,
+         wedges, and EAIBreakBlock smashes whatever it is touching. Fril's own
+         observation is the tell: half-block walls and plates never caused this, the
+         diagonal windows did.
+
+         WHY vanilla LEAVES MOST BLOCKS AT 0. A collision query per cell is not free.
+         TFP marked 292 blocks Path="solid" (gun safes, crates, chests) and let the rest
+         ride on the guess. So the fix is to mark the blocks where the guess is wrong,
+         not to mark everything.
+
+         v1.213.0 CORRECTION, AND IT CHANGES WHAT THIS APPEND DOES. This paragraph used to
+         say "THIS IS NOT MAKE IT A WALL... a ramp marked solid would still be walkable,
+         because IsMovementBlocked reports it passable from the low side. Nothing here
+         forces anything shut." There is no low side and nothing reports per side. Given
+         the resolution above, and glassBulletproofRampSheet's own properties:
+
+             Shape           New          (does not override IsMovementBlocked)
+             Collide         movement,melee,bullet,arrow,rocket
+             BlocksMovement  unset        (so the shape is asked, and the shape says yes)
+
+         this append makes that block a FULLY BLOCKED CELL to the navigation grid, on
+         every side. That is still the behaviour we wanted, because the fault was routes
+         planned straight through the glass, and a sealed cell stops them. But it is a
+         seal, not a second look, and anywhere a zombie was previously expected to walk up
+         or over one of these it no longer can. Flagged rather than left to be discovered.
+
+         The evidence for all of this is the trash can. cntDomedTrashCanCornerRandomLootHelper
+         is vanilla, declares Path="solid" with Collide="movement" and BlocksMovement unset,
+         exactly like the ramp above, and a knee-high bin was sealing the corner at the top
+         of the Ostrich stairs so completely that routes to the cell next to it cost 31
+         waypoints against 7 for the cell one block further east.
+
+         SCOPE: glassBulletproofRampSheet ONLY. The other diagonals in the 22 Oct logs
+         (plateDiagonalHalfLeft, windowRampTwoSidedBulletproof*) were blocks Fril placed
+         to test this theory, not part of the build, and he said so. If the chewing moves
+         to another shape, that shape joins this list and we have learned something.
+         ================================================================== -->
     <append xpath="/blocks/block[@name='glassBulletproofRampSheet']">
         <property name="Path" value="solid"/>
     </append>
-
-  <set xpath="/blocks/block/property[@name='CreativeMode']/@value">None</set>
-
-  <append xpath="/blocks/block[not(property[@name='CreativeMode'])]">
-    <property name="CreativeMode" value="None"/>
-  </append>
 
 </configs>

@@ -1,31 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- OstrichChallenge: NO VEHICLE CRAFTING.
 
+     The way out of the hotel is the 4x4 in the basement, and the stalker has its key. A player
+     who can craft a bicycle simply rides away without ever meeting him, so every vehicle recipe
+     goes, exactly as the Hospital Challenge does it for the rooftop gyro.
+
+     Recipes only. Vehicle parts in loot and anything a trader might sell still need doing. -->
 <configs>
 
+    <!-- Bicycle -->
     <remove xpath="//recipe[@name='vehicleBicycleChassis']"/>
     <remove xpath="//recipe[@name='vehicleBicycleHandlebars']"/>
     <remove xpath="//recipe[@name='vehicleBicyclePlaceable']"/>
 
+    <!-- Minibike -->
     <remove xpath="//recipe[@name='vehicleMinibikeChassis']"/>
     <remove xpath="//recipe[@name='vehicleMinibikeHandlebars']"/>
     <remove xpath="//recipe[@name='vehicleMinibikePlaceable']"/>
 
+    <!-- Motorcycle -->
     <remove xpath="//recipe[@name='vehicleMotorcycleChassis']"/>
     <remove xpath="//recipe[@name='vehicleMotorcycleHandlebars']"/>
     <remove xpath="//recipe[@name='vehicleMotorcyclePlaceable']"/>
 
+    <!-- 4x4 Truck: the hotel's own is placed by the mod, it is never built -->
     <remove xpath="//recipe[@name='vehicleTruck4x4Accessories']"/>
     <remove xpath="//recipe[@name='vehicleTruck4x4Chassis']"/>
     <remove xpath="//recipe[@name='vehicleTruck4x4Placeable']"/>
 
+    <!-- Gyrocopter -->
     <remove xpath="//recipe[@name='vehicleGyroCopterAccessories']"/>
     <remove xpath="//recipe[@name='vehicleGyroCopterChassis']"/>
     <remove xpath="//recipe[@name='vehicleGyrocopterPlaceable']"/>
 
+    <!-- ============================================================
+         NO LAND CLAIM BLOCK
+         There is one building and one run: a claim block has no place in it.
+         ============================================================ -->
     <remove xpath="/recipes/recipe[@name='keystoneBlock']"/>
 
+    <!-- ============================================================
+         NO BUCKET ON THE BENCH (v1.30.0)
+
+         Decided 23 September, built 3 October. Fril, mid-test on 2 Oct: "The bucket is still
+         craftable. Im not sure if I asked you to remove that." He had not asked, he had DECIDED
+         it, and ten days of builds went by with nothing checking the difference between a
+         decision written in the devlog and a decision in the files.
+
+         LOOT IS DELIBERATELY UNTOUCHED. Only the recipe goes. Fril, 3 Oct: "Leave in loot but
+         honestly, Ive never seen one in loot."
+
+         AND THE REASONING ON RECORD WAS WRONG, so it is corrected here rather than repeated.
+         The 23 Sep note said the bucket's "only uses are filling itself and building sinks and
+         toilets, both pointless in a hotel, so water means the river". Fril, 3 Oct: "there isnt
+         a river anywhere close but there are fountains outside the front and there are 2 baths,
+         a swimming pool and a jaccuzzi that could be used with a bucket. So it has to go."
+
+         That inverts the point of the change. The bucket is not pointless here, it is the key to
+         a swimming pool, a jacuzzi, two baths and the fountains at the front door. Removing the
+         CRAFT is what makes those worth something: you cannot bench your way to water, you have
+         to find a bucket in the building first. Leaving it in loot is therefore not a softening
+         of the decision, it is the whole mechanism.
+         ============================================================ -->
     <remove xpath="/recipes/recipe[@name='bucketEmpty']"/>
 
+    <!-- ============================================================
+         DUKES FROM PRECIOUS METALS
+         Silver, gold and diamonds can be turned into money.
+         ============================================================ -->
     <append xpath="/recipes">
         <recipe name="casinoCoin" count="100" craft_time="60">
             <ingredient name="resourceSilverNugget" count="1"/>
@@ -38,6 +80,20 @@
         </recipe>
     </append>
 
+    <!-- ============================================================
+         VENDING MACHINE REPAIR KIT
+         Workbench only, and craftable from the start: a security guard putting the staff soda
+         machine back together is a day one job, not something he needs to read a book about.
+
+         Costed against what ONE broken machine gives up when wrenched, which is electrical
+         parts 2-6, mechanical parts 2-4, forged steel 2-3 and springs 1-3, plus iron and
+         polymers we deliberately do not ask for. So three machines covers a kit on decent
+         rolls and four on poor ones, springs being the usual pinch point. Fril's numbers, and
+         deliberately not costed against the guaranteed minimums, because these parts salvage
+         from plenty of other things in the building.
+
+         Vanilla caps a recipe at five ingredients, hence four and not the full six.
+         ============================================================ -->
     <append xpath="/recipes">
         <recipe name="occVendingRepairKit" count="1" craft_area="workbench" craft_time="30">
             <ingredient name="resourceElectricParts" count="10"/>
@@ -47,10 +103,18 @@
         </recipe>
     </append>
 
+    <!-- ============================================================
+         FARM PLOTS, CHEAPER
+         No rotting flesh, and 16 each of nitrate and clay.
+         ============================================================ -->
     <remove xpath="//recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='foodRottingFlesh']"/>
     <set xpath="//recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='resourcePotassiumNitratePowder']/@count">16</set>
     <set xpath="//recipe[@name='farmPlotBlockVariantHelper']/ingredient[@name='resourceClayLump']/@count">16</set>
 
+    <!-- ============================================================
+         SEEDS, 2 OF THE CROP EACH
+         Farming worth doing without being free.
+         ============================================================ -->
     <set xpath="/recipes/recipe[@name='plantedAloe1']/ingredient/@count">2</set>
     <set xpath="/recipes/recipe[@name='plantedBlueberry1']/ingredient/@count">2</set>
     <set xpath="/recipes/recipe[@name='plantedCoffee1']/ingredient/@count">2</set>
@@ -65,12 +129,47 @@
     <set xpath="/recipes/recipe[@name='plantedHop1']/ingredient/@count">2</set>
     <set xpath="/recipes/recipe[@name='plantedGraceCorn1']/ingredient/@count">2</set>
 
+    <!-- ============================================================
+         ARROWS (v1.12.1)
+
+         A wooden arrow, and feathers out of the arrow recipes.
+
+         VERIFIED AGAINST VANILLA recipes.xml AND progression.xml, which Fril supplied after
+         v1.12.0 shipped with both of these guessed. Both guesses were wrong in useful ways.
+
+         ONLY TWO ARROWS USE FEATHERS, not the five v1.12.0 patched:
+             ammoArrowStone     resourceRockSmall x1, resourceWood x1, resourceFeather x1
+             ammoArrowIron      resourceArrowHeadIron x1, resourceWood x1, resourceFeather x1
+         SteelAP, Flaming and Exploding already use resourceScrapPolymers, so those three sets
+         were inert. Removed rather than left in, because a line that looks like it does
+         something and does not is worse than no line.
+
+         AND THE BUNDLES, WHICH v1.12.0 MISSED ENTIRELY. The bulk recipes want EIGHTY feathers
+         each, so patching only the singles would have left bulk crafting still demanding them:
+             ammoBundleArrowStone   resourceFeather x80
+             ammoBundleArrowIron    resourceFeather x80
+
+         v1.13.0: THE BOLTS ARE DONE TOO, on Fril's word, with a wood variant to match. Same
+         four shapes as the arrows, and verified against vanilla the same way:
+             ammoCrossbowBoltStone / Iron         resourceFeather x1
+             ammoBundleCrossbowBoltStone / Iron   resourceFeather x80
+
+         STILL NOT TOUCHED: foodChickenNuggets uses 2 feathers. That is food, not ammunition,
+         and feathers remain lootable, so it is left alone deliberately.
+
+         NO PROGRESSION ENTRY IS NEEDED. progression.xml gates only ammoArrowExploding,
+         ammoArrowSteelAP and ammoArrowFlaming behind RecipeTagUnlocked. Stone and Iron are
+         ungated, and ammoArrowWood is declared with the same shape as Stone, so it is
+         craftable from the start.
+         ============================================================ -->
     <append xpath="/recipes">
         <recipe name="ammoArrowWood" count="1" craft_time="1.4" tags="packMuleCrafting">
             <ingredient name="resourceWood" count="1"/>
             <ingredient name="resourceScrapPolymers" count="1"/>
         </recipe>
 
+        <!-- v1.13.0: the bolt, same cost as the arrow. Vanilla charges the same for a stone
+             bolt as a stone arrow, so matching that keeps the two in step. -->
         <recipe name="ammoCrossbowBoltWood" count="1" craft_time="1.4" tags="packMuleCrafting">
             <ingredient name="resourceWood" count="1"/>
             <ingredient name="resourceScrapPolymers" count="1"/>
@@ -82,6 +181,7 @@
     <set xpath="/recipes/recipe[@name='ammoBundleArrowStone']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
     <set xpath="/recipes/recipe[@name='ammoBundleArrowIron']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
 
+    <!-- v1.13.0: the bolts -->
     <set xpath="/recipes/recipe[@name='ammoCrossbowBoltStone']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
     <set xpath="/recipes/recipe[@name='ammoCrossbowBoltIron']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>
     <set xpath="/recipes/recipe[@name='ammoBundleCrossbowBoltStone']/ingredient[@name='resourceFeather']/@name">resourceScrapPolymers</set>

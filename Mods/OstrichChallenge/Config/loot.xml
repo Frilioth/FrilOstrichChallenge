@@ -1,22 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Loot
 
+    THE ARMOURY. The basement holds the hotel's only T5 hardened chest, and it is the one place in
+    the building that hands the guard a real weapon. Everything here is GUARANTEED, not rolled,
+    because the finale is balanced around having it: the same armoury every run.
+
+    Written the way Area 7 does its T4 crucible, appending to the chest's own loot group. Vanilla
+    splits that group into numbered sub-groups (groupHardenedChestT5_01 for ammo, _02 weapons and
+    armour, _03 medical and so on) and rolls them with count="all", so appending to the PARENT
+    adds our items alongside its normal contents rather than competing with them.
+
+    QUALITY, and this took two goes. quality="6" on an ITEM does nothing: in vanilla that attribute
+    only ever appears inside <qualitytemplate> blocks. Quality comes from loot_quality_template,
+    and that is an attribute of a LOOTGROUP, never of an item. So the rifle gets its own one-item
+    group carrying vanilla's qualTwitchT6Template, which is level="1,999999" default_quality="6",
+    a fixed 6 at any player level, and the chest references that group.
+
+    Every item id below is checked against the game's items.xml. gunMGT1AK47 is the only AK in the
+    game; there is no plain "ammo762mmBullet", the ball round is ammo762mmBulletBall.
+
+    NOTE this group is the game's, so any other T5 hardened chest in the city carries these too.
+    In Occupancy that hardly matters, since the player cannot leave the hotel until the run is
+    over, but it is worth knowing before this file is reused anywhere else.
+-->
 <configs>
 
+    <!-- ============================================================
+         CONTAINERS SURVIVE BEING SEARCHED (v0.57.2)
+
+         Vanilla destroys many containers on close: rubbish piles vanish as you search them, and a
+         container that no longer exists can never restock, which is why the hotel's filing
+         cabinets and rubbish were not coming back while ordinary boxes were.
+
+         Area 7 and the Hospital both do exactly this, and it is the piece that was missing here:
+         strip destroy_on_close from EVERY loot container, then put it back as "empty" on junk and
+         laundry baskets so those collapse to an empty version rather than disappearing entirely.
+         ============================================================ -->
+    <!-- ============================================================
+         v1.96.0: NO VEHICLE CRAFTING MAGAZINES ANYWHERE IN LOOT.
+
+         Fril, 8 Oct 2026: "I think we should remove all vehiclesSkillsMagazines from loot and
+         remove the Grease Monkey skill tree. Putting points in there is pointless as you cannot
+         craft any vehicles?"
+
+         HIS PREMISE IS CORRECT AND THIS MOD ALREADY SAID SO IN TWO PLACES. recipes.xml removes
+         all twelve vehicle recipes, and progression.xml's own header reads "a mod where no
+         vehicle can be crafted at all". The 4x4 is spawned by the DLL, is indestructible, and
+         needs no fuel, battery or repair, so nothing about the escape depends on this either.
+
+         ONE REMOVE, FIFTEEN PLACES. vehiclesSkillMagazine appears in fifteen vanilla lootgroups:
+         skillMagazines, groupQuestRewardSkillMagazinesAll01, groupChallengeRewardSkillMagazinesAll01,
+         groupCars02, groupGarage, groupGarage02, groupRollingToolbox03, groupMoPower02,
+         groupFarmTruck, groupFarmTruck02, groupPassNGasMagazines, groupPassNGas01, groupZpackLab02,
+         groupZpackSoldier02 and groupZpackThug02. RemoveByXPath iterates every match rather than
+         taking the first, which was read out of the 3.3 IL on 8 Oct, so one line does the lot.
+
+         THE IMPORTANT ONE IS skillMagazines. That is the general pool the Book Bag draws its
+         "1,3" from, and three of the zpack lists are what the guests' bags pull from, so this
+         also stops the magazine arriving through the back door.
+         ============================================================ -->
     <remove xpath="//item[@name='vehiclesSkillMagazine']" />
 
     <removeattribute xpath="//lootcontainer/@destroy_on_close" />
     <setattribute xpath="//lootcontainer[@name='junk']" name="destroy_on_close">empty</setattribute>
     <setattribute xpath="//lootcontainer[@name='laundryBasket']" name="destroy_on_close">empty</setattribute>
 
+    <!-- ============================================================
+         THE CHEST IS OUR LIST AND NOTHING ELSE (v1.90.0)
+
+         Fril, 7 Oct: "I think the chest should be our loot only after tonight."
+
+         Until now we APPENDED to vanilla's groupHardenedChestT5, so the chest gave our armoury
+         plus everything vanilla's eight sub-groups rolled. That is where the treasure map came
+         from, and it was never going to be the last surprise: the parent group pulls from
+         sub-groups the mod does not control and TFP can change at any version.
+
+         WHAT IS BEING DROPPED, listed so it is a decision and not an accident:
+
+             _01 count 5   Ammo
+             _02 count 2   Weapon OR Armor
+             _03 count 1   Medical
+             _04 count 1   Mods
+             _05 count 2   Books and schematics (perk books, skill magazines)
+             _06 count 2   Bonus items
+             _07 count 1   Cash and prizes
+             _08 count 1   T5 bonus items
+             conditional   The Christmas holiday gear roll
+             booksAllScaled with the buffPerkBookwormSuccess requirement
+
+         So the chest no longer gives MODS, ARMOUR, PERK BOOKS, SKILL MAGAZINES or the Bookworm
+         bonus roll. The hotel still seeds magazines elsewhere (occEssentialMags, see the
+         bookshelf work further down this file), so books are not gone from the run, only from
+         the chest.
+
+         ORDER MATTERS AND IT IS THE WHOLE TRAP HERE. XML patches apply in document order, and
+         our own items are <item> children of the same group. If these removes ran AFTER the
+         append below they would delete the armoury along with vanilla's contents and leave an
+         empty chest. They are deliberately placed before it. Do not move them.
+
+         The removes are two, not one: the direct <item> children, and the <conditional> block,
+         which an "/item" xpath does not reach because its item is nested inside it.
+         ============================================================ -->
     <remove xpath="//lootgroup[@name='groupHardenedChestT5']/item" />
     <remove xpath="//lootgroup[@name='groupHardenedChestT5']/conditional" />
 
+    <!-- The rifle, in its own group so it can carry the fixed-quality template.
+         INSERTBEFORE, not insertafter: the loader parses the file in order and a group must be
+         DEFINED BEFORE IT IS REFERENCED, or it throws "lootgroup does not exist or has not been
+         defined before being referenced" and the whole of loot.xml fails to load. -->
     <insertbefore xpath="//lootgroup[@name='groupHardenedChestT5']">
         <lootgroup name="occArmouryRifle" count="1" loot_quality_template="qualTwitchT6Template">
             <item name="gunMGT1AK47" count="1"/>
         </lootgroup>
     </insertbefore>
 
+    <!-- The armoury: a rifle, ammunition for it, and enough medicine to survive using it. -->
     <append xpath="//lootgroup[@name='groupHardenedChestT5']">
         <item group="occArmouryRifle" count="1"/>
         <item name="ammo762mmBulletBall" count="300"/>
@@ -29,6 +128,46 @@
         <item name="foodCanBeef" count="2"/>
         <item name="drinkJarBoiledWater" count="4"/>
     </append>
+
+    <!-- ============================================================
+         LOOSE ROUNDS, IN MANY PLACES (v0.86.0)
+
+         Fril: "more ammunition in loot but in smaller quantities."
+
+         WHAT THE HOTEL ACTUALLY HELD BEFORE THIS. Counted from the prefab itself rather than
+         guessed: Ostrich_Hotel_2.tts is 60x100x60 and holds 1,073 container blocks, 932 of them
+         with a loot list, of which 247 can produce 9mm at all. Four types are 209 of that 247:
+
+             luggage     81        toilet      55
+             nightstand  48        microwave   25
+
+         And every one of them hides its ammo behind a nested gate: the parent group reaches its
+         ammo-bearing sub-group only at veryLow (0.05) or low (0.20), and the sub-group then makes
+         ONE weighted pick among ten or so entries. Multiply it out and searching all 209 yields
+         about TWELVE rounds. The player starts with thirty. A complete sweep of the entire hotel
+         gave back less than half a magazine.
+
+         WHY THIS APPENDS TO THE PARENT AND NOT THE SUB-GROUP. All four parents are count="all",
+         so an item appended here rolls INDEPENDENTLY at exactly the probability given. Appending
+         to the sub-groups instead would drop our line into a weighted single pick and the real
+         rate would depend on the other entries' weights, which is how vanilla's own ammo ends up
+         so much rarer than it looks. Same lesson as the honey in traders.xml: go to the level
+         where the outcome is bounded.
+
+         THE NUMBERS. 0.10 at 1 to 3 rounds is about 42 rounds per full sweep on top of vanilla's
+         twelve, which is roughly three rounds per floor. It reads as "most rooms have nothing,
+         and now and then there are a few loose rounds in a bedside drawer". Fril chose it from a
+         table of the alternatives; medHigh and above were ruled out because with the two-day loot
+         respawn, ammunition would stop being a constraint at all.
+
+         A RATE, NOT A PLACEMENT, ON PURPOSE. The floors are still being decorated, so the
+         container counts will keep rising. A probability per container scales with the building;
+         hand-placed ammo would have to be redone every time Bunny finishes a floor.
+
+         9mm ONLY, DELIBERATELY. It is the guard's sidearm and the round the run is balanced
+         around. 7.62 is the armoury's guaranteed 300 and should stay something you have to go
+         down to the basement for, so it is not scattered here.
+         ============================================================ -->
 
     <append xpath="//lootgroup[@name='groupNightstand']">
         <item name="ammo9mmBulletBall" count="1,3" loot_prob_template="lower"/>
@@ -43,8 +182,30 @@
         <item name="ammo9mmBulletBall" count="1,3" loot_prob_template="lower"/>
     </append>
 
+    <!-- ============================================================
+         ROOM SAFES: THE FIRST CRACK PAYS, THE REFILLS DO NOT
+
+         A locked safe in every room. Getting into one the first time can yield a lockpick, which
+         is how a player who started with none ever gets to pick rather than break. Everything
+         after that is an ordinary restock: a little ammo, a few Dukes, no picks. Otherwise a
+         single safe on a two day timer is an infinite lockpick tap.
+
+         WHY TWO CONTAINERS RATHER THAN ONE. A loot list cannot know whether it has been rolled
+         before, so the difference has to live somewhere that persists. It lives on the container:
+         the safe starts pointed at occSafeFirst and the DLL repoints it at occSafeRestock once it
+         has been opened. lootListName is written to the save (TEFeatureStorage.Write), so the safe
+         carries its own memory and the mod needs no record of which safes have been cracked.
+
+         PICKED OR BEATEN, IT LANDS HERE EITHER WAY. TEFeatureLockPickable.DowngradeToUnlockedVariant
+         sends a successfully picked safe to the same unlocked block that breaking one produces, so
+         both routes open the same container and both get the first-crack roll.
+
+         Appended at the end, after vanilla's own groups are defined: a group must exist before it
+         is referenced or the whole file fails to load.
+         ============================================================ -->
     <append xpath="/lootcontainers">
 
+        <!-- First time in. Everything a vanilla safe holds, plus the chance of a pick. -->
         <lootcontainer name="occSafeFirst" size="8,5" sound_open="UseActions/open_safe"
                        sound_close="UseActions/close_safe" open_time="1"
                        loot_quality_template="qualPlus1Template">
@@ -52,6 +213,7 @@
             <item name="resourceLockPick" count="1" prob="0.1"/>
         </lootcontainer>
 
+        <!-- Every refill after that. Ammo, Dukes and the odd bit of safe loot. No picks. -->
         <lootcontainer name="occSafeRestock" size="8,5" sound_open="UseActions/open_safe"
                        sound_close="UseActions/close_safe" open_time="1"
                        loot_quality_template="qualPlus1Template">
@@ -61,10 +223,124 @@
 
     </append>
 
+    <!-- ============================================================
+         OLD CASH BECOMES DUKES (v0.94.0)
+
+         Fril: Dukes are the primary source of food and drink, because the vending machines are
+         the only shop in the building. Vending machines SELL, they do not buy, and there is no
+         trader in the hotel, so every note of oldCash in the loot tables was an item the player
+         could look at and nothing else. Dead weight in the only economy the run has.
+
+         WHAT THE BUILDING ACTUALLY HELD, counted from the prefab rather than guessed. The current
+         Ostrich_Hotel_2.tts is 60x100x60, 66,300 solid blocks, 864 block types and 953 containers
+         carrying a loot list. Resolved through every group chain, a complete sweep yields:
+
+             Dukes     279        old cash   674
+
+         And the old cash was where the Dukes should have been. The ten room safes are 434 of that
+         674, 65% of it, because groupSmallSafeLoot03 pays in oldCash. The comment above on
+         occSafeRestock has said "Ammo, Dukes and the odd bit of safe loot" since it was written
+         and that was never true: a safe restock was 43.4 old cash and ZERO Dukes. The repeating
+         tap the economy is built on was paying in the one item nothing accepts.
+
+         Dukes before this were also concentrated in exactly the wrong places: 225 of the 279 sat
+         in four single containers (the two hardened chests, the till and two hidden stashes), and
+         luggage, microwave and the room safes produced none at all.
+
+         THE CHANGE. One line, because oldCash appears in 30 places across the merged config and
+         listing them would rot the moment the game patches:
+
+             every <item name="oldCash"> anywhere in loot.xml becomes casinoCoin
+
+         COUNTS LEFT ALONE, Fril's call. Note this is not value-neutral: oldCash is EconomicValue
+         7 and casinoCoin is 5, so a 1:1 swap by count is about 29% less purchasing power than the
+         old numbers implied. Set the vending prices against the real figure below, not against
+         the old cash amounts.
+
+             Dukes per sweep after this change: 953
+
+         SCALES WITH THE SAFES. There are ten safes now and the plan is one helper in every room,
+         so the safe contribution is 43.4 Dukes per safe per restock and the total climbs with the
+         room count rather than staying put. Worth re-reading once the safes are all in: at sixty
+         rooms the safes alone are about 2,600 a sweep, and on the two-day respawn that is a very
+         different economy from this one. The dial, if it needs one, is the loot_prob_template on
+         groupSmallSafeLoot03, not this line.
+
+         WHY setattribute AND NOT A LIST OF APPENDS. Changing the name attribute in place keeps
+         vanilla's own counts, probabilities and quality templates exactly as they are, so the
+         distribution of the money is untouched and only the denomination changes. Appending
+         casinoCoin entries alongside would have doubled the drops instead of converting them.
+         ============================================================ -->
     <setattribute xpath="//item[@name='oldCash']" name="name">casinoCoin</setattribute>
 
+    <!-- ============================================================
+         THE CHECK-IN GUESTS' BAGS (v1.5.4, FIXED IN v1.5.5 AND AGAIN IN v1.5.6)
+
+         Five bags, one per bag class in entityclasses.xml. What a guest was carrying when they
+         walked into the lobby, so the contents say who they were rather than being generic
+         salvage. Nothing here is construction material: the building supplies that, these are
+         personal effects.
+
+         DUKES ARE IN EVERY BAG and that is the point. Vending machines are the hotel's only shop
+         and they sell rather than buy, so Dukes are the one currency the run has. A wallet is the
+         most honest thing a guest can be carrying.
+
+         ==== THE v1.5.4 BREAKAGE, RECORDED IN FULL BECAUSE IT WAS ENTIRELY SELF-INFLICTED ====
+
+         v1.5.4 shipped with count="all" on the LOOTCONTAINER. That is not a legal value there and
+         it took the WHOLE FILE down:
+
+             ERR XML loader: Loading and parsing 'loot.xml' failed
+             EXC Parsing error count (input='all')
+
+         One bad attribute in an appended block means the armoury, the safe lists and the
+         oldCash-to-Dukes conversion all silently stopped existing. A loot.xml error is never
+         local to the thing you just added.
+
+         The shape is now vanilla's own, counted rather than assumed: across the whole of the
+         game's loot.xml, count="all" appears on <lootgroup> 361 times and on <lootcontainer>
+         ZERO times. A bag is a container of count="1" holding ONE group, and the group carries
+         count="all" and the items. That is exactly zPackReg -> groupZpackReg.
+
+         HOW THIS WENT WRONG TWICE IN ONE BUILD is the part worth keeping. The first draft
+         invented the sounds (open_bag, which does not exist) and used count="2,3", which would
+         have rolled only two or three entries so a bag could contain no money at all. Catching
+         that, I "corrected" count to "all" — and invented again instead of reading zPackReg
+         properly the second time. Both errors were the same act: writing what seemed reasonable
+         instead of copying what the game already does.
+
+         ==== THE v1.5.5 BREAKAGE, WHICH WAS THE SAME MISTAKE AGAIN ====
+
+         v1.5.5 put the groups in <append xpath="/lootgroups">. THERE IS NO SUCH PATH. The root
+         element of loot.xml IS <lootcontainers>, and <lootgroup> and <lootcontainer> are both
+         DIRECT CHILDREN of it: 1015 groups and 339 containers, siblings, in one flat list. So the
+         append matched nothing, the five groups were never added, and the containers then
+         referenced groups that did not exist:
+
+             EXC lootgroup 'groupOccBagHoldall' does not exist or has not been defined before
+                 being reference by lootcontainer/lootgroup name='occBagHoldall'
+
+         Which is the exact failure the armoury comment at the top of this file already warns
+         about, and the working pattern was already three sections above: the room safes use
+         <append xpath="/lootcontainers">. Invented a path instead of reading the file being
+         edited.
+
+         GROUPS ARE DEFINED BEFORE THEY ARE REFERENCED. The loader parses in document order, so
+         both the groups and the containers go in ONE /lootcontainers append, groups first.
+
+         EVERY ITEM ID CHECKED against the game's items.xml. Three that do NOT exist and were
+         reached for first: drinkJarWater (it is drinkJarBoiledWater or drinkJarPureMineralWater),
+         medicalPainkillers (it is drugPainkillers) and drinkCanBeer (it is drinkJarBeer). Vanilla
+         has no purse, wallet, phone or jewellery item, so "personal effects" is carried by the
+         CONTENTS rather than by flavour props.
+
+         COUNTS ARE DELIBERATELY SMALL. A bag is a pocket, not a chest. The reward for a night's
+         fighting is two or three bags, not two or three hauls. The casinoCoin line in each group
+         carries no prob, so with count="all" it is guaranteed; everything else is a chance on top.
+         ============================================================ -->
     <append xpath="/lootcontainers">
 
+        <!-- The ordinary guest. A weekend bag: money, something to eat, something to drink. -->
         <lootgroup name="groupOccBagHoldall" count="all">
             <item name="casinoCoin" count="25,90"/>
             <item name="foodCanChili" count="1" loot_prob_template="medLow" force_prob="true"/>
@@ -74,6 +350,7 @@
             <item name="drugVitamins" count="1" loot_prob_template="low" force_prob="true"/>
         </lootgroup>
 
+        <!-- The businessman. A briefcase: more money, paperwork, a drink for the room. -->
         <lootgroup name="groupOccBagBriefcase" count="all">
             <item name="casinoCoin" count="60,180"/>
             <item name="resourcePaper" count="3,8" loot_prob_template="medHigh" force_prob="true"/>
@@ -82,6 +359,7 @@
             <item name="resourceLockPick" count="1" loot_prob_template="veryLow" force_prob="true"/>
         </lootgroup>
 
+        <!-- The party girl. A handbag: cash, painkillers, something to keep going on. -->
         <lootgroup name="groupOccBagHandbag" count="all">
             <item name="casinoCoin" count="40,140"/>
             <item name="drugPainkillers" count="1,2" loot_prob_template="med" force_prob="true"/>
@@ -90,6 +368,7 @@
             <item name="resourceSewingKit" count="1" loot_prob_template="veryLow" force_prob="true"/>
         </lootgroup>
 
+        <!-- Janitor and utility worker. Staff, not guests, but they still had their kit on them. -->
         <lootgroup name="groupOccBagToolbag" count="all">
             <item name="casinoCoin" count="15,50"/>
             <item name="resourceDuctTape" count="1,3" loot_prob_template="med" force_prob="true"/>
@@ -99,6 +378,7 @@
             <item name="resourceSpring" count="1,2" loot_prob_template="low" force_prob="true"/>
         </lootgroup>
 
+        <!-- The nurse. The one bag worth going out of your way for. -->
         <lootgroup name="groupOccBagMedkit" count="all">
             <item name="casinoCoin" count="20,60"/>
             <item name="medicalFirstAidBandage" count="1,2" loot_prob_template="medHigh" force_prob="true"/>
@@ -108,25 +388,78 @@
             <item name="medicalSplint" count="1" loot_prob_template="low" force_prob="true"/>
         </lootgroup>
 
+        <!-- THE SOLDIER'S KITBAG (v1.55.0). Fril: "I killed a few soldiers last night and the
+             loot seemed to be more medical related that ammo and weapons". He was right, and
+             the cause was not the contents: occBagWeapons had no loot list of its own and its
+             LootList pointed at occBagHoldall, so the kitbag had been pouring out tinned food,
+             water, cloth and VITAMINS since the day it was added. The vitamins are the medical
+             item he saw. There was never any ammo in it to find.
+
+             Ammo leads by a clear margin, with one field dressing because a soldier carrying a
+             dressing is right and one line does not make it a medkit. Item names were checked
+             against vanilla items.xml rather than typed from memory: resourceBrass and
+             armorMilitaryVest do NOT exist.
+
+             v1.56.0, Fril: "lose the resourceScrapBrass ... add weapons parts instead. Reduce
+             the amount of ammo762mmBulletBall 5-10 (they wont have an AK for ages so giving
+             them loads early will just fill the inventory. It also makes the 300 in the loot
+             room worthless if they already have 300 from looting bags and safes." 7.62 is
+             therefore 5-10 rather than 10-30: the loot room's stash has to stay worth finding,
+             and a bag that hands out ammo for a gun the player cannot have yet is just
+             inventory clutter. -->
         <lootgroup name="groupOccBagWeapons" count="all">
             <item name="casinoCoin" count="20,70"/>
             <item name="ammo9mmBulletBall" count="15,40" loot_prob_template="medHigh" force_prob="true"/>
             <item name="ammo762mmBulletBall" count="5,10" loot_prob_template="med" force_prob="true"/>
             <item name="ammoShotgunShell" count="6,16" loot_prob_template="medLow" force_prob="true"/>
-            
+            <!-- v1.56.0: parts in place of the scrap brass Fril cut. ONE T1 part per ammo type
+                 already in the bag, so the kitbag reads as one soldier's kit rather than a
+                 random parts bin. Vanilla's own groupWeapons_RangedParts was rejected: it
+                 carries rocket launcher and robotics parts, which is exactly the early-game
+                 flooding this change exists to avoid. count 1,2 is vanilla's conservative
+                 figure from its weaponParts group, not invented here. -->
             <item name="gunHandgunT1PistolParts" count="1,2" loot_prob_template="medLow" force_prob="true"/>
             <item name="gunShotgunT1DoubleBarrelParts" count="1,2" loot_prob_template="low" force_prob="true"/>
             <item name="gunRifleT1HuntingRifleParts" count="1,2" loot_prob_template="low" force_prob="true"/>
             <item name="medicalFirstAidBandage" count="1" loot_prob_template="low" force_prob="true"/>
         </lootgroup>
 
+        <!-- THE BOOK BAG (v1.5.8). Books and nothing else: no Dukes, no food, no parts. It is the
+             one bag that is not about who the guest was, so it carries none of their belongings.
+             skillMagazines is vanilla's own pool and carries abundance_type="Magazines", so the
+             sandbox MagazinesCountModifier still scales it per tier, which is correct. -->
         <lootgroup name="groupOccBagBooks" count="all">
             <item group="skillMagazines" count="1,3"/>
             <item group="perkBooks" count="1" loot_prob_template="low" force_prob="true"/>
-            
+            <!-- v1.14.0: one guaranteed essential (workstation / electrical / vehicle). The
+                 group is count="all" and this line carried no prob, so it ALWAYS fired.
+                 Declared inline rather than xpath-appended because occEssentialMags and this
+                 group are both ours, defined in this same file.
+
+                 v1.96.0: NO LONGER GUARANTEED. Fril: "instead of a guaranteed drop from this we
+                 have a 33% chance that 1,3 of those magazines are in the book bag."
+
+                 WHY IT MATTERED. Every one of the 25 guest classes drops bags on a 6:4 split, so
+                 exactly 40% of every kill in the hotel was a Book Bag, and every one of those
+                 carried a guaranteed essential magazine. Two kills in five handed over a
+                 workstation, electrical or vehicle magazine with no roll involved. That is a
+                 progression tap rather than loot, and it sits badly with this file's own
+                 position that Area 7's "leave the magazines alone" call does not transfer here
+                 because "the magazines are not the point in a hotel".
+
+                 A raw prob rather than a loot_prob_template, matching occSafeFirst's lockpick
+                 line in this same file. Templates scale with game stage; this should not.
+
+                 THE 6:4 BAG WEIGHTING IS UNCHANGED, so the Book Bag is still 40% of drops. Only
+                 what is inside it has moved. -->
             <item group="occEssentialMags" count="1,3" prob="0.33"/>
         </lootgroup>
 
+
+
+        <!-- THE FOB BAG (v1.9.0). Everything here is GUARANTEED: no loot_prob_template on any
+             line, so nothing is a roll. This is the reward for the only fight in the mod that
+             cannot be avoided, and a bad roll on the key would end the run. -->
         <lootgroup name="groupOccBagFob" count="all">
             <item name="occKeyFob" count="1"/>
             <item name="ammo9mmBulletBall" count="30,60"/>
@@ -135,6 +468,12 @@
             <item name="occChocNAwe" count="2,4"/>
             <item name="drugAntibiotics" count="1,2"/>
         </lootgroup>
+
+        <!-- The containers themselves, shaped exactly like vanilla's zPackReg: count="1", one
+             group, open_time 1, the backpack sounds, a quality template. SizeScale on the entity
+             class in entityclasses.xml makes a briefcase read smaller than a holdall.
+             SAME APPEND ON PURPOSE: the groups above must be defined before these reference them,
+             and one append block preserves that order. -->
 
         <lootcontainer name="occBagHoldall" count="1" size="6,3" open_time="1"
                        sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack"
@@ -184,14 +523,116 @@
             <item group="groupOccBagFob"/>
         </lootcontainer>
 
+
     </append>
 
+    <!-- ============================================================
+         NO BOOKS IN ANY OTHER BAG (v1.5.8)
+
+         Fril, looking at a backpack full of Wiring 101 and Southern Farming: books belong in
+         ONE bag, not scattered through every corpse.
+
+         WHERE THEY WERE ACTUALLY COMING FROM, because it was not our five bags. All three of
+         vanilla's zombie packs carry the whole world's book pool:
+
+             groupZpackReg, groupZpackStrong, groupZpackBoss
+                 <item group="booksAllScaled" count="1" buffs="buffPerkBookwormSuccess">
+
+         The Ostrich's sleepers are deliberately still on vanilla loot, so every sleeper bag was a
+         book bag. Our own five lists contain no book entry at all and never did, which is why
+         "strip the books out of the bags" first read as already done. It was the wrong bags.
+
+         These three removes take books out of every zombie pack in the game. The book pool itself
+         is untouched, so world containers, shelves and bookcases still hold magazines exactly as
+         vanilla intends. Only the corpse route changes.
+         ============================================================ -->
     <remove xpath="//lootgroup[@name='groupZpackReg']/item[@group='booksAllScaled']"/>
     <remove xpath="//lootgroup[@name='groupZpackStrong']/item[@group='booksAllScaled']"/>
     <remove xpath="//lootgroup[@name='groupZpackBoss']/item[@group='booksAllScaled']"/>
 
+    <!-- ============================================================
+         THE ESSENTIAL MAGAZINES (v1.14.0)
+
+         Fril, after a two-day run: "there were nowhere near enough books. I barely got a forge
+         ahead and I need 10 for a workstation."
+
+         WHAT IS ACTUALLY WRONG, AND IT IS NOT SUPPLY. Every block name in hotel_02_blocks.nim was
+         matched against vanilla's tables: FORTY-ONE container types in the hotel can already roll
+         skillMagazines. Bookshelves, book piles and file cabinets at "high", the T5 hardened
+         chest at "med", then luggage, desks, lockers, nightstands and junk below that, plus the
+         zombie packs at "medHigh".
+
+         THE PROBLEM IS DILUTION. skillMagazines holds 23 entries and each reference draws one,
+         so workstationSkillMagazine is about 1 in 23 a draw. Ten copies is on the order of two
+         hundred magazine draws. The hotel is not short of books, it is short of THAT book.
+
+         THE FIX IS FRIL'S OWN, FROM AREA 7. frilArea7EssentialMags is a three-entry group
+         (workstation, electrical, vehicle) rolled ALONGSIDE the vanilla pool, so those draws are
+         1 in 3 instead of 1 in 23. This is that pattern, and the three magazines are the same
+         three, because they are the three that gate building rather than fighting.
+
+         WHY force_prob="true" AND NOT A BARE APPEND, WHICH IS THE WHOLE CARE IN THIS CHANGE.
+         The Area 7 notes record a real fault in exactly this shape: the four collapsed-workstation
+         containers there got a second entry appended with no prob, and because those containers
+         pick ONE entry, the magazine REPLACES the normal loot instead of accompanying it.
+
+         Every group below is count="all", so each child fires on its own. Read out of
+         LootContainer.SpawnLootItemsFromList: an entry with force_prob="true" is taken out of the
+         weighted pick entirely and given its own pass/fail roll against its prob, which is what
+         vanilla's own groupCrackabookShelves02 and groupLuggage02 already do one line away. So
+         these entries ADD a chance of an essential magazine and take nothing away from anything
+         already in the container. Nothing existing changes weight.
+
+         prob IS A 0-TO-1 CHANCE HERE, not a weight. getProbability returns lootItem.prob
+         unmodified for a group reference with no tags and no template, and forceProb then tests
+         RandomFloat against it.
+
+         THE NUMBERS, and they are choices rather than findings:
+             bookshelves / book piles / single books   0.5   dedicated book furniture
+             file cabinets                             0.3   an office drawer, not a library
+             our own book bag                          1.0   it is THE book bag, so guarantee one
+
+         WHAT THIS DOES NOT DO. It does not add magazine VOLUME across the hotel, only targeting
+         plus these extra rolls. The volume lever is the Magazines Abundance sandbox option
+         (Resources tab, option 98), which this save leaves at the vanilla 100%; Area 7 runs it at
+         150%. Preset triplets if that is wanted later: DUJ = 150%, DUK = 200%, DUL = 300%. The
+         other lever is Magazine Points (Crafting tab, option 108, triplet EEC for 2), which
+         halves every requirement: MinEventActionAddProgressionLevel reads GameStats 115 and uses
+         it in place of level="1" for a type-6 crafting progression, so one Forge Ahead would
+         count as two. Neither is touched here; both are Fril's to set in the presets.
+
+         A CORRECTION TO THE COMMENT ABOVE THIS ONE. The v1.5.8 note says removing booksAllScaled
+         from the zombie packs took "the whole world's book pool" off corpses. It did not take
+         MAGAZINES: booksAllScaled is perkBooks plus two schematics groups and contains no
+         crafting magazines at all, and groupZpackReg02 / Strong02 / Boss02 still reference
+         skillMagazines at medHigh and are untouched. That change cost perk books and schematics,
+         which was the intent, and never cost a single Forge Ahead.
+
+         NOT MEASURED: unplayed. Every structural claim here is read from vanilla's own tables and
+         the assembly, but no container has been opened with this in place.
+         ============================================================ -->
+    <!-- TWO THINGS ABOUT THIS ONE DEFINITION, BOTH OF WHICH BIT BEFORE IT SHIPPED.
+
+         1. The root is /lootcontainers and there is NO <lootgroups> element. My first draft used
+            /lootcontainers/lootgroups and would have matched nothing, which is the exact mistake
+            the v1.5.5 note two hundred lines above this one already records.
+
+         2. A GROUP MUST BE DEFINED BEFORE ANYTHING REFERENCES IT. The second draft appended this
+            to the end of /lootcontainers, and simload reported three forward references: the
+            vanilla book groups sit near the top of the file and would have pointed at a group
+            defined a thousand lines later. Vanilla itself never forward-references, which is why
+            the check is trustworthy. So this is an insertBefore against the FIRST vanilla group
+            ("empty"), which puts it ahead of every possible user. -->
     <insertBefore xpath="/lootcontainers/lootgroup[@name='empty']">
-        
+        <!-- v1.96.0: FOOD, WORKSTATION, MEDICAL. Fril: "maybe just have the foodSkillMagazine,
+             workstationSkillsMagazine and the medicalSkillMagazine in it".
+
+             Out go electricianSkillMagazine and vehiclesSkillMagazine. Vehicles because nothing
+             in the hotel can be crafted that needs it and the magazine is now stripped from loot
+             altogether, electrician because it was never on his list.
+
+             Item names are vanilla's exact spellings, checked against items.xml rather than
+             copied from the request: it is workstationSkillMagazine, not Skills. -->
         <lootgroup name="occEssentialMags" count="1">
             <item name="foodSkillMagazine"/>
             <item name="workstationSkillMagazine"/>
@@ -212,8 +653,42 @@
         <item group="occEssentialMags" count="1" prob="0.3" force_prob="true"/>
     </append>
 
+    <!-- v1.18.0: groupBookcase, the fifth and last one.
+
+         MEASURED PROPERLY THIS TIME, AND IT CORRECTED ME. For two sessions I told Fril the four
+         appends above were aimed at groups that are not in The Ostrich and offered to retarget
+         them. That was wrong, and it was wrong because I read BLOCK NAMES off the prefab and
+         compared them to LOOTGROUP names. Those are two different layers. A container block
+         carries LootList="crackabookShelves", which names a LOOTCONTAINER, and the lootcontainer
+         is what holds <item group="groupCrackabookShelves"/>.
+
+         Walking the real chain - the 865 block names in Ostrich_Hotel_2.blocks.nim, each resolved
+         through blocks.xml (following Extends, and with LootList nested inside its class wrapper
+         rather than a direct child) to a lootcontainer, then every lootcontainer expanded
+         recursively through loot.xml - gives 81 containers, all 81 resolving, and 426 distinct
+         lootgroups reachable. All four existing targets are among them:
+
+             groupCrackabookShelves   via crackabookShelves   4 block types
+             groupBookPile            via bookPile            2
+             groupSingleBooks         via singleBooks         1
+             groupFileCabinet         via fileCabinet         3
+
+         So nothing needed retargeting. The ONE genuine gap that survey found is this: the
+         "bookcase" container is in the building, on cntBookcaseCornerFull and
+         cntBookcaseCornerPoorRandomLootHelper, and groupBookcase was never targeted.
+
+         0.5 matches the other three book groups. A file cabinet is an office drawer rather than
+         somewhere books live, which is why that one alone sits at 0.3. -->
     <append xpath="//lootgroup[@name='groupBookcase']">
         <item group="occEssentialMags" count="1" prob="0.5" force_prob="true"/>
     </append>
+
+    <!-- v1.89.3 removed <item group="groupTreasureMaps"/> from groupHardenedChestT5_05,
+         because Fril got a treasure map out of the chest and a buried crate is no use to someone
+         who cannot leave the hotel. v1.90.0 makes that op redundant: the chest no longer draws
+         from groupHardenedChestT5_05, or from any other vanilla sub-group, so the op is gone
+         rather than left sitting there looking load-bearing. Treasure maps still appear in the
+         nine other places vanilla puts them (footlockers, zombie bags, the T3 and T4 chests),
+         which is unchanged and was never asked about. -->
 
 </configs>

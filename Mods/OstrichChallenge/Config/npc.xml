@@ -1,5 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge: REGISTERING FRILIOTH AS AN NPC
 
+    WHY THIS FILE HAS TO EXIST. The entity class carries NPCID="traderfrilioth", and that is not a
+    label, it is a dictionary key. EntityNPC.NPCInfo does a straight lookup:
+
+        if (this.npcID != "") return npcInfoList[this.npcID];
+        return null;
+
+    with no TryGetValue and no fallback, so an unregistered id throws the moment anything asks:
+
+        KeyNotFoundException: The given key 'traderfrilioth' was not present in the dictionary.
+        at EntityNPC.get_NPCInfo ... at EntityTrader.PostInit
+
+    AND CLEARING NPCID WOULD NOT HELP, WHICH WAS THE FIRST THING I CHECKED. PostInit guards the
+    lookup once, at IL_0027, then uses it again unguarded on its last line:
+
+        emodel.avatarController.SetArchetypeStance(this.NPCInfo.CurrentStance);
+
+    So an empty NPCID swaps a KeyNotFoundException for a NullReferenceException four instructions
+    from the end. Every EntityTrader needs a real entry here; the vanilla six all have one.
+
+    THE ROOT IS <npc>, NOT <npcs>, WHICH IS WORTH KNOWING IF THIS EVER LOOKS WRONG. The loader's
+    own error string says "No element <npcs> found!", and it is simply wrong: NPCsFromXml.ParseNode
+    never checks the root's name at all, it just walks the children looking for npc_info,
+    voice_sets and factions. The real vanilla root is <npc>. An xpath of /npcs matches nothing and
+    fails silently.
+
+    EVERY VALUE BELOW IS COPIED FROM A VANILLA ENTRY, NOT INVENTED. Sources for each, in order:
+
+      faction="whiteriver"   All five real traders use whiteriver, not trader. Note that the
+                             entity class still says Faction="trader", copied from
+                             npcTraderTemplate. That split is vanilla's own, not a mistake here:
+                             the two fields feed different systems.
+      stance="Like"          Joel, Jen, Bob, traderTest and the junk drone are all Like. Hugh is
+                             Neutral and Rekt is Dislike, which is clearly characterisation.
+      trader_id="11"         His own, added in v0.80.0. See the note below.
+      dialog_id="trader"     All five real traders use it. This is what opens the trade window.
+      voice_set="trader"     The generic set the junk drone uses, rather than borrowing another
+                             trader's character voice. Swap it when Fril records his own.
+      portrait="npc_joel"    A PLACEHOLDER, and the most visible one. It is Joel's face in the
+                             trade window. The junk drone also points at npc_joel despite being a
+                             drone, so vanilla treats this field loosely, but this wants replacing
+                             with a portrait of Frilioth before anyone sees it.
+      quest_faction="1"      Matches all five. Quests are off in this mod anyway.
+
+    DELIBERATELY OMITTED, each with a vanilla precedent:
+      quest_list             Every vanilla value is trader-specific (trader_joel_quests). Pointing
+                             at a list that does not exist is worse than having none, and the junk
+                             drone omits it too.
+      dms_section_type       An enum with a value per named trader. traderTest and the junk drone
+                             both omit it.
+      name, name_key,        NOT PARSED AT ALL. NPCsFromXml.ParseNPCInfo reads exactly eleven
+      greeting_type          attributes and these three are not among them, so vanilla's npc.xml
+                             carries them for nothing, the same way entity_class carries Archetype.
+                             The displayed name comes from localization_id, which is why there is
+                             an npcTraderFrilioth row in Localization.csv.
+
+    >>> trader_id="11", SETTLED IN v0.80.0. He now has his own entry, and it is EMPTY: he is the
+    end of the run rather than a shop. The matching <trader_info id="11"> is in our traders.xml
+    and the two must always ship together, because TraderData.get_TraderInfo returns
+    traderInfoList[TraderID] and an id with no entry hands back a null that later throws.
+
+    TWO CORRECTIONS TO WHAT THIS COMMENT USED TO SAY, both found by reading rather than recalling:
+
+      "10 is the next free one" was WRONG. Vanilla fills ids 1 to 10 inclusive; 10 is a vending
+      machine. 11 is the first free one.
+
+      "an out-of-range read" was WRONG. traderInfoList is allocated as
+      "ldc.i4 0x100 ; newarr TraderInfo", so it holds 256 slots. An unused id is simply null, and
+      the failure is a NullReferenceException further along rather than an index error.
+
+    He keeps his god mode, which is wanted: EntityTrader.PostInit sets IsGodMode inside
+    "if (NPCInfo.TraderID > 0)", and 11 is positive. He is the ending, so a stray shot or a
+    wandering horde must not be able to end the run by killing him.
+
+    Until v0.80.0 this said trader_id="1", which shared Joel's tables. That was always a
+    placeholder, and it meant a survivor who reached Frilioth was offered Joel's entire stock.
+-->
 <configs>
 
     <append xpath="/npc">

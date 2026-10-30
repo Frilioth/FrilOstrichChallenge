@@ -1,13 +1,24 @@
 <OstrichChallenge>
    <append xpath="/styles/global">
 
+      <!-- v1.29.0: SAMPLED FROM FRIL'S ART, not chosen to sit beside it. Every value below is
+           the mean of the matching pixels in Resources/ostrich_esc_sign.png, so the UI and the
+           artwork cannot drift apart. Measured, not eyeballed:
+
+             cream lettering  238,232,208   (113,827 px)
+             brass            183,156,99    (199,069 px)
+             green accent      60, 72, 51   ( 10,425 px)
+             dark ground       36, 36, 34   (666,473 px)
+
+           The old palette guessed 175,168,161 for the cream and 54,85,37 for the green. Both
+           were close, and both were slightly wrong against the art that is now on screen. -->
       <style_entry name="occHeaderBgColor"     value="36,36,34"/>
       <style_entry name="occPageBgColor"       value="36,36,34"/>
-      <style_entry name="occPanelBorderColor"  value="183,156,99"/>    
-      <style_entry name="occHeaderTitleColor"  value="238,232,208"/>   
-      <style_entry name="occHeaderMottoColor"  value="60,72,51"/>      
+      <style_entry name="occPanelBorderColor"  value="183,156,99"/>    <!-- brass, was flat black -->
+      <style_entry name="occHeaderTitleColor"  value="238,232,208"/>   <!-- sign cream -->
+      <style_entry name="occHeaderMottoColor"  value="60,72,51"/>      <!-- ostrich green -->
       <style_entry name="occPageTitleColor"    value="238,232,208"/>
-      <style_entry name="occPageBodyColor"     value="238,232,208"/>   
+      <style_entry name="occPageBodyColor"     value="238,232,208"/>   <!-- body text now matches the lettering -->
       <style_entry name="occBrassColor"        value="183,156,99"/>
       <style_entry name="occQuietColor"        value="150,150,150"/>
 

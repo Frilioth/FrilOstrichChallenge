@@ -1,20 +1,30 @@
 <Frils-HUD>
 
+    <!-- v1.1.1: compass + day/time, plus full-width Food and Water stat bars -->
+
+    <!-- Compass with marked center & additional info -->
+
+    <!-- Make compass box 600 wide and keep it centered -->
     <set xpath="/windows/window[@name='windowCompass']/@width">600</set>
     <set xpath="/windows/window[@name='windowCompass']/@pos">-300,-9</set>
 
+    <!-- Remove vanilla grey compass backgrounds -->
     <remove xpath="/windows/window[@name='windowCompass']/sprite[@pos='47,0']"/>
     <remove xpath="/windows/window[@name='windowCompass']/sprite[@pos='50,-3']"/>
 
+    <!-- Show more of the compass strip instead of stretching it -->
     <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@pos">0,-12</set>
     <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@width">600</set>
     <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@rect_size">0.395,1</set>
     <set xpath="/windows/window[@name='windowCompass']/texture[@name='compassTexture3']/@rect_offset">{#compass_rotation / 360 + 0.0625 - 0.1975},0</set>
 
+    <!-- Remove vanilla time block so we can use custom -->
     <remove xpath="/windows/window[@name='windowCompass']/sprite[@pos='240,-60']"/>
 
+    <!-- Add custom center marker and extra info -->
     <append xpath="/windows/window[@name='windowCompass']">
 
+        <!-- Center divider -->
         <label depth="10"
                name="TextContent"
                pos="0,-3"
@@ -41,8 +51,32 @@
 
     </append>
 
+    <!-- ==============================================================
+         STAT BARS  (v1.1.1)
+         Food and Water were 83 wide sitting side by side. They are now
+         171 wide and stacked, matching Stamina and Health.
+
+         Vanilla's rects are kept in place, controller and {statvisible}
+         untouched, and only their geometry is patched. Rebuilding these
+         rects is what caused the statvisible crashes previously.
+
+         The stack now runs 33px deeper, so the container is raised from
+         y=156 to y=189 or the Water bar falls off the bottom of the
+         screen. That leaves the same 6px gap under the stack that
+         vanilla has. Raising it also lifts the Stealth bar top edge from
+         156 to 189.
+
+BUFF POPOUT at 90,165. Fril's tested position, kept as-is.
+         For reference, its child item rect is 168x46 with pivot="center"
+         at pos 70,0, so the drawn box works out about 14px left of the
+         parent and vertically centred on it. Vanilla sat at 90,132.
+         ============================================================== -->
+
+    <!-- Raise the stack. NOTE: two rects in this window are name="hud",
+         so the row count is needed to pick the stat one. -->
     <set xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@rows='2']/@pos">9,285</set>
 
+    <!-- Food: 83 -> 171 wide, interior matched to the Health bar -->
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/@width">171</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/sprite[@depth='3']/@width">169</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/sprite[@name='BarContent']/@width">169</set>
@@ -52,6 +86,7 @@
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/filledsprite[@depth='8']/@width">171</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Food']/filledsprite[@depth='3']/@width">170</set>
 
+    <!-- Water: 83 -> 171 wide, moved from beside Food to below it -->
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/@width">171</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/@pos">0,-168</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/sprite[@depth='3']/@width">169</set>
@@ -62,6 +97,21 @@
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/filledsprite[@depth='8']/@width">171</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Water']/filledsprite[@depth='3']/@width">170</set>
 
+    <!-- ==============================================================
+         XP BAR MOVED TO THE LEFT STACK  (technique credit: AGF)
+         The XP values are supplied by the ToolbeltWindow controller, so
+         a copy of the bar elsewhere normally renders empty. AGF's
+         HUDPlus shows the way round it: a CONTROLLER can be attached to
+         any element, not just a window. Putting controller="ToolbeltWindow"
+         on the fill sprite gives that one sprite its own controller
+         instance, so {xp} and {xpcolor} resolve wherever it lives.
+         Same trick on the label with controller="MapStats" for the
+         player level.
+
+         Vanilla's three XP sprites above the toolbelt are removed, and
+         the stack is raised another 33 to make room, with the buff
+         popout raised by the same 33 so it keeps the spacing you tuned.
+         ============================================================== -->
     <remove xpath="/windows/window[@name='windowToolbelt']//sprite[@visible='{showxp}']"/>
 
     <append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@rows='2']">
@@ -78,6 +128,20 @@
         </rect>
     </append>
 
+    <!-- ==============================================================
+         BOX HEIGHT 30 -> 35 so the values are not so tight.
+         Stealth stays at vanilla 46: its crouch raise is the hardcoded
+         52 in XUiC_HUDStatBar, which only matches a 46-tall bar.
+
+         Interiors do not scale with the rect, so the icon and label are
+         re-centred by hand: icon 16,-15 -> 16,-18, label 44,-17 -> 44,-19.
+         The border and fill sprites carry no height, so they follow the
+         rect on their own.
+
+         Spacing goes 33 -> 38 (35 + the same 3px gap), which pushes the
+         stack 25 deeper, so the container rises 9,222 -> 9,247 and the
+         buff popout 90,198 -> 90,223 to keep the gap you tuned.
+         ============================================================== -->
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Stamina']/@height">35</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Stamina']/sprite[@name='Icon']/@pos">16,-18</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Health']/@height">35</set>
@@ -91,6 +155,22 @@
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Stamina']/label[@name='TextContent']/@pos">44,-19</set>
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@stat_type='Health']/label[@name='TextContent']/@pos">44,-19</set>
 
+    <!-- ==============================================================
+         FLOOR + CORE TEMP, half width, side by side, below the stack. (Occupancy: the left box shows the
+         hotel floor, B / G / 1-14 / R, from the OstrichChallenge DLL, instead of elevation.)
+         Not stat bars: there is no HUDStatBar stat_type for either, so
+         these are plain rects and the controller goes on the LABEL
+         (controller="MapStats"), the same trick as the XP bar.
+         Deliberately no visible="{statvisible}" on them: only HUDStatBar
+         supplies that binding, and putting it on a MapStats element is
+         what threw the NRE back in v1.0.9.
+
+         84 wide at x=0 and x=87 gives the same 4px gutter vanilla used
+         for its old half-width food/water pair, ending flush at 171.
+
+         Row sits at -244 (38 below XP), so the stack runs 38 deeper:
+         container 9,247 -> 9,285 and buff popout 90,223 -> 90,261.
+         ============================================================== -->
     <append xpath="/windows/window[@name='HUDLeftStatBars']/rect[@name='hud'][@rows='2']">
         <rect width="84" height="35" pos="0,-244">
             <sprite depth="1" name="border" color="0,0,0,235" type="sliced"/>
@@ -108,21 +188,128 @@
         </rect>
     </append>
 
+    <!-- Buff popout out of the way of the widened stack -->
     <set xpath="/windows/window[@name='HUDLeftStatBars']//rect[@controller='BuffPopoutList']/@pos">90,261</set>
 
+    <!-- ==============================================================
+         TOP-RIGHT POI LOCATION DISPLAY REMOVED.
+         windowLocation is anchored TopRight and shows {locationname}
+         plus the difficulty skulls, controller="Location". Players know
+         where they are, so the whole window goes.
+         AGF's HUDPlus removes it the same way, so the game is happy
+         with the window simply not existing.
+         NOTE this is NOT the same as windowEntering, the transient
+         "entering area" banner at the top of the screen, which this
+         mod does not touch.
+         ============================================================== -->
     <remove xpath="/windows/window[@name='windowLocation']"/>
 
+
+    <!-- v1.1.5: enemy HP bar (windowTargetBar) moved down clear of the top-anchored area banner. -->
     <set xpath="/windows/window[@name='windowTargetBar']/rect[@visible='{isnotboss}']/@pos">-200,-140</set>
     <set xpath="/windows/window[@name='windowTargetBar']/rect[@visible='{isboss}']/@pos">-267,-140</set>
 
+    <!-- v1.1.7 kept the area difficulty skulls but moved them onto the POI name's ROW, to the
+         right of the name, with pivot=left at 345,-24. Its own comment called that a "first-pass
+         position to eyeball", so it was always provisional.
+
+         v1.95.0: THEY GO BACK UNDER THE NAME. Fril, 8 Oct 2026: "I's also like the skulls to be
+         below the name and not next to it."
+
+         This is vanilla's own arrangement, so these two lines now restore vanilla's values rather
+         than inventing new ones: pivot=center at x 170, which is the centre of the 340 wide rect
+         the name is centred in. y goes to -85 rather than vanilla's -78, because the name label
+         runs from -3 to -63 at font 42 and -78 left very little air under it.
+
+         ONE THING TO WATCH, and it cannot be settled from the XML. The grid declares cols="8"
+         while only five skulls are visible here. If the grid sizes itself to all eight columns
+         (272px) rather than to its visible children, a centred pivot will put the five skulls
+         LEFT of the name rather than under it. If that is what it looks like, the fix is to move
+         x right: for N visible skulls the correction is x = 306 - 17N, so 221 for five. -->
     <set xpath="/windows/window[@name='windowEntering']/rect/grid/@pivot">center</set>
     <set xpath="/windows/window[@name='windowEntering']/rect/grid/@pos">170,-85</set>
 
-    <append xpath="/windows">
 
+    <!-- ==============================================================
+         THE ESC PAGES (OstrichChallenge v0.51.0)
+         The 5am register and the guard's instructions, on the ESC menu.
+
+         GEOMETRY from Fril's working Area 7 ESC guide: a 1200x820 window anchored
+         CenterCenter, content inside a "core" rect at pos="-560,400" flowing right (+X) and
+         down (-Y); a label with justify="center" centres across its PARENT rect's width, so a
+         centred title sits at pos="0" in a full-width parent.
+         Tabs are vanilla TabSelector / TabSelectorButton / TabSelectorTab.
+         Technique credit for the ESC hook: AuroraGiggleFairy (AGF-ESCWindow).
+
+         THERE IS NO CONTROLLER ON THIS WINDOW ANY MORE, AND THAT IS DELIBERATE (v0.85.0).
+         It used to carry controller="OccupancyRegister, OstrichChallenge", and the old note here
+         warned in capitals that losing it was what emptied every binding in v0.50.1. That warning
+         was correct at the time and is now obsolete, so read this before "fixing" it back:
+
+             the register tab is GONE, and with it every binding this window had. What is left is
+             literal text and text_key lookups, which are the localisation system rather than a
+             controller. TabSelector, TabSelectorButton and TabSelectorTab are vanilla controllers
+             on their own rects and do not need one on the window.
+
+         So there is nothing for a controller to serve. Putting one back would not break anything,
+         but it would re-couple this page to the laptop for no reason.
+
+         WHY THE REGISTER LEFT (Fril, 28 Sep). The laptop on the roof is the security terminal and
+         shows exactly this data. Having it on the ESC menu too meant the player could read the
+         register from anywhere in the building, which quietly undid the design: the devlog's own
+         rule is that "wanting to know where the guests are means climbing to the top floor". The
+         roof trip is the point. The ESC pages are now purely reference, and the only place the
+         count exists in game is the laptop.
+
+         Tab strip: 3 cells x 204 = 612 wide, centred under 1100 => (1100-612)/2 = 244.
+         ============================================================== -->
+    <append xpath="/windows">
+        <!-- v1.29.1: pos lowers the whole window by 62 units. Fril: "The window slightly covers
+             the date, time and day at the top." Measured off his screenshot rather than guessed:
+             the frame's gold linework put the window's top edge about 44px ABOVE the top of a
+             3781x2119 screen grab, and the lowest HUD pixel sat at y=76, so roughly 60 units of
+             clearance were needed. There were 186px spare below, so lowering beats shrinking and
+             the art keeps its full size. Tuned to Fril's resolution; a very different aspect
+             ratio may want a different number.
+
+             v1.29.2: 62 was too far. Measured again off the v1.29.1 grab: the offset moved the
+             window 61.5 units against the 62 asked for, so it is 1:1 and the only question was
+             the number. That left 64 units of gap above the art and 23 below. Splitting the
+             slack evenly between the bottom of the HUD and the bottom of the screen gives 42,
+             which lands about 91px clear at the top and 91px at the bottom. -->
+        <!-- v1.31.0: NO BACKING PANEL. Fril cut the frame PNG out around its stepped
+             silhouette (now RGBA, 13% fully transparent), so the window's own background was
+             left showing through the gaps as a plain card behind the deco. Both attributes are
+             set because vanilla uses backgroundcolor on a window (windowBagStorage carries
+             backgroundcolor="[black]") while disableautobackground appears nowhere in vanilla's
+             windows.xml and is the one this mod's `core` rect already relies on. One of the two
+             is the right lever, neither does harm, and an unknown attribute is ignored. -->
         <window name="windowOccupancyRegister" depth="10" width="1200" height="910" pos="0,-42" anchor="CenterCenter" cursor_area="true"
                 backgroundcolor="0,0,0,0" disableautobackground="true">
 
+            <!-- ==========================================================
+                 v1.29.0: FRIL'S ART DECO ART, REPLACING THE DRAWN PANELS.
+
+                 Both PNGs are his, generated on Nano Banana 2 and shipped unmodified. Nothing
+                 here resizes or crops them; the renderer scales them to the width/height below.
+
+                 THE PATH. XUiV_Texture.loadTexture runs the string through
+                 ModManager.TryPatchModPathString and loads it as file://, so a plain PNG in the
+                 mod's Resources folder works with no atlas and no code. Confirmed against real
+                 vanilla usage in windows.xml, which does the same thing with
+                 texture="@:Textures/UI/Compass/overlay-{compass_language}.png".
+
+                 THE GEOMETRY, measured off the art rather than guessed. The frame's clear centre
+                 is 964x738 of its 1152x928, which scales to 1004x724 inside this 1200x910 window.
+                 The body text needs 560 and the tab row 48, which is 608 of that 724. That leaves
+                 116, and the sign is 2.44:1, so a sign fitting inside the frame would be 283 wide
+                 and unreadable. So THE SIGN STRADDLES THE TOP BORDER instead, as a cartouche
+                 breaking the frame, which is a deco thing to do anyway and buys the 100px needed.
+
+                 Positions are in `core` space, which starts 40px in from the left of the window
+                 and 10px down from the top. The frame is placed on the window itself rather than
+                 in core, so it can cover the full 1200x910.
+                 ========================================================== -->
             <texture name="escFrame" depth="0" pos="-600,455" width="1200" height="910"
                      color="255,255,255,255"
                      texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_frame.png"/>
@@ -130,6 +317,15 @@
             <rect name="tabs" controller="TabSelector" select_tab_contents_on_open="true">
                 <rect name="core" pos="-560,445" disableautobackground="true">
 
+                    <!-- The sign carries THE OSTRICH II and the fan, so the two drawn labels that
+                         used to say it, and the two sprites behind them, are gone.
+
+                         v1.32.0: NEW SIGN WITH THE OSTRICH ON IT, Fril's art, shipped unmodified.
+                         It is 1584x672 where the old one was 2.44:1, so the slot went 480x197 to
+                         464x197 to match the new 2.36:1 exactly rather than stretching it 3%.
+                         Height is deliberately unchanged, so nothing below it has to move: the
+                         tabs stay at -205 and the body at -265. x=328 re-centres the narrower
+                         plate on the window, not on core. -->
                     <texture name="escSign" depth="5" pos="328,2" width="464" height="197"
                              color="255,255,255,255"
                              texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_sign.png"/>
@@ -148,21 +344,66 @@
                     <rect name="tabsContents">
 
                         <rect name="page_job" controller="TabSelectorTab" tab_key="occesc_tab_job">
-                            
+                            <!-- v1.29.0: bodyBg and bodyBorder deleted, the frame art is the ground now.
+                                 The per-page title label is deleted too: it read "The job" directly
+                                 under a tab button already reading "The job", and the 46px it cost is
+                                 exactly what the text needed to clear the frame's bottom border.
+                                 Flagged because it is a content change, not just a reskin.
+
+                                 v1.29.1: font 26 -> 30, and x 60 w 980 -> x 98 w 924. Fril: the
+                                 font was "a little too small which makes too much blank space at
+                                 the bottom and its justified too far left. It needs a margin
+                                 between it and the border." He is right: x=60 in core space is
+                                 window x 100, and the frame's clear centre starts at window x 98,
+                                 so the text was two pixels off the border. x=98 gives 40, and
+                                 w=924 gives the same 40 on the right. The longest page renders
+                                 about 7 lines at font 26; at 30 in a 6% narrower box that is
+                                 roughly 9 lines plus 3 paragraph gaps, about 444 of the 560
+                                 available, so there is still headroom. -->
                             <rect name="body" pos="0,-265" width="1100" height="600">
                                 <label name="text" depth="10" pos="98,-5" width="924" height="560" justify="left" effect="Outline8" effect_color="0,0,0,255" effect_distance="1,1" color="[occPageBodyColor]" font_size="30" text_key="occesc_job_body" foregroundlayer="true"/>
                             </rect>
                         </rect>
 
                         <rect name="page_him" controller="TabSelectorTab" tab_key="occesc_tab_him">
-                            
+                            <!-- v1.29.0: bodyBg and bodyBorder deleted, the frame art is the ground now.
+                                 The per-page title label is deleted too: it read "Him" directly
+                                 under a tab button already reading "Him", and the 46px it cost is
+                                 exactly what the text needed to clear the frame's bottom border.
+                                 Flagged because it is a content change, not just a reskin.
+
+                                 v1.29.1: font 26 -> 30, and x 60 w 980 -> x 98 w 924. Fril: the
+                                 font was "a little too small which makes too much blank space at
+                                 the bottom and its justified too far left. It needs a margin
+                                 between it and the border." He is right: x=60 in core space is
+                                 window x 100, and the frame's clear centre starts at window x 98,
+                                 so the text was two pixels off the border. x=98 gives 40, and
+                                 w=924 gives the same 40 on the right. The longest page renders
+                                 about 7 lines at font 26; at 30 in a 6% narrower box that is
+                                 roughly 9 lines plus 3 paragraph gaps, about 444 of the 560
+                                 available, so there is still headroom. -->
                             <rect name="body" pos="0,-265" width="1100" height="600">
                                 <label name="text" depth="10" pos="98,-5" width="924" height="560" justify="left" effect="Outline8" effect_color="0,0,0,255" effect_distance="1,1" color="[occPageBodyColor]" font_size="30" text_key="occesc_him_body" foregroundlayer="true"/>
                             </rect>
                         </rect>
 
                         <rect name="page_out" controller="TabSelectorTab" tab_key="occesc_tab_out">
-                            
+                            <!-- v1.29.0: bodyBg and bodyBorder deleted, the frame art is the ground now.
+                                 The per-page title label is deleted too: it read "The way out" directly
+                                 under a tab button already reading "The way out", and the 46px it cost is
+                                 exactly what the text needed to clear the frame's bottom border.
+                                 Flagged because it is a content change, not just a reskin.
+
+                                 v1.29.1: font 26 -> 30, and x 60 w 980 -> x 98 w 924. Fril: the
+                                 font was "a little too small which makes too much blank space at
+                                 the bottom and its justified too far left. It needs a margin
+                                 between it and the border." He is right: x=60 in core space is
+                                 window x 100, and the frame's clear centre starts at window x 98,
+                                 so the text was two pixels off the border. x=98 gives 40, and
+                                 w=924 gives the same 40 on the right. The longest page renders
+                                 about 7 lines at font 26; at 30 in a 6% narrower box that is
+                                 roughly 9 lines plus 3 paragraph gaps, about 444 of the 560
+                                 available, so there is still headroom. -->
                             <rect name="body" pos="0,-265" width="1100" height="600">
                                 <label name="text" depth="10" pos="98,-5" width="924" height="560" justify="left" effect="Outline8" effect_color="0,0,0,255" effect_distance="1,1" color="[occPageBodyColor]" font_size="30" text_key="occesc_out_body" foregroundlayer="true"/>
                             </rect>
@@ -175,6 +416,18 @@
         </window>
     </append>
 
+
+    <!-- ==============================================================
+         THE SECURITY TERMINAL (OstrichChallenge v0.60.0)
+
+         Pressing E on the laptop opened a tooltip: white text over the world, uncentred and hard
+         to read against a bright roof. This is a proper window instead, dressed as the terminal
+         itself: black screen, green phosphor text, the register laid out as the machine would
+         print it. Esc closes it.
+
+         Opened by name from the DLL (GUIWindowManager.Open("occupancyTerminal")). The text comes
+         from XUiC_OccupancyRegister, the same bindings the ESC page uses.
+         ============================================================== -->
     <append xpath="/windows">
         <window name="windowOccupancyTerminal" depth="10" width="900" height="706"
                 anchor="CenterCenter" cursor_area="true" backgroundcolor="0,0,0,220">
@@ -185,7 +438,11 @@
 
                 <label name="head1" depth="10" pos="40,-34"  width="820" justify="left" color="120,255,120" font_size="26" text="{occterminal}" foregroundlayer="true"/>
                 <label name="head2" depth="10" pos="40,-66"  width="820" justify="left" color="60,160,60"  font_size="20" text="{occterminalsub}" foregroundlayer="true"/>
-                
+                <!-- v0.60.1: a row of dashes rather than a sprite. ui_game_header_fill has a
+                     minimum height, so asking it for 2 pixels drew a thick green bar over the
+                     heading instead of a hairline.
+                     v0.60.2: 104 dashes, which overfills the 820 wide box at this size, so the
+                     rule reaches the right edge on any screen rather than stopping short. -->
                 <label name="rule" depth="10" pos="40,-92" width="820" justify="left" color="40,110,40" font_size="18" text="--------------------------------------------------------------------------------------------------------" foregroundlayer="true"/>
 
                 <label name="heading" depth="10" pos="40,-108" width="820" justify="left" color="120,255,120" font_size="22" text="{occheading}" foregroundlayer="true"/>
@@ -194,17 +451,46 @@
                 <label name="caption" depth="10" pos="40,-206" width="500" justify="left" color="60,160,60"  font_size="20" text="GUESTS IN THE HOTEL" foregroundlayer="true"/>
                 <label name="change"  depth="10" pos="40,-234" width="820" justify="left" color="120,255,120" font_size="20" text="{occchange}" foregroundlayer="true"/>
 
+                <!-- v1.129.0: the hotel system noticing the trader on its network. Empty on every
+                     screen except the roof snapshot, where it is the ONLY tell that the front desk
+                     can now stop check-ins. It was being written into Occupancy.Describe, which is
+                     the tooltip fallback this window replaced in v0.60.0, so nothing ever drew it.
+                     Amber rather than green: it is the system complaining, not reporting. -->
                 <label name="notice"  depth="10" pos="40,-286" width="820" height="40" justify="left" color="110,190,110" font_size="18" text="{occnotice}" foregroundlayer="true"/>
 
+                <!-- v1.132.0: the breach gets its own label because it gets its own colour.
+                     Fril: "can you make the NOTICE: unrecognised host in RED". The signpost
+                     above shares the slot and is benign, so it stays green: one label could
+                     not be both. The three never have text at the same time. -->
                 <label name="breach"  depth="10" pos="40,-286" width="820" height="40" justify="left" color="255,70,70" font_size="18" text="{occbreach}" foregroundlayer="true"/>
 
+                <!-- v1.130.0: the intruder alert, same slot as the notice because the two can
+                     never both have text: one belongs to the roof snapshot and the other to
+                     the front desk at nil. Bigger and brighter than anything else on the
+                     screen, because it is the only line here that asks the player to DO
+                     something rather than telling them a number. -->
                 <label name="alert"   depth="10" pos="40,-256" width="820" height="46" justify="left" color="255,230,90" font_size="21" text="{occalert}" foregroundlayer="true"/>
 
                 <label name="rule2" depth="10" pos="40,-308" width="820" justify="left" color="40,110,40" font_size="18" text="--------------------------------------------------------------------------------------------------------" foregroundlayer="true"/>
 
+                <!-- v0.60.3: font 19, not 22. XUi labels have no line spacing attribute, so the
+                     blank line between floors is a whole line and its height follows the font. -->
+                <!-- v1.220.0: 380 -> 400, and NOTHING MOVES. The dawn suffix makes the longest
+                     realistic line "Floor 10   28 guests (12 of them due at dawn)", 46 characters.
+                     Calibrating off rule2 below, 104 hyphens in 820 at font 18, a character is
+                     7.885 units at 18 and 8.323 at this label's 19, so 46 characters want 383 and
+                     380 was three short. These labels SHRINK the whole column to fit rather than
+                     clipping it (see the header of XUiC_OccupancyRegister.cs), so three units over
+                     would not have cut the line off, it would have quietly made every floor on
+                     that side smaller than the other side. 400 gives 48 characters.
+                     Left still starts at 40 and ends at 440, right still starts at 460 and now
+                     ends at 860, which is where the 820 wide labels above and below end. The 40
+                     unit gutter between the columns is unchanged. -->
                 <label name="floorsLeft"  depth="10" pos="40,-324"  width="400" height="300" justify="left" color="120,255,120" font_size="19" text="{occfloorsleft}" foregroundlayer="true"/>
                 <label name="floorsRight" depth="10" pos="460,-324" width="400" height="300" justify="left" color="120,255,120" font_size="19" text="{occfloorsright}" foregroundlayer="true"/>
 
+                <!-- v0.60.1: pulled up. The roof holds no rooms, so the list is two lines shorter
+                     than the box allowed for and the screen had a hole in the middle of it. -->
                 <label name="rule3" depth="10" pos="40,-600" width="820" justify="left" color="40,110,40" font_size="18" text="--------------------------------------------------------------------------------------------------------" foregroundlayer="true"/>
                 <label name="state" depth="10" pos="40,-622" width="820" height="40" justify="left" color="200,220,120" font_size="20" text="{occstate}" foregroundlayer="true"/>
                 <label name="close" depth="10" pos="40,-660" width="820" justify="left" color="60,160,60" font_size="18" text="PRESS ESC TO CLOSE" foregroundlayer="true"/>
@@ -213,6 +499,29 @@
         </window>
     </append>
 
+
+    <!-- ==============================================================
+         THE DUTY MANAGER'S NOTE (OstrichChallenge v1.38.0)
+
+         WHY THIS WINDOW EXISTS AT ALL. Reading the note used to raise vanilla's message box,
+         which is ONE shared window, 1200x400, whose text label carries overflow="shrinkcontent".
+         A long note therefore rendered small, and the only way to enlarge it was to enlarge the
+         template, which would have enlarged every quit prompt, delete confirmation and network
+         error in the game. Fril: "Id like the custom one." The full investigation, including two
+         wrong answers on the way, is at the top of HandoverNote.cs.
+
+         GEOMETRY IS THE ESC WINDOW'S, DELIBERATELY. Same 1200x910 frame art, same core rect at
+         -560,445, same sign plate at 328,2, same body inset of 98 with width 924. That is not
+         laziness: those numbers were measured off Fril's frame art in v1.29.1 and the margins are
+         already correct for it, so the note sits in the hotel's own stationery rather than a grey
+         system dialog, and nothing has to be re-measured.
+
+         The body is CENTRED where the ESC pages are left aligned, because the note's own artwork
+         is centred and this is the same piece of paper.
+
+         NO CONTROLLER. One text_key and some literals, which is localisation, not bindings.
+         Closed with Esc, exactly like the terminal, and it says so at the bottom.
+         ============================================================== -->
     <append xpath="/windows">
         <window name="windowOstrichNote" depth="10" width="1200" height="910" pos="0,-42"
                 anchor="CenterCenter" cursor_area="true"
@@ -228,17 +537,43 @@
                          color="255,255,255,255"
                          texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_sign.png"/>
 
+                <!-- THE BODY STARTS AT -210, NOT THE ESC PAGES' -265, because there is no tab
+                     strip to clear. That is 55px of extra room and it is all needed.
+
+                     FONT 28 IS MEASURED, NOT PICKED. The ESC job page is the known-good
+                     reference: 653 characters over 4 paragraphs renders about 9 lines plus 3
+                     gaps in a 924 wide box at font 30, which implies roughly 71 characters a
+                     line and 37px a line. The note is shorter at 493 characters but has SIX
+                     paragraphs, so its five blank lines cost more than its text saves: about 10
+                     text lines plus 5 gaps, 15 in all. That is 555px at font 30 against roughly
+                     615 available, which leaves nothing for the footer. At 28 it is about 518px
+                     and the footer fits.
+
+                     THE DIAL IS font_size ON THIS LABEL. If it clips, drop it. If there is a
+                     band of empty paper under the signature, raise it.
+
+                     v1.38.1: 28 -> 32, MEASURED IN GAME THIS TIME. The v1.38.0 screenshot showed
+                     a clear band of empty paper below the signature, so the estimate above was
+                     conservative: the five paragraph gaps cost less than the 37px a line the ESC
+                     reference implied. Fril: "We can up the font on the next update." 545px is
+                     still the ceiling, since the rule sits at -555. -->
                 <rect name="body" pos="0,-210" width="1100" height="640">
                     <label name="text" depth="10" pos="98,-5" width="924" height="545"
                            justify="center" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="32"
                            text_key="occHandoverNoteBody" foregroundlayer="true"/>
 
+                    <!-- A row of dashes rather than a sprite, for the reason recorded on the
+                         terminal in v0.60.1: ui_game_header_fill has a minimum height and drew a
+                         thick bar when asked for a hairline. -->
                     <label name="rule" depth="10" pos="98,-555" width="924" justify="center"
                            color="[occBrassColor]" font_size="22"
                            text="------------------------------------------------"
                            foregroundlayer="true"/>
 
+                    <!-- ONE FOOTER LINE, NOT TWO, and it is worded carefully. Esc closes THIS
+                         window; the briefing is on the Esc menu after that. Two separate lines
+                         saying "press ESC" for two different outcomes would be a puzzle. -->
                     <label name="pointer" depth="10" pos="98,-585" width="924" justify="center"
                            color="[occBrassColor]" font_size="24"
                            text="Press ESC to close. The job, him and the way out are on the ESC menu."
@@ -248,6 +583,27 @@
         </window>
     </append>
 
+
+    <!-- ==============================================================
+         THE END-OF-SHIFT WINDOW (OstrichChallenge v1.94.0)
+
+         Fril, having seen v1.93.0 in game: "Id like this to be the same as the esc window and
+         the handover note window." v1.93.0 used vanilla's XUiC_TipWindow, which is what the
+         Hospital Challenge uses and is right for the Hospital. It is wrong here, because this
+         mod already has the hotel's own frame and uses it twice. A grey system dialog in the
+         middle of that is the same mistake the handover note itself fixed in v1.38.0.
+
+         GEOMETRY IS THE NOTE'S, WHICH IS THE ESC WINDOW'S. Same 1200x910 frame art, same core
+         rect at -560,445, same sign plate at 328,2, same body inset of 98 with width 924. Those
+         numbers were measured off Fril's frame art in v1.29.1 and the margins are already right
+         for it, so nothing is re-measured here. Body centred, like the note, because this is
+         the same piece of paper.
+
+         IT HAS A CONTROLLER WHERE THE NOTE DELIBERATELY DOES NOT. The note is one text_key and
+         some literals. This has to show the register figure and the run stats, which are only
+         true at the moment it opens. See XUiC_OccupancyFailed.cs for the layout arithmetic and
+         for why the stats are in two columns of four rather than one column of eight.
+         ============================================================== -->
     <append xpath="/windows">
         <window name="windowOstrichFailed" depth="10" width="1200" height="910" pos="0,-42"
                 anchor="CenterCenter" cursor_area="true"
@@ -264,23 +620,79 @@
                          color="255,255,255,255"
                          texture="@modfolder(OstrichChallenge):Resources/ostrich_esc_sign.png"/>
 
+                <!-- Body starts at -210 like the note, for the same reason: no tab strip to
+                     clear. 545px of usable height before the rule at -555. -->
                 <rect name="body" pos="0,-210" width="1100" height="640">
 
+                    <!-- FONT 30, NOT THE NOTE'S 32. The note went to 32 because it had a band of
+                         empty paper under the signature. This window has no spare room: the
+                         narrative, the register line and eight stat rows come to about 493px of
+                         the 545 available at font 30, and 32 would overflow it. The arithmetic
+                         is in XUiC_OccupancyFailed.cs. -->
                     <label name="text" depth="10" pos="98,-5" width="924" height="270"
                            justify="center" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="30"
                            text="{occfailedbody}" foregroundlayer="true"/>
 
+                    <!-- The register in brass, because it is the number the whole challenge is
+                         about and it should not read as one stat among eight. -->
                     <label name="register" depth="10" pos="98,-210" width="924" height="40"
                            justify="center" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occBrassColor]" font_size="30"
                            text="{occfailedregister}" foregroundlayer="true"/>
 
+                    <!-- v1.216.0: the kill tally's total, in brass beside the register for the
+                         same reason the register is in brass. See the twin block on
+                         windowOstrichCompleted for the measurement that paid for it. -->
                     <label name="registertotal" depth="10" pos="98,-250" width="924" height="40"
                            justify="center" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occBrassColor]" font_size="30"
                            text="{occfailedtotal}" foregroundlayer="true"/>
 
+                    <!-- TWO COLUMNS OF FOUR. One column of eight is 288px against the 160px this
+                         costs, and it would not fit. XUiC_OccupancyRegister splits its floor
+                         list the same way and for the same recorded reason: a label shrinks text
+                         to fit rather than clipping, so an over-long column comes out tiny.
+
+                         v1.95.0: FOUR LABELS, NOT TWO, AND THE BLOCK IS CENTRED.
+                         Fril, having seen v1.94.1: "the list below 'The register stood at' needs
+                         centralising."
+
+                         v1.94.0 used two left-justified labels 452 wide holding rows built as
+                         {label,-16}{value}. Two things were wrong with that and only one of them
+                         was the one he reported:
+
+                           1. THE TEXT DID NOT FILL THE LABELS. The longest row is about 20
+                              characters, roughly 225px at font 26, inside a 452px box. Each
+                              column's text hugged its own left edge, so the visible block was far
+                              narrower than the pair of boxes and sat left of the window's centre.
+
+                           2. THE VALUES DID NOT LINE UP. {label,-16} pads with SPACES, which only
+                              aligns in a monospaced font. In the screenshot "Time 0d 0h",
+                              "Level 1" and "Guests killed 0" all start their value at a different
+                              x. He did not mention this, it is visible in his screenshot, and it
+                              is the same root cause, so it is fixed here rather than left.
+
+                         A label per column of labels and a label per column of values. Labels are
+                         right-justified and values left-justified, so each pair meets at a fixed
+                         gutter and the values form a true column. Nothing is padded with spaces.
+
+                         CENTRED ON 560, which is the centre of the body text above it (that label
+                         runs 98 to 1022), NOT on the rect's own centre of 550. Matching the body
+                         matters more than matching the box. The block runs 170 to 950.
+
+                         v1.216.0: THREE COLUMNS OF FIVE, FOUR AND THREE, AND THE BLOCK HAS MOVED
+                         UP TO -300. Twelve rows where there were eight. The font stays 26 and the
+                         spacing stays double, because Fril asked for both and asked that nothing
+                         be dropped; the room came from the 131 units of dead space above the
+                         register, measured off his completion screenshot. The full measurement is
+                         recorded once, on windowOstrichCompleted below, rather than twice.
+
+                         LEFT and RIGHT keep their names as the outer columns. MID is new. A
+                         rename would read to check_configs as a deleted element. The block now
+                         runs 90 to 1030, which still centres on 560. -->
+
+                    <!-- column one: the tally -->
                     <label name="statsleftlabels" depth="10" pos="90,-300" width="210" height="250"
                            justify="right" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
@@ -291,6 +703,7 @@
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
                            text="{occfailedleftvalues}" foregroundlayer="true"/>
 
+                    <!-- column two: the run -->
                     <label name="statsmidlabels" depth="10" pos="440,-300" width="150" height="250"
                            justify="right" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
@@ -301,6 +714,7 @@
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
                            text="{occfailedmidvalues}" foregroundlayer="true"/>
 
+                    <!-- column three: the state he was in -->
                     <label name="statsrightlabels" depth="10" pos="750,-300" width="170" height="250"
                            justify="right" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
@@ -311,6 +725,9 @@
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
                            text="{occfailedrightvalues}" foregroundlayer="true"/>
 
+                    <!-- Dashes rather than a sprite, for the reason recorded on the terminal in
+                         v0.60.1: ui_game_header_fill has a minimum height and drew a thick bar
+                         when asked for a hairline. -->
                     <label name="rule" depth="10" pos="98,-555" width="924" justify="center"
                            color="[occBrassColor]" font_size="22"
                            text="------------------------------------------------"
@@ -325,6 +742,25 @@
         </window>
     </append>
 
+    <!-- ==============================================================
+         THE ENDING WINDOW (v1.116.0)
+
+         GEOMETRY IS windowOstrichFailed's, WHICH IS THE NOTE'S, WHICH IS THE ESC WINDOW'S.
+         Same 1200x910 frame art, same core rect at -560,445, same sign plate at 328,2, same
+         body inset of 98 with width 924, same font 30 body and font 26 stats in two columns of
+         four. Those numbers were measured off Fril's frame art in v1.29.1 and the full
+         arithmetic, and the reasons for every one of these choices, are recorded on
+         windowOstrichFailed above and in XUiC_OccupancyFailed.cs. They are not repeated here,
+         and this window is deliberately identical to it so the two screens cannot drift apart.
+
+         WHAT DIFFERS IS THE WORDS AND THREE OF THE FIGURES. See XUiC_OccupancyCompleted.cs:
+         the register line reads as a score rather than an accusation, zero gets its own line
+         because emptying the hotel is the actual challenge, and the level shown is the one the
+         run finished on rather than the one it started on.
+
+         IT IS OPENED LAST, NOT FIRST. Completed.ShowWhenDone waits out the 23.8s of
+         occEnding_01 and its final caption before this appears.
+         ============================================================== -->
     <append xpath="/windows">
         <window name="windowOstrichCompleted" depth="10" width="1200" height="910" pos="0,-42"
                 anchor="CenterCenter" cursor_area="true"
@@ -348,11 +784,53 @@
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="30"
                            text="{occcompletedbody}" foregroundlayer="true"/>
 
+                    <!-- v1.216.0: BRASS MOVED UP INTO DEAD SPACE.
+                         Measured off Fril's own completion screenshot at native resolution rather
+                         than trusting the arithmetic in XUiC_OccupancyFailed's header, which was
+                         known to be conservative (see the note's font going 28 to 32 in v1.38.1
+                         for the same reason). Scale is 1.26 screen pixels to the game unit, agreed
+                         two ways off the register-to-rule and rule-to-pointer gaps. A double
+                         spaced stat row costs 52 units. The band between "Your shift is over." and
+                         the register measured 131 units: two and a half rows of nothing.
+
+                         v1.217.0: AND THE REGISTER LINE IS GONE FROM THIS WINDOW. Fril, shown that
+                         "You left 17 guests behind" was the 5am snapshot on a run he had actually
+                         emptied the hotel on: "Then dont put it on the end screen. You left 17
+                         looks wrong."
+
+                         It is removed rather than recounted because BOTH branches of it were
+                         unsafe, not just the one he saw. Occupancy.LastTotal is the last roll
+                         call, so a non-zero figure can accuse a man who finished the job, and a
+                         zero can congratulate one who did not. The nil line went with it. The
+                         window is one brass line now, and it is the tally's total, which is
+                         computed at the moment it is read and cannot go stale.
+
+                         THE DEATH SCREEN KEEPS ITS REGISTER LINE AND THAT IS DELIBERATE, NOT
+                         DRIFT. "The register stood at 17 guests" is past tense about the register
+                         and stays true whenever it is read. "You left 17 guests behind" was a
+                         claim about the moment he walked out, and that is the one the snapshot
+                         cannot support. See XUiC_OccupancyCompleted.cs. -->
                     <label name="registertotal" depth="10" pos="98,-210" width="924" height="40"
                            justify="center" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occBrassColor]" font_size="30"
                            text="{occcompletedtotal}" foregroundlayer="true"/>
 
+                    <!-- THREE COLUMNS OF FIVE, FOUR AND THREE. Twelve rows where there were eight,
+                         at the same font 26 and the same double spacing, because Fril asked for
+                         both to be kept and for nothing to be dropped.
+
+                         LEFT and RIGHT keep their names and their meaning as the outer columns so
+                         nothing vanishes from this file; MID is the new one. check_configs
+                         inventories elements by name and a rename reads to it as a deletion.
+
+                         WIDTHS. Longest label per column at font 26, measured off the screenshot
+                         at roughly 9.3 units a character: "Not on the register" 19 chars, "He
+                         detonated" 12, "Worst infection" 15. Label boxes are 210, 150 and 170 with
+                         a 20 gutter to each value box. The block runs 90 to 1030, which centres on
+                         560, the same centre as the body label above it (98 to 1022). That
+                         matching was the point of v1.95.0 and it still holds. -->
+
+                    <!-- column one: the tally -->
                     <label name="statsleftlabels" depth="10" pos="90,-300" width="210" height="250"
                            justify="right" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
@@ -363,6 +841,7 @@
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
                            text="{occcompletedleftvalues}" foregroundlayer="true"/>
 
+                    <!-- column two: the run -->
                     <label name="statsmidlabels" depth="10" pos="440,-300" width="150" height="250"
                            justify="right" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
@@ -373,6 +852,7 @@
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
                            text="{occcompletedmidvalues}" foregroundlayer="true"/>
 
+                    <!-- column three: the state he was in -->
                     <label name="statsrightlabels" depth="10" pos="750,-300" width="170" height="250"
                            justify="right" effect="Outline8" effect_color="0,0,0,255"
                            effect_distance="1,1" color="[occPageBodyColor]" font_size="26"
@@ -397,6 +877,29 @@
         </window>
     </append>
 
+
+    <!-- ==============================================================
+         THE MOD VERSION ON THE HUD (v1.24.0)
+
+         Sits under the game's own "V 3.2.0 (b10)" in the top right corner, so you can see which
+         build is loaded without opening the console or asking.
+
+         WHY A NEW WINDOW AND NOT AN APPEND TO AN EXISTING ONE. The game's version text is an NGUI
+         prefab, not XUi, so there is no label here to append to (see XUiC_OstrichVersion.cs for
+         the disassembly). Of the always-open XUi HUD windows, vanilla anchors windowCompass,
+         windowEntering and windowTargetBar to Top, windowToolbelt to Bottom, HUDLeftStatBars to
+         BottomLeft and HUDRightStatBars to BottomRight. The only TopRight one was windowLocation,
+         and this mod removes that outright further up this file. So nothing suitable is left and
+         we add our own.
+
+         Registered into the always-open "toolbelt" window group in xui.xml.
+
+         POSITION IS A FIRST PASS. The NGUI version label's exact pixel position is not knowable
+         from the XML, so this is eyeballed to sit one line below it. Nudge pos: first number is
+         distance from the right edge (more negative moves it left), second is distance down from
+         the top (more negative moves it down). pos x plus width should stay near -10 so the right
+         edges line up.
+         ============================================================== -->
     <append xpath="/windows">
         <window name="windowOstrichVersion" anchor="TopRight" pos="-310,-34" width="300" height="24" depth="-20">
             <label name="ostrichVersionLabel"
@@ -415,7 +918,111 @@
         </window>
     </append>
 
+    <!-- ==============================================================
+         THE CHALLENGES TAB IS HIDDEN (v1.90.1)
+
+         There are no challenges in this mod and there are not going to be. Fril, 7 Oct, on the
+         four that were agreed on 23 September: "Im second guessing these again as to whether we
+         ned them". They were dropped: the ESC register already reports the count per floor off
+         the 5am snapshot, the morning report prints a line every day, the HUD box shows the
+         floor, and the laptop is the only place the finale is stated.
+
+         WHY THE TAB HAD TO BE HIDDEN RATHER THAN LEFT TO SORT ITSELF OUT. Config/challenges.xml
+         replaces vanilla's whole /challenges tree with one empty category, and the comment there
+         said that was so "the challenge window has something to show rather than nothing at all".
+         It does not. Fril's screenshot of the live window shows SIXTY blank grey boxes and a help
+         panel telling the player to redeem rewards "at any trader", in a mod with one trader who
+         ends the run. An empty window reads as broken rather than absent.
+
+         The button is vanilla's own, in windowPagingHeader, carrying
+         visible="{is_challenge_enabled}". That binding resolves in
+         XUiController.GetBindingValueInternal to ChallengeJournal.AllowChallenges, and the
+         screenshot proves it is TRUE even with our category empty, so removing the category
+         would not have hidden anything.
+
+         Setting visible to false is the mechanism the bar is built for rather than a hack:
+         vanilla already hides Map and Creative on the same attribute ({is_map_enabled} and
+         {is_creative}).
+
+         NOT A SUBSTITUTE FOR THE SANDBOX OPTION. Picking "No Challenges" in Sandbox Options also
+         hides the tab AND stops the challenge system running at all. This line is here because
+         that option is the player's to change and this one is not. Both is the goal: fold
+         ChallengesEnabled into the preset codes in occupancy_presets.xml next time they are
+         regenerated, which that file's own notes already say is overdue.
+
+         AND IT DOES NOT TOUCH FRILIOTH, checked rather than assumed. Every method that reads or
+         writes ChallengeJournal.AllowChallenges is in the Challenge, ChallengeCategory and
+         ChallengeJournal family plus the XUi binding. No EntityTrader, no dialog type, no quest
+         journal. He is reached through dialog_id="trader", which is separate machinery.
+
+         WHEN THE FRILIOTH ENDING WINDOW IS BUILT it must NOT be wired as a vanilla challenge
+         completion, or turning challenges off would break the ending. The run tracks its own
+         state through RunState and Finale, and the ending calls RunStats.StampEnd, which is what
+         the "occ run complete" stand-in already does.
+         ============================================================== -->
     <set xpath="/windows/window[@name='windowPagingHeader']/iconbutton[@name='Challenges']/@visible">false</set>
+
+    <!-- ==============================================================
+         v1.107.0: THE SUBTITLE PANEL IS BACK TO VANILLA, DELIBERATELY.
+
+         v1.104.0 to v1.106.0 grew this window to twelve lines and 230 pixels because a whole
+         broadcast, up to 390 characters, had to fit on screen at once. It never looked right:
+         a one-line caption sat in a tall empty box, and because this window is SHARED with the
+         vanilla traders their subtitles were dragged along with it.
+
+         Radio.cs now feeds the panel two lines at a time in step with the voice, so the wall of
+         text is gone and vanilla's own two-line geometry is the correct size again. Every <set>
+         that was here has been removed rather than tuned. Jen and Bob get their font back.
+
+         If a radio subtitle ever clips again, the fix is Radio.SubtitleChunkChars, not this
+         window.
+         ============================================================== -->
+
+    <!-- ==============================================================
+         v1.226.0: THE HOW TO PLAY PAGE, AND ITS BUTTON ON THE ESC MENU
+
+         Fril, after confusing himself at his own reception terminal: "If players are ever
+         confused about what they should be doing the answer needs to be on that button."
+
+         VANILLA FURNITURE, NOT THE HOTEL'S. This mod already has an art deco four-tab page on
+         the ESC menu and I proposed matching it. Fril: "This tab should not look like the
+         ostrich tab that you see when you press escape. It should be the same format as the
+         mods button we added to frilsMods." So this is copied from FrilModList's window, which
+         was itself copied from vanilla's sandboxOptions: 1260x800, headerbg, boxbg, and the
+         centring rule below.
+
+         THE CENTRING RULE. With anchor="center" the position is the offset to the window's
+         TOP-LEFT corner, not to its middle. Vanilla writes pos="-630,400" for a 1260x800
+         window: minus half the width, plus half the height. FrilModList v1.0.0 got this wrong
+         and the window hung off to one side.
+
+         WHY insertBefore btnOpenConsole AND NOT insertAfter btnTpPoi. Fril wants this button
+         UNDER the Mods button. FrilModList inserts btnMods after btnTpPoi; XML patches apply in
+         mod load order and folders load alphabetically, so FrilModList patches first and ours
+         inserted at the same anchor would land ABOVE Mods. Inserting after btnMods would get
+         the order right and make the Ostrich's own help page depend on another mod being
+         installed, which is not acceptable. btnOpenConsole is the next vanilla entry after
+         btnTpPoi and is always declared, since its `visible` attribute hides it rather than
+         removing it. Inserting before it puts ours last among the unconditional buttons:
+         directly under Mods when FrilModList is there, directly under Teleport to POI when it
+         is not. One xpath, no dependency. The full reasoning is in Guide.cs.
+
+         ELEVEN HEADERS DOWN THE LEFT. Fril: "On the window that opens there should also be
+         buttons containing the main headers with the text on the right so there isnt a wall of
+         text for people to read." 11 x 50 is 550, which clears the 714 of usable height.
+
+         The captions come from bindings rather than literals so the titles live in one place,
+         Guide.Titles, and the window cannot drift from the content.
+
+         v1.226.3: pause_game="true" REMOVED FROM THIS WINDOW. It was copied off sandboxOptions
+         in v1.226.0 and it never did anything. It is not a window attribute: it occurs exactly
+         once in all of vanilla's XML, on that one window, and it is a custom attribute of that
+         one controller. The ESC menu pauses, opening this window closed the menu and unpaused,
+         and nothing paused it again, so a player reading the page was stood in the world. The
+         pause is now done where vanilla does it, in the controller's OnOpen and OnClose. See
+         XUiC_OstrichGuide.cs. XUiC_OstrichGuide serves
+         ostrichguidehead0 to ostrichguidehead10 by parsing the index off the binding name.
+         ============================================================== -->
 
     <insertBefore xpath="//window[@name='ingameMenu']/grid[@name='buttons']/simplebutton[@name='btnOpenConsole']">
         <simplebutton name="btnOstrichGuide" depth="3" width="250" height="46" caption_key="xuiOstrichGuideButton" font_size="34" />
@@ -434,6 +1041,7 @@
             <rect name="content" pos="0,-46" height="${parentinnerheight-46}" depth="1" padding="20">
                 <boxbg />
 
+                <!-- The contents column. One button per header, 50 apart. -->
                 <rect name="headers" pos="0,0" width="300" height="${parentinnerheight}" depth="2">
                     <rect name="btnOstrichGuide0"  pos="0,0"    width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead0}"  /></rect>
                     <rect name="btnOstrichGuide1"  pos="0,-50"  width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead1}"  /></rect>
@@ -448,9 +1056,26 @@
                     <rect name="btnOstrichGuide10" pos="0,-500" width="290" height="46"><simplebutton name="b" depth="3" width="290" height="46" font_size="22" caption="{ostrichguidehead10}" /></rect>
                 </rect>
 
+                <!-- The reading pane. -->
                 <label name="guideTitle" depth="2" pos="320,-2" width="890" height="40"
                        text="{ostrichguidetitle}" font_size="32" pivot="topleft" />
 
+                <!-- v1.226.2: LITERAL WIDTHS IN HERE, AND THAT IS NOT LAZINESS.
+                     v1.226.0 wrote width="${parentwidth-10}" on the label and 3.4 logged
+                       ERR [XUi] Template parameter 'parentwidth' undefined
+                     followed by a failed conversion of "" to Int32, so the label had no width
+                     at all. parentwidth is not defined for a child of a scrollview.
+                     FrilModList's window, which this was copied from, uses literal widths on
+                     its labels for exactly this reason and I copied the structure without
+                     copying that.
+                     The second, quieter bug fixed at the same time: the scrollview read
+                     ${parentinnerwidth-330-10-20}, but its parent is guideBody and not content,
+                     so the 330 was being subtracted a second time and the pane came out at 530
+                     instead of 860. It parsed, so nothing complained.
+                     The arithmetic, once, here: the window is 1260 wide, content pads 20 a side
+                     so its inner width is 1220, the contents column takes the first 320, which
+                     leaves 890 for guideBody, 860 inside it once the scrollbar and margin are
+                     taken, and 850 for the text. -->
                 <rect name="guideBody" pos="320,-50" width="890" height="${parentinnerheight-50}"
                       depth="2" on_scroll="true" gamepad_selectable="true" snap="false" use_selection_box="true">
                     <defaultscrollbar />

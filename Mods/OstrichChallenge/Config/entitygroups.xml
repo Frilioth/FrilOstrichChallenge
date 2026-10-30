@@ -1,6 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- OstrichChallenge: NO ZOMBIE BEARS, NO BEARS, NO DIRE WOLVES
 
+     Fril: "Rears both normal and zombie must be removed from the Wasteland with dire wolves,
+     we do this in hospital."
+
+     ================================================================================
+     HE WAS RIGHT AND I WAS WRONG, TWICE OVER. THIS IS HIS CODE, NOT MINE.
+     ================================================================================
+     v1.15.1 of this file was my own work, written after reading the Hospital DEVLOG and
+     finding the removal listed as an open TBD in two places (lines 503 and 1197, neither
+     struck through). I told Fril the Hospital had never done it.
+
+     Fril: "Ive played and seen played Hospital in the wasteland many times and Ive never seen
+     a direwolf or zombie bear. As far as I was concerned they had been removed."
+
+     He then sent the Hospital's actual entitygroups.xml and the three lines below are in it,
+     verbatim. THE HOSPITAL DEVLOG IS OUT OF DATE; the change shipped and the TBD was never
+     struck through. His memory of his own mod beat the document about it, and it beat my
+     reading of that document.
+
+     THE LESSON, and it is the inverse of the one I wrote last night: "check the artefact, not
+     the memory" is only half a rule. A devlog IS a memory, just a written one, and a stale
+     entry reads exactly like a current one. The artefact that settles a question about what
+     CODE does is the CODE. I had the devlog and treated it as the artefact.
+
+     ================================================================================
+     WHY HIS THREE LINES ARE BETTER THAN MY FIVE
+     ================================================================================
+     v1.15.1 zeroed five @p attributes across the three Wasteland-named groups. This removes
+     the entries outright, everywhere in the game, and it is better in three ways:
+
+       GLOBAL         Every group, not just the wasteland. That catches the seventy-plus
+                      feralHordeStageGS* groups carrying animalDireWolf at 0.1, which my
+                      version left alone and flagged as an open question. It also catches
+                      ZombiesDowntown, ZombiesForestDowntown, EnemyAnimalsSnow and the rest.
+
+       SELF-GROUPS    The not() guards keep the dedicated single-animal groups intact:
+                      animalZombieBear, ZombieBearsGroup, animalDireWolf, animalBear,
+                      animalBearSmall, BearGroup, BearSmallGroup. Anything that deliberately
+                      spawns one — a quest, an SVS script, a console spawn — still works.
+                      Only the mixed pools lose them.
+
+       animalBear     My version wrote nothing for the normal bear because it appears in no
+                      Wasteland group. Fril asked for it and his line covers it wherever it
+                      is, which is the request rather than my narrowing of it.
+
+     His file also records the bug behind the exact @n matching: the old form used
+     contains(text(), 'animalBear'), which also caught animalBearSmall.
+
+     ================================================================================
+     THE COMPANION PATCH IS NOT OPTIONAL
+     ================================================================================
+     EnemyAnimalsWastelandNight is dire wolf 20, zombie bear 20, none 60. Removing both
+     animals leaves a group whose only entry is "none", and EntityGroups.IsEnemyGroup ends
+
+         return EntityClass.list[list[0].entityClassId].bIsEnemyEntity;
+
+     with no guard on that lookup. It null-checks the list and checks Count >= 1, so an EMPTY
+     group is safe, but a group holding only "none" has Count 1 and an unresolvable class id,
+     and EntityClass.list[-1] returns null. That throws every tick.
+
+     That is why the Hospital also ships HospitalIsEnemyGroupPatch, and why this mod now ships
+     the same guard as EntityGroups_IsEnemyGroup_Patch in Animals.cs. The two pieces go
+     together: DO NOT take these three lines without it.
+-->
 <configs>
+
+    <!-- =====================================================================
+         ANIMAL REMOVALS — copied from the Hospital's entitygroups.xml, unchanged.
+         Exact @n matching; the group-name guards keep the dedicated
+         single-animal groups working.
+    ===================================================================== -->
 
     <remove xpath="//entitygroup[not(@name='animalZombieBear') and not(@name='ZombieBearsGroup')]/e[@n='animalZombieBear']"/>
     <remove xpath="//entitygroup[not(@name='animalDireWolf')]/e[@n='animalDireWolf']"/>

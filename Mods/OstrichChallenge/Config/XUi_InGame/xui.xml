@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - XUi
 
+    THE REGISTER ON THE ESC SCREEN. Technique from AuroraGiggleFairy's AGF-ESCWindow: the vanilla
+    serverinfowindow group is already wired to the ESC menu's Server Info slot, so a window
+    appended into it inherits a working hook with no code and no controller registration.
+    Re-declaring the group by name MERGES into it, so vanilla's own window survives.
+-->
 <configs>
 
     <append xpath="/xui">
@@ -9,24 +16,63 @@
         <window_group name="occupancyTerminal" controller="OccupancyRegister, OstrichChallenge">
             <window name="windowOccupancyTerminal"/>
         </window_group>
-        
+        <!-- v1.38.0: THE HANDOVER NOTE. Its own group, opened from HandoverNote.Show the same
+             way Laptop.Show opens the terminal, and closed with Esc.
+
+             NO CONTROLLER, deliberately, and for the same reason the ESC pages lost theirs in
+             v0.85.0: the window is literal text and one text_key lookup, which is the
+             localisation system rather than a binding. There is nothing for a controller to
+             serve. -->
         <window_group name="occupancyNote">
             <window name="windowOstrichNote"/>
         </window_group>
-        
+        <!-- v1.94.0: THE END-OF-SHIFT WINDOW. Its own group, opened from Failed.ShowNow the same
+             way HandoverNote.Show opens the note, and closed with Esc.
+
+             IT HAS A CONTROLLER where occupancyNote does not, because the register figure and
+             the run stats only exist at the moment it opens. The note is literal text; this is
+             bindings. See XUiC_OccupancyFailed.cs. -->
         <window_group name="occupancyFailed">
             <window name="windowOstrichFailed"/>
         </window_group>
-        
+        <!-- v1.116.0: THE ENDING WINDOW. The twin of occupancyFailed, opened from
+             Completed.ShowNow once occEnding_01 has finished playing rather than the moment the
+             run completes, because the voice is the ending and a stats panel over the top of it
+             would be the mod congratulating itself while a man is talking.
+
+             IT HAS A CONTROLLER for the same reason the failure window does: the register figure
+             and the run stats only exist at the moment it opens. See XUiC_OccupancyCompleted.cs. -->
         <window_group name="occupancyCompleted">
             <window name="windowOstrichCompleted"/>
         </window_group>
-        
+        <!-- v1.226.0: THE HOW TO PLAY PAGE, opened by the ESC menu button and closed with Esc.
+
+             IT HAS A CONTROLLER, declared on the WINDOW and not here. A group-level controller
+             serves the group, and the bindings this page needs are read by labels and buttons
+             inside the window, so declaring it on the window is what gives them an instance that
+             resolves where they actually live. The same note is on FrilModList's xui.xml and the
+             Ostrich learned it first. -->
         <window_group name="ostrichGuide">
             <window name="windowOstrichGuide"/>
         </window_group>
     </append>
 
+    <!-- ==============================================================
+         THE MOD VERSION ON THE HUD (v1.24.0)
+
+         windowOstrichVersion has to live in a window group that is already open during normal
+         play, or it never gets shown. The "toolbelt" group is that group. Vanilla puts seven
+         windows in it (windowToolbelt, HUDLeftStatBars, HUDRightStatBars, windowLocation,
+         windowQuestTracker, windowRecipeTracker, windowGroupBars) and it is open whenever the
+         player is in the world.
+
+         This appends straight into the existing group by xpath rather than re-declaring the
+         group by name and relying on merge semantics, so there is nothing to get wrong.
+
+         NOTE the group still lists windowLocation even though this mod removes that window from
+         windows.xml. A group tolerates a window that no longer exists, which is why the mod has
+         shipped that way since v1.1.5.
+         ============================================================== -->
     <append xpath="/xui/window_group[@name='toolbelt']">
         <window name="windowOstrichVersion"/>
     </append>

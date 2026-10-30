@@ -1,29 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Loading Screen Tips
 
+    Ported from the Hospital Challenge's Localization.csv "# LOADING SCREEN TIPS" section, which
+    is where this pattern already works. Fril, 8 Oct 2026: "Id also like to add the rotating
+    Loading Screen tips ... and the (# UI & MENU - SPAWN / RESPAWN SCREEN) that we have in the
+    Hospital localisation.csv. Obviously tailored to this challenge."
+
+    HOW THE GAME READS THIS, verified against the vanilla 3.3 loadingscreen.xml and
+    Localization.csv rather than assumed:
+
+      - vanilla loadingscreen.xml holds <backgrounds> and <tips>, and each tip is a bare
+        <tip key="..." /> under /doc/tips. Nothing else. There is no weighting and no ordering.
+      - the key names the BODY string, and the same key plus "_title" names the heading. Vanilla
+        carries 41 tip keys and 41 matching _title keys, which is how the pairing was confirmed.
+        Only 40 of them are in the rotation: loadingTipJournalEntries is commented out in
+        vanilla's own loadingscreen.xml, so "41 tips" would have been wrong.
+      - so tips need no DLL at all. FrilOstrichRotateLoadingscreens rotates the BACKGROUND IMAGES
+        and has nothing to do with this file.
+
+    v1.92.2: THIS REPLACES THE LIST, IT NO LONGER APPENDS TO IT.
+
+    v1.92.0 appended, leaving vanilla's 40 active tips in the rotation alongside these 15. Fril, 8 Oct
+    2026: "Im seeing vanilla loading screen tips as well as ours". The remove below strips every
+    tip vanilla ships before ours go in, so the rotation is the hotel's own and nothing else.
+
+    That is also the right answer on the merits, not just the requested one. Several vanilla tips
+    are flatly untrue here, because the ESC guide says "There is nobody to trade with in here and
+    nothing to build your way out with": loadingTipQuestSharing, loadingTipTwitchIntegration, loadingTipSeeds,
+    loadingTipApiary, loadingTipDewCollector and loadingTipCollectors among them.
+
+    TWO THINGS THIS RELIES ON, BOTH READ OUT OF THE 3.3 IL RATHER THAN ASSUMED:
+
+      - XmlPatchMethods.RemoveByXPath calls GetXpathResults, foreaches the result set, and per
+        match calls XNode.AddAfterSelf (an XComment marking the removal) then XNode.Remove.
+        So ONE remove with a multi-match xpath removes EVERY match. "/doc/tips/tip" takes all 40.
+      - XmlPatcher.PatchXml foreaches XContainer.Elements() and calls singlePatch per element,
+        and Elements() yields in document order. So patches inside one file apply top to bottom.
+
+    THE ORDER OF THE TWO PATCHES BELOW THEREFORE MATTERS: the remove must come first. Reversed,
+    it would strip our own tips along with vanilla's and leave an empty rotation.
+
+    TO PUT ANY VANILLA TIP BACK, delete the remove and list the ones you want kept individually,
+    or add the single key back in the append block. Nothing is lost: vanilla's own
+    loadingscreen.xml is untouched on disk and this file only patches it at load.
+-->
 <configs>
 
+    <!-- Every tip vanilla ships. Matches all <tip> children of /doc/tips, not one key. -->
     <remove xpath="/doc/tips/tip" />
 
     <append xpath="/doc/tips">
 
-        <tip key="ostrichLoadingTip01" />   
-        <tip key="ostrichLoadingTip02" />   
-        <tip key="ostrichLoadingTip03" />   
+        <!-- The job -->
+        <tip key="ostrichLoadingTip01" />   <!-- The Register            -->
+        <tip key="ostrichLoadingTip02" />   <!-- The Bell                -->
+        <tip key="ostrichLoadingTip03" />   <!-- Work Downwards          -->
 
-        <tip key="ostrichLoadingTip04" />   
-        <tip key="ostrichLoadingTip05" />   
-        <tip key="ostrichLoadingTip06" />   
-        <tip key="ostrichLoadingTip07" />   
+        <!-- Him -->
+        <tip key="ostrichLoadingTip04" />   <!-- He Hunts By Sound       -->
+        <tip key="ostrichLoadingTip05" />   <!-- Quiet Is Not Safe       -->
+        <tip key="ostrichLoadingTip06" />   <!-- He Learns the Building  -->
+        <tip key="ostrichLoadingTip07" />   <!-- He Gets Back Up         -->
 
-        <tip key="ostrichLoadingTip08" />   
-        <tip key="ostrichLoadingTip09" />   
-        <tip key="ostrichLoadingTip14" />   
+        <!-- The way out -->
+        <tip key="ostrichLoadingTip08" />   <!-- He Has the Key          -->
+        <tip key="ostrichLoadingTip09" />   <!-- Zero, Then the Window   -->
+        <tip key="ostrichLoadingTip14" />   <!-- The City Is Not a Way Out -->
 
-        <tip key="ostrichLoadingTip10" />   
-        <tip key="ostrichLoadingTip11" />   
-        <tip key="ostrichLoadingTip12" />   
-        <tip key="ostrichLoadingTip13" />   
-        <tip key="ostrichLoadingTip15" />   
+        <!-- Living in the building -->
+        <tip key="ostrichLoadingTip10" />   <!-- Nothing Is Coming       -->
+        <tip key="ostrichLoadingTip11" />   <!-- The Radio               -->
+        <tip key="ostrichLoadingTip12" />   <!-- Rooms Refill            -->
+        <tip key="ostrichLoadingTip13" />   <!-- Fifteen Floors          -->
+        <tip key="ostrichLoadingTip15" />   <!-- Your Kit                -->
 
     </append>
 

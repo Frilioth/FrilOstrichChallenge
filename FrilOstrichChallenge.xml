@@ -19,6 +19,7 @@
 
                 FEATURES:
 
+                TEN MAPS, five with the city and five without. The No City set is the same five maps with every building removed except the hotel and the bunker, for machines that struggle with a full city. The hotel, the stalker and the challenge are identical on both; you only lose the skyline. Pick whichever you want on the New Game screen.
                 A fourteen floor hotel, plus a ground floor, a basement and a roof, every room of it occupied.
                 A nightly check-in system. Guests walk in through the doors, report to reception and take the rooms you clear.
                 A stalker that hunts you by sound, hears through floors, and cannot be killed until the hotel is empty.
@@ -41,7 +42,7 @@
                 Twitch: twitch.tv/frilioth
             </Description>
 
-            <Version>1.226.3</Version>
+            <Version>1.228.0</Version>
             <EAC>Disabled</EAC>
             <Discord></Discord>
             <Donate></Donate>

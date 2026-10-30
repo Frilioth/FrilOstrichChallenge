@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OstrichChallenge - Challenges
 
+    NO VANILLA TUTORIAL. Replacing the whole /challenges tree is how Area 7 does it, and it takes
+    the lot with it: the tutorial challenge in the corner of the screen and the Duke's note it
+    tells you to read. A security guard who has worked here for years does not need telling how
+    to open a window.
+
+    What is left is one empty category, so the challenge window has something to show rather than
+    nothing at all. The hotel's own challenges go in here when there are any: guests cleared, the
+    armoury opened, the register at zero, the drive out.
+-->
 <configs>
 
     <set xpath="/challenges">

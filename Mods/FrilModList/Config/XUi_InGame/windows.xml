@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    FrilModList - XUi windows
 
+    TWO CHANGES, both into vanilla's own in-game menu file.
+
+    1. A "Mods" button in the ESC menu's left-hand column.
+
+       Vanilla declares that column as a plain vertical grid inside <window name="ingameMenu">,
+       so the button is one more <simplebutton> in the same grid with the same depth, width,
+       height and font_size as its neighbours.
+
+       INSERTED AFTER btnTpPoi, NOT APPENDED, and that is deliberate. The last two entries in
+       vanilla's list, btnOpenConsole and btnBugReport, both carry a `visible` condition, so
+       appending would put ours after two buttons that are usually hidden. btnTpPoi is the last
+       unconditional one.
+
+    2. The window the button opens.
+
+       v1.1.0: REBUILT ON VANILLA'S OWN FURNITURE. Fril: "the window is off. It needs moving
+       into the centre and as its a standalone mod can we use the same format as vanilla does.
+       The sandbox window is image 2 for reference." v1.0.0 was a hand-drawn green terminal
+       panel borrowed from the Ostrich's register, which suits a diegetic hotel screen and does
+       not suit a utility window sitting next to Options and Sandbox Options.
+
+       Copied from <window name="sandboxOptions"> rather than approximated:
+
+         - the same 1260x800, so the two sit identically when you flick between them
+         - <headerbg /> and a label with style="header.name" for the title bar
+         - a content rect at pos 0,-46 with <boxbg /> and padding 20
+         - a scrollview holding three 390-wide columns at x 0, 400 and 800, font_size 28
+         - vanilla's own colour convention for the text, see the controller
+
+       THE CENTRING RULE, which is what was actually wrong. With anchor="center" the position
+       is the offset to the window's TOP-LEFT corner, not to its middle. Vanilla writes
+       pos="-630,400" for a 1260x800 window: minus half the width, plus half the height. Get
+       that wrong and the window hangs off to one side, which is exactly what v1.0.0 did.
+
+       v1.5.1: pause_game="true" REMOVED. The note here used to say it "matches sandboxOptions",
+       and it matched the spelling and nothing else. It is NOT a window attribute: it occurs once
+       in all of vanilla's XML, on that one window, and it is a custom attribute of that one
+       controller. So this window never paused anything. The ESC menu pauses, opening this closed
+       the menu and unpaused, and a player reading the list was stood in the world. The pause is
+       now done in the controller's OnOpen and OnClose, where vanilla does it.
+-->
 <configs>
 
     <insertAfter xpath="//window[@name='ingameMenu']/grid[@name='buttons']/simplebutton[@name='btnTpPoi']">

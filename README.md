@@ -47,11 +47,25 @@ When the hotel reads zero you can shut the doors, and for the next twenty four h
 
 ---
 
+## The maps
+
+Ten maps ship with the mod and you pick one on the New Game screen.
+
+**Ostrich Challenge (1. Forest)** through **(5. Wasteland)** are the full maps, city and all.
+
+**Ostrich Challenge (No City 1. Forest)** through **(No City 5. Wasteland)** are those same five maps with every building removed except the Ostrich and the bunker.
+
+The No City set is there for machines that struggle with the city. The hotel, the stalker and the challenge itself are identical, you only lose the skyline. On the machines it has been tested on it roughly doubles the frame rate.
+
+---
+
 ## Installing
 
 1. Disable **Easy Anti-Cheat**. This mod uses Harmony and will not run with EAC on.
-2. Drop the `OstrichChallenge` folder into your `Mods` folder.
+2. Drop **every** folder from the download into your `Mods` folder.
 3. Start a new game and pick one of the six Ostrich presets on the New Game screen.
+
+`OstrichChallenge` is the challenge itself and carries all ten maps. The rest are small supporting mods that come with it: the menu logo and videos, the loading screens, the weather and ragdoll fixes, the mod list button, and an optional no-scroll backpack that stays off until you turn it on in the backpack window. The challenge is built and tested with all of them present.
 
 Set your sandbox options before you start.
 

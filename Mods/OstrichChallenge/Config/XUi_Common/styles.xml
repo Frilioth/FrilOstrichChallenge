@@ -1,5 +1,6 @@
 <Frils-HUD>
 
+<!--Add outline to text-->
 	<append xpath="styles">
 		<style name="Outlined_Text" type="label">
 			<style_entry name="crispness" value="OnDesktop" />

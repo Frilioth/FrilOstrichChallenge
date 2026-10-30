@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<prefabs>
+  <decoration type="model" name="Ostrich_Hotel_2" position="-41,42,-41" rotation="1" y_is_groundlevel="true" />
+  <decoration type="model" name="Frils_Bunker" position="-1156,38,-1313" rotation="0" y_is_groundlevel="true" />
+</prefabs>
