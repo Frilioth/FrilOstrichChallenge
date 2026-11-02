@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<prefab>
+  <property name="CopyAirBlocks" value="True" />
+  <property name="ExcludeDistantPOIMesh" value="False" />
+  <property name="ExcludePOICulling" value="False" />
+  <property name="DistantPOIYOffset" value="0" />
+  <property name="AllowDecorations" value="True" />
+  <property name="DifficultyTier" value="0" />
+  <property name="ShowQuestClearCount" value="1" />
+  <property name="TraderArea" value="False" />
+  <property name="YOffset" value="-9" />
+  <property name="PrefabSize" value="60, 112, 60" />
+  <property name="RotationToFaceNorth" value="2" />
+  <property name="Zoning" value="none" />
+  <property class="IndexedBlockOffsets">
+    <property class="quest_wood_trees">
+      <property name="0" value="55, 6, 42" />
+    </property>
+    <property class="quest_wood">
+      <property name="0" value="37, 7, 13" />
+      <property name="1" value="38, 7, 13" />
+    </property>
+    <property class="challenge_sinks">
+      <property name="0" value="40, 9, 31" />
+      <property name="1" value="37, 9, 33" />
+      <property name="2" value="38, 9, 33" />
+      <property name="3" value="39, 87, 35" />
+      <property name="4" value="42, 15, 35" />
+      <property name="5" value="42, 20, 35" />
+      <property name="6" value="42, 25, 35" />
+      <property name="7" value="42, 30, 35" />
+      <property name="8" value="42, 35, 35" />
+      <property name="9" value="42, 40, 35" />
+      <property name="10" value="42, 45, 35" />
+      <property name="11" value="42, 50, 35" />
+      <property name="12" value="42, 55, 35" />
+      <property name="13" value="42, 60, 35" />
+      <property name="14" value="42, 65, 35" />
+      <property name="15" value="42, 70, 35" />
+      <property name="16" value="42, 75, 35" />
+      <property name="17" value="42, 80, 35" />
+      <property name="18" value="37, 15, 39" />
+      <property name="19" value="37, 20, 39" />
+      <property name="20" value="37, 25, 39" />
+      <property name="21" value="37, 30, 39" />
+      <property name="22" value="37, 35, 39" />
+      <property name="23" value="37, 40, 39" />
+      <property name="24" value="37, 45, 39" />
+      <property name="25" value="37, 50, 39" />
+      <property name="26" value="37, 55, 39" />
+      <property name="27" value="37, 60, 39" />
+      <property name="28" value="37, 65, 39" />
+      <property name="29" value="37, 70, 39" />
+      <property name="30" value="37, 75, 39" />
+      <property name="31" value="37, 80, 39" />
+      <property name="32" value="38, 16, 40" />
+      <property name="33" value="38, 21, 40" />
+      <property name="34" value="38, 26, 40" />
+      <property name="35" value="38, 31, 40" />
+      <property name="36" value="38, 36, 40" />
+      <property name="37" value="38, 41, 40" />
+      <property name="38" value="38, 46, 40" />
+      <property name="39" value="38, 51, 40" />
+      <property name="40" value="38, 56, 40" />
+      <property name="41" value="38, 61, 40" />
+      <property name="42" value="38, 66, 40" />
+      <property name="43" value="38, 71, 40" />
+      <property name="44" value="38, 76, 40" />
+      <property name="45" value="38, 81, 40" />
+      <property name="46" value="40, 16, 40" />
+      <property name="47" value="40, 21, 40" />
+      <property name="48" value="40, 26, 40" />
+      <property name="49" value="40, 31, 40" />
+      <property name="50" value="40, 36, 40" />
+      <property name="51" value="40, 41, 40" />
+      <property name="52" value="40, 46, 40" />
+      <property name="53" value="40, 51, 40" />
+      <property name="54" value="40, 56, 40" />
+      <property name="55" value="40, 61, 40" />
+      <property name="56" value="40, 66, 40" />
+      <property name="57" value="40, 71, 40" />
+      <property name="58" value="40, 76, 40" />
+      <property name="59" value="40, 81, 40" />
+      <property name="60" value="40, 15, 42" />
+      <property name="61" value="40, 20, 42" />
+      <property name="62" value="40, 25, 42" />
+      <property name="63" value="40, 30, 42" />
+      <property name="64" value="40, 35, 42" />
+      <property name="65" value="40, 40, 42" />
+      <property name="66" value="40, 45, 42" />
+      <property name="67" value="40, 50, 42" />
+      <property name="68" value="40, 55, 42" />
+      <property name="69" value="40, 60, 42" />
+      <property name="70" value="40, 65, 42" />
+      <property name="71" value="40, 70, 42" />
+      <property name="72" value="40, 75, 42" />
+      <property name="73" value="40, 80, 42" />
+      <property name="74" value="44, 7, 42" />
+    </property>
+    <property class="quest_feather">
+      <property name="0" value="22, 13, 14" />
+    </property>
+    <property class="POILight">
+      <property name="0" value="46, 111, 19" />
+      <property name="1" value="46, 7, 29" />
+    </property>
+    <property class="challenge_polymers">
+      <property name="0" value="50, 6, 22" />
+    </property>
+    <property class="TraderOnOff">
+      <property name="0" value="46, 6, 21" />
+      <property name="1" value="46, 6, 22" />
+      <property name="2" value="46, 6, 23" />
+    </property>
+    <property class="challenge_gore">
+      <property name="0" value="40, 80, 37" />
+      <property name="1" value="35, 80, 41" />
+    </property>
+    <property class="challenge_leather">
+      <property name="0" value="42, 80, 38" />
+    </property>
+    <property class="challenge_mech_parts">
+      <property name="0" value="39, 86, 25" />
+    </property>
+    <property class="challenge_steel">
+      <property name="0" value="38, 25, 35" />
+      <property name="1" value="38, 35, 35" />
+      <property name="2" value="38, 45, 35" />
+      <property name="3" value="38, 55, 35" />
+      <property name="4" value="38, 65, 35" />
+      <property name="5" value="38, 75, 35" />
+    </property>
+    <property class="challenge_cars">
+      <property name="0" value="54, 6, 15" />
+    </property>
+    <property class="challenge_pallet">
+      <property name="0" value="44, 6, 43" />
+    </property>
+  </property>
+  <property class="Stats">
+    <property name="LightsVolume" value="57266.7" />
+    <property name="TotalVertices" value="4888334" />
+    <property name="TotalTriangles" value="1978099" />
+    <property class="BlockEntities">
+      <property name="Vertices" value="3993777" />
+      <property name="Triangles" value="1477694" />
+    </property>
+    <property class="ChunkMeshes0">
+      <property name="Vertices" value="870095" />
+      <property name="Triangles" value="474209" />
+    </property>
+    <property class="ChunkMeshes1">
+      <property name="Vertices" value="3840" />
+      <property name="Triangles" value="1920" />
+    </property>
+    <property class="ChunkMeshes2">
+      <property name="Vertices" value="7956" />
+      <property name="Triangles" value="3976" />
+    </property>
+    <property class="ChunkMeshes3">
+      <property name="Vertices" value="936" />
+      <property name="Triangles" value="468" />
+    </property>
+    <property class="ChunkMeshes4">
+      <property name="Vertices" value="0" />
+      <property name="Triangles" value="0" />
+    </property>
+    <property class="ChunkMeshes5">
+      <property name="Vertices" value="11730" />
+      <property name="Triangles" value="19832" />
+    </property>
+  </property>
+</prefab>
