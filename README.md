@@ -73,7 +73,7 @@ Set your sandbox options before you start.
 
 ## Compatibility
 
-Built and tested against **V3.3.0 (b18)** and **V3.4.0 (b6)**.
+Built and tested against **V3.3.0 (b18)** and **V3.4.0 (b10)**.
 
 A world started on 3.3 loads on 3.4.
 

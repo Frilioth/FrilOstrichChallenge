@@ -3,7 +3,7 @@
     <ServerGroup Name="The Ostrich Challenge" Logo="" Description="You are the night security guard at a fourteen floor hotel that is full of sleeping guests, and something in the basement is hunting you.">
         <Server Name="The Ostrich Challenge" Logo="">
             <Description>
-                The Ostrich Challenge — A self-contained survival challenge mod for 7 Days to Die (V3.3 and V3.4)
+                The Ostrich Challenge — A self-contained survival challenge mod for 7 Days to Die V3.4
 
                 You are the night security guard at the Ostrich. Every room above the ground floor holds sleeping guests, and more arrive all night to take any room you have emptied. Your job is to empty the hotel completely, and then deal with the thing in the basement.
 
@@ -42,7 +42,7 @@
                 Twitch: twitch.tv/frilioth
             </Description>
 
-            <Version>1.228.0</Version>
+            <Version>1.232.0</Version>
             <EAC>Disabled</EAC>
             <Discord></Discord>
             <Donate></Donate>
