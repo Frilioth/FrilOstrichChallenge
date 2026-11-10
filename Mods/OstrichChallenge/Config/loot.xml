@@ -271,6 +271,62 @@
          distribution of the money is untouched and only the denomination changes. Appending
          casinoCoin entries alongside would have doubled the drops instead of converting them.
          ============================================================ -->
+    <!-- ============================================================
+         DUKES DOUBLED IN WORLD LOOT (v1.233.0)
+
+         Fril, 10 Nov 2026: "Can you double the amount of dukes that are available in loot and
+         bag drops too".
+
+         TWO THINGS ABOUT THIS BLOCK ARE LOAD BEARING. Both were found by simulating the patch
+         against 3.4's own loot.xml before it was written, not reasoned about afterwards.
+
+         1. IT MUST STAY ABOVE THE oldCash -> casinoCoin RENAME BELOW.
+            These rules target oldCash, which at this point in the file only ever means VANILLA's
+            entries. The mod's own bag groups further down are written as casinoCoin from the
+            start and their counts are doubled where they are declared, so world loot and bags
+            are each doubled exactly once. Below the rename these rules would have to say
+            casinoCoin, which would catch the bags too and quadruple them. Simulated: moved
+            below, they match nothing at all and the world loot silently stays single.
+
+         2. THE ORDER OF THE FIFTEEN LINES IS NOT ARBITRARY, DO NOT SORT THEM.
+            Each rule matches on the count as it stands when the rule runs, so one rule's OUTPUT
+            can be the next rule's INPUT. Two values collide that way in 3.4:
+                100,200 -> 200,400   and 200,400 is itself an input
+                25,100  -> 50,200    and 50,200  is itself an input
+            Written in the obvious order, 100,200 became 200,400 and then 400,800, and 25,100
+            became 50,200 and then 100,400. Eight of the thirty entries came out QUADRUPLED. The
+            fix is that a rule which CONSUMES a value runs before the rule that PRODUCES it, so
+            200,400 and 50,200 are handled before 100,200 and 25,100. Proved by replaying all
+            fifteen rules over all thirty entries: every one ends exactly doubled.
+
+         WHY FIFTEEN LINES AND NOT THIRTY. 3.4 has 30 oldCash entries and only 15 distinct count
+         values between them, so one rule per value covers the lot, and a new vanilla entry
+         reusing an existing value is doubled for free.
+
+         ONLY THE COUNT CHANGES. Every loot_prob_template and quality template is untouched, so
+         Dukes turn up exactly as often as before and there are simply twice as many when they
+         do. Fril asked for the amount, not the frequency.
+
+         IF THE GAME UPDATES, RE-CHECK THIS. New or changed vanilla count values will not be
+         covered, and a new value that collides with an output here could reintroduce the
+         quadrupling. tools/check_configs.py will not catch that; only replaying it will.
+         ============================================================ -->
+    <setattribute xpath="//item[@name='oldCash'][@count='100,500']" name="count">200,1000</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='200,400']" name="count">400,800</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='100,200']" name="count">200,400</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='50,200']" name="count">100,400</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='25,100']" name="count">50,200</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='400,600']" name="count">800,1200</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='5,10']" name="count">10,20</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='5,20']" name="count">10,40</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='1,10']" name="count">2,20</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='1,20']" name="count">2,40</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='10,300']" name="count">20,600</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='100']" name="count">200</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='300,800']" name="count">600,1600</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='5,60']" name="count">10,120</setattribute>
+    <setattribute xpath="//item[@name='oldCash'][@count='600,800']" name="count">1200,1600</setattribute>
+
     <setattribute xpath="//item[@name='oldCash']" name="name">casinoCoin</setattribute>
 
     <!-- ============================================================
@@ -342,7 +398,7 @@
 
         <!-- The ordinary guest. A weekend bag: money, something to eat, something to drink. -->
         <lootgroup name="groupOccBagHoldall" count="all">
-            <item name="casinoCoin" count="25,90"/>
+            <item name="casinoCoin" count="50,180"/>
             <item name="foodCanChili" count="1" loot_prob_template="medLow" force_prob="true"/>
             <item name="foodCanPeas" count="1" loot_prob_template="medLow" force_prob="true"/>
             <item name="drinkJarPureMineralWater" count="1,2" loot_prob_template="med" force_prob="true"/>
@@ -352,7 +408,7 @@
 
         <!-- The businessman. A briefcase: more money, paperwork, a drink for the room. -->
         <lootgroup name="groupOccBagBriefcase" count="all">
-            <item name="casinoCoin" count="60,180"/>
+            <item name="casinoCoin" count="120,360"/>
             <item name="resourcePaper" count="3,8" loot_prob_template="medHigh" force_prob="true"/>
             <item name="drinkJarBeer" count="1" loot_prob_template="medLow" force_prob="true"/>
             <item name="drinkJarCoffee" count="1" loot_prob_template="medLow" force_prob="true"/>
@@ -361,7 +417,7 @@
 
         <!-- The party girl. A handbag: cash, painkillers, something to keep going on. -->
         <lootgroup name="groupOccBagHandbag" count="all">
-            <item name="casinoCoin" count="40,140"/>
+            <item name="casinoCoin" count="80,280"/>
             <item name="drugPainkillers" count="1,2" loot_prob_template="med" force_prob="true"/>
             <item name="drinkCanMegaCrush" count="1" loot_prob_template="medLow" force_prob="true"/>
             <item name="medicalBandage" count="1,2" loot_prob_template="medLow" force_prob="true"/>
@@ -370,7 +426,7 @@
 
         <!-- Janitor and utility worker. Staff, not guests, but they still had their kit on them. -->
         <lootgroup name="groupOccBagToolbag" count="all">
-            <item name="casinoCoin" count="15,50"/>
+            <item name="casinoCoin" count="30,100"/>
             <item name="resourceDuctTape" count="1,3" loot_prob_template="med" force_prob="true"/>
             <item name="resourceMechanicalParts" count="1,4" loot_prob_template="med" force_prob="true"/>
             <item name="resourceElectricParts" count="1,4" loot_prob_template="med" force_prob="true"/>
@@ -380,7 +436,7 @@
 
         <!-- The nurse. The one bag worth going out of your way for. -->
         <lootgroup name="groupOccBagMedkit" count="all">
-            <item name="casinoCoin" count="20,60"/>
+            <item name="casinoCoin" count="40,120"/>
             <item name="medicalFirstAidBandage" count="1,2" loot_prob_template="medHigh" force_prob="true"/>
             <item name="medicalBandage" count="2,4" loot_prob_template="med" force_prob="true"/>
             <item name="drugPainkillers" count="1,2" loot_prob_template="medLow" force_prob="true"/>
@@ -408,7 +464,7 @@
              and a bag that hands out ammo for a gun the player cannot have yet is just
              inventory clutter. -->
         <lootgroup name="groupOccBagWeapons" count="all">
-            <item name="casinoCoin" count="20,70"/>
+            <item name="casinoCoin" count="40,140"/>
             <item name="ammo9mmBulletBall" count="15,40" loot_prob_template="medHigh" force_prob="true"/>
             <item name="ammo762mmBulletBall" count="5,10" loot_prob_template="med" force_prob="true"/>
             <item name="ammoShotgunShell" count="6,16" loot_prob_template="medLow" force_prob="true"/>
