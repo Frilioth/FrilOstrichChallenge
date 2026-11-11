@@ -82,24 +82,85 @@
 
     <!-- ============================================================
          VENDING MACHINE REPAIR KIT
-         Workbench only, and craftable from the start: a security guard putting the staff soda
-         machine back together is a day one job, not something he needs to read a book about.
 
-         Costed against what ONE broken machine gives up when wrenched, which is electrical
-         parts 2-6, mechanical parts 2-4, forged steel 2-3 and springs 1-3, plus iron and
-         polymers we deliberately do not ask for. So three machines covers a kit on decent
-         rolls and four on poor ones, springs being the usual pinch point. Fril's numbers, and
-         deliberately not costed against the guaranteed minimums, because these parts salvage
-         from plenty of other things in the building.
+         v1.236.0: NOW GENUINELY CRAFTABLE FROM THE START, IN YOUR INVENTORY.
+
+         Fril, 11 Nov: "Change vending machine recipes to unlock from the start in your
+         inventory". He was right and the old comment below was wrong about its own recipe.
+
+         THE CONTRADICTION THAT WAS SITTING HERE. The note said "craftable from the start: a
+         security guard putting the staff soda machine back together is a day one job", and
+         then the recipe carried craft_area="workbench". A workbench is craftingWorkstations
+         level 10, so on day one this was not craftable at all. The intent was written down
+         and the attribute quietly disagreed with it.
+
+         WHAT CHANGED: craft_area="workbench" removed, nothing else. A recipe with no
+         craft_area is craftable in the backpack, which is 198 of vanilla's 642 recipes, so
+         this is the ordinary shape rather than a trick.
+
+         NOT LOCKED BEHIND ANYTHING, verified rather than assumed: this recipe has never had
+         an unlocked_by or a learnable flag, so the workbench was the ONLY gate on it. Taking
+         the workbench away is the whole of "unlock from the start".
+
+         craft_time stays at 30 seconds. It is NOT tagged packMuleCrafting, deliberately: that
+         tag only lets the Pack Mule perk cut crafting time by up to half, the mod's own
+         casinoCoin recipes do not carry it, and adding a perk interaction he did not ask for
+         would be a silent change. One word to add if he ever wants it.
+         ============================================================ -->
+    <!-- ============================================================
+         INGREDIENTS CHANGED IN v1.237.0, AND THIS IS WHAT FINISHES THE DAY ONE JOB.
+
+         Fril, 11 Nov: "Change the vending machine repair kit recipe to use forged iron, not
+         forged steel and replace Springs with Duct tape".
+
+             resourceForgedSteel 6  ->  resourceForgedIron 6
+             resourceSpring      5  ->  resourceDuctTape   5
+
+         Counts untouched, he did not ask for that.
+
+         WHY THIS MATTERS MORE THAN IT LOOKS. Removing craft_area="workbench" above took the
+         workbench off the recipe, but the INGREDIENTS were still gated far later than day one,
+         so "craftable from the start" was still only half true. Read out of vanilla's recipes:
+
+             resourceForgedSteel   craft_area="forge"  craft_tool="toolForgeCrucible"
+                                   The crucible is craftingWorkstations level 75 of 75.
+             resourceForgedIron    craft_area="forge", no tool. The forge is level 4.
+             resourceSpring        NO RECIPE AT ALL. Salvage only, and nothing else.
+             resourceDuctTape      no craft_area, so the backpack. 1 glue + 7 cloth.
+
+         So the old recipe asked for one thing you could not craft before level 75 and one thing
+         you could not craft at all. Both are now early or makeable, and the kit is genuinely a
+         day one job for the first time, which is what its comment has claimed since v1.13.x.
+
+         WHAT A WRENCHED MACHINE STILL GIVES, re-read from blocks.xml rather than carried over.
+         cntVendingMachine2Broken is the parent of all four POI machines and drops:
+
+             resourceElectricParts   2-6      asked for: 10
+             resourceMechanicalParts 2-4      asked for: 10
+             resourceForgedIron      1-3      asked for: 6     <- NEW pinch point
+             resourceForgedSteel     2-3      no longer asked for
+             resourceSpring          1-3      no longer asked for
+             resourceScrapPolymers   2-5      deliberately not asked for
+
+         SO THE SALVAGE MATHS BARELY MOVES, which is the point: forged iron is 1-3 a machine
+         where springs were 1-3, so three machines still covers a kit on decent rolls and four
+         on poor ones. The pinch point moves from springs to forged iron and stays about the
+         same size. Fril's original numbers survive intact.
+
+         DUCT TAPE IS THE ONE THING MACHINES DO NOT DROP, stated plainly rather than buried.
+         It has to be looted or made, and making 5 costs 5 glue and 35 cloth, with the glue
+         needing a campfire and a cooking pot (7 bones each, so 35 bones). Cloth is everywhere
+         in a hotel. This is a real cost but an early-game one, and unlike springs it is a cost
+         the player can CHOOSE to pay rather than wait for a drop.
 
          Vanilla caps a recipe at five ingredients, hence four and not the full six.
          ============================================================ -->
     <append xpath="/recipes">
-        <recipe name="occVendingRepairKit" count="1" craft_area="workbench" craft_time="30">
+        <recipe name="occVendingRepairKit" count="1" craft_time="30">
             <ingredient name="resourceElectricParts" count="10"/>
             <ingredient name="resourceMechanicalParts" count="10"/>
-            <ingredient name="resourceForgedSteel" count="6"/>
-            <ingredient name="resourceSpring" count="5"/>
+            <ingredient name="resourceForgedIron" count="6"/>
+            <ingredient name="resourceDuctTape" count="5"/>
         </recipe>
     </append>
 

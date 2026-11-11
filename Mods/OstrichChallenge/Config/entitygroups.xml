@@ -76,4 +76,105 @@
     <remove xpath="//entitygroup[not(@name='animalDireWolf')]/e[@n='animalDireWolf']"/>
     <remove xpath="//entitygroup[not(@name='animalBear') and not(@name='animalBearSmall') and not(@name='BearGroup') and not(@name='BearSmallGroup')]/e[@n='animalBear']"/>
 
+    <!-- =====================================================================
+         NO SCREAMERS, ANYWHERE (v1.235.0)
+
+         Fril, 11 Nov: "Can we remove all screamers from spawning in Hordes", and when told
+         they were already absent from every horde list vanilla ships: "Yes, gone from the
+         game. Remove them from the heat system and only keep regular zombies in that".
+
+         WHAT WAS CHECKED FIRST, because his first request was already true. Vanilla 3.4 has
+         1875 entitygroups. With comments stripped, exactly SEVEN contain a screamer: the
+         three ZombieScouts groups below and four single-entity self-groups. Every
+         feralHordeStageGS (322 of them), wanderingHordeStageGS (19), badassHordeStageGS (55),
+         sleeperHordeStageGS (322), defenseHordeStageGS (322) and policeCarHordeStageGS (55)
+         has none. TFP even commented the screamers out of scoutHordeStageGS, which is the
+         horde a screamer calls in. A first pass that counted commented-out lines said 124
+         groups and was wrong; the number is seven.
+
+         So the screamer only ever reaches the world through the chunk heat map, and these
+         three groups are the whole of it:
+
+             heat >= 25 on a chunk  ->  AIDirectorChunkEventComponent.SpawnScouts
+             gamestage  < 45  Scouts1        ->  ZombieScouts
+             gamestage  < 85  Scouts2        ->  ZombieScouts
+             gamestage  < 125 ScoutsFeral    ->  ZombieScoutsFeral
+             gamestage >= 125 ScoutsRadiated ->  ZombieScoutsRadiated
+
+         THE COMPANION PATCH IS NOT OPTIONAL, and this is the whole reason src/Scouts.cs
+         exists. There is no screamer in the game's CODE: one search of the entire assembly
+         for "Screamer" returns a single log string. The horde-calling is attached to the
+         SLOT, not to the zombie, and the scout chain never asks what kind of zombie it was
+         handed. Swapping these entries without the patch would give a regular zombie that
+         still summons a horde, with no scream and no distinctive model to warn you it is
+         happening: the tell lost and the horde kept. Scouts.cs refuses the horde call, and
+         vanilla's own branch then releases the zombie to carry on as an ordinary one.
+
+         DO NOT TAKE THESE LINES WITHOUT src/Scouts.cs.
+
+         ELEVEN REPLACEMENTS, TIERED TO MATCH WHAT THE SLOT USED TO SEND. The base eleven go
+         in ZombieScouts, their Feral twins in ZombieScoutsFeral and their Radiated twins in
+         ZombieScoutsRadiated, so a gamestage 150 scout is still a gamestage 150 problem. All
+         thirty-three class names were resolved against the game's own entityclasses.xml
+         before shipping, and none of them is on Fril's v1.15.0 exclusion list (Screamer,
+         FatCop, Chuck, Spider, PlagueSpitter, Rancher, Mutated) or is the stalker.
+
+         APPEND BEFORE REMOVE, deliberately. Each group holds exactly one entry, the screamer.
+         Removing first would leave it momentarily empty. EntityGroups.IsEnemyGroup does guard
+         an empty list (see the note above and Animals.cs), so this is belt and braces rather
+         than a known fault, but it costs nothing to never create the state.
+
+         THE SELF-GROUPS ARE LEFT ALONE ON PURPOSE, exactly as the animal removals above leave
+         animalZombieBear and the rest intact: zombieScreamer, zombieScreamerFeral,
+         zombieScreamerRadiated, zombieScreamerCharged and zombieScreamerInfernal still exist
+         and still hold her. Nothing spawns from them on its own, so a quest, an SVS script or
+         a console spawn still works. Screamers are gone from the game as it plays, not deleted
+         from it.
+    ===================================================================== -->
+
+    <append xpath="//entitygroup[@name='ZombieScouts']">
+        <e n="zombieArlene"/>
+        <e n="zombieBoe"/>
+        <e n="zombieDarlene"/>
+        <e n="zombieJoe"/>
+        <e n="zombieMarlene"/>
+        <e n="zombieSteve"/>
+        <e n="zombieYo"/>
+        <e n="zombieBusinessMan"/>
+        <e n="zombieNurse"/>
+        <e n="zombieUtilityWorker"/>
+        <e n="zombieTomClark"/>
+    </append>
+    <remove xpath="//entitygroup[@name='ZombieScouts']/e[@n='zombieScreamer']"/>
+
+    <append xpath="//entitygroup[@name='ZombieScoutsFeral']">
+        <e n="zombieArleneFeral"/>
+        <e n="zombieBoeFeral"/>
+        <e n="zombieDarleneFeral"/>
+        <e n="zombieJoeFeral"/>
+        <e n="zombieMarleneFeral"/>
+        <e n="zombieSteveFeral"/>
+        <e n="zombieYoFeral"/>
+        <e n="zombieBusinessManFeral"/>
+        <e n="zombieNurseFeral"/>
+        <e n="zombieUtilityWorkerFeral"/>
+        <e n="zombieTomClarkFeral"/>
+    </append>
+    <remove xpath="//entitygroup[@name='ZombieScoutsFeral']/e[@n='zombieScreamerFeral']"/>
+
+    <append xpath="//entitygroup[@name='ZombieScoutsRadiated']">
+        <e n="zombieArleneRadiated"/>
+        <e n="zombieBoeRadiated"/>
+        <e n="zombieDarleneRadiated"/>
+        <e n="zombieJoeRadiated"/>
+        <e n="zombieMarleneRadiated"/>
+        <e n="zombieSteveRadiated"/>
+        <e n="zombieYoRadiated"/>
+        <e n="zombieBusinessManRadiated"/>
+        <e n="zombieNurseRadiated"/>
+        <e n="zombieUtilityWorkerRadiated"/>
+        <e n="zombieTomClarkRadiated"/>
+    </append>
+    <remove xpath="//entitygroup[@name='ZombieScoutsRadiated']/e[@n='zombieScreamerRadiated']"/>
+
 </configs>

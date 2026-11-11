@@ -275,20 +275,66 @@
                      foodHoney      80 x 3 = 240 Dukes
                      occChocNAwe    80 x 3 = 240 Dukes
 
-                 Fril's number, and it is a third more than the chili for the same 15 food and
-                 7 health, so the whole difference is the silence.
+                 That was a third more than the chili for the same 15 food and 7 health, so the
+                 whole difference was the silence.
 
-                 IT IS LEVEL WITH THE HONEY, AND THAT IS WORTH KNOWING RATHER THAN HIDING. My
-                 v1.13.5 draft used 100 to sit the bar above the cure; Fril set it level instead.
-                 So a player with 240 Dukes in a hotel with an infection is choosing between the
-                 cure and a silent meal at exactly the same price, which is a sharper decision
-                 than the one I had built. The player starts with 200, so neither is the first
-                 thing they can afford.
+                 ================================================================================
+                 CUT TO 70 IN v1.236.0. Fril, 11 Nov: "reduce the chock and awe price please.
+                 Make it slightly more expensive than chili".
+                 ================================================================================
+
+                 His original brief still holds: "dont make it cheap. It needs to be more
+                 expensive than the chili". A premium stays, it is just a slight one now rather
+                 than a third:
+
+                     foodCanChili    60 x 3 = 180 Dukes
+                     occChocNAwe     70 x 3 = 210 Dukes     <- was 240
+                     foodHoney       80 x 3 = 240 Dukes
+
+                 30 Dukes over the chili, which reads as "the quiet one costs a bit more" rather
+                 than as a luxury. The arithmetic above (XUiM_Trader.GetBuyPrice, markup 3 on
+                 trader ids 4 and 10) is unchanged and was re-checked, not assumed.
+
+                 IT IS NO LONGER LEVEL WITH THE HONEY, and that is the real change in feel. At
+                 240 a player with exactly that much was choosing between the cure and a silent
+                 meal. At 210 the bar is the cheaper of the two, so the choice is no longer a
+                 straight swap: honey is now the thing you save up for.
+
+                 THE STARTING STAKE IS 200 DUKES, AND IT IS WHY THIS IS 70 AND NOT 65.
+
+                 WHERE IT COMES FROM, written down here because it is the number every price in
+                 this file is really set against, and because I could not find it on my own:
+
+                     Config/gameevents.xml
+                       <set xpath="/gameevents/action_sequence[@name='game_first_spawn']">
+                         <action class="SetItemSlots">  items_location="Toolbelt"
+                           ... casinoCoin ... slot 7, count 200
+
+                 Fril pointed at the file ("I think its in gameevents.xml") after I searched
+                 items, loot, recipes and the C# and reported it missing. It was never in any of
+                 those: the starting kit is a game EVENT, not an item or a loot table, which is
+                 why nothing I grepped found it. Check gameevents.xml first for anything about
+                 what the player begins a run holding.
+
+                 THE SAME EVENT ALSO HANDS OUT occChocNAwe x1 IN SLOT 9. So the first bar is
+                 free and this price only ever applies to the SECOND one. That matters more than
+                 the exact digit: nobody is deciding whether to try it, they are deciding whether
+                 to buy another.
+
+                 65 was drafted first, which would have been 195: just UNDER the stake, so a
+                 player could buy a silent meal before looting anything. That was put to Fril as
+                 a choice rather than slipped in, because it changes what is possible on the
+                 first visit to a machine rather than merely being cheaper. He chose 70.
+
+                 So at 210 the bar stays just ABOVE the opening 200, and the old note's
+                 observation holds: neither the bar nor the honey is the first thing you can
+                 afford. You have to loot something first. The premium shrank from 60 Dukes to
+                 30 without moving that line, which is the whole point of the number.
 
                  TO DIAL IT: the number below is the only knob, and the machine price is always
                  three times it. EconomicValue is global, so it also sets the sell price, which
                  is academic here because the hotel has no trader to sell to. -->
-            <property name="EconomicValue" value="80"/>
+            <property name="EconomicValue" value="70"/>
             <property name="CustomIcon" value="occChocNAwe"/>
             <property name="SoundPickup" value="drug_atomjunkies_grab"/>
             <property name="SoundPlace" value="drug_atomjunkies_place"/>

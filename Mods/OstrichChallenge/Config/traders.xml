@@ -90,6 +90,59 @@
     </append>
 
     <!-- ================================================================================
+         HONEY IN THE SNACK MACHINES TOO (v1.236.0)
+
+         Fril, 11 Nov: "Make Honey available in all vending machines and not just drinks ones".
+
+         WHERE IT WAS. The honey append at the top of this file puts it in groupDrinks, which
+         is the drinks machine (trader id 4) and nothing else. Vanilla itself puts honey in NO
+         vending machine at all: it lives in the `medicine` and `foodSupplies` trader groups,
+         which are proper traders, and the hotel has none. So "just the drinks ones" was this
+         mod's doing and this line is the other half of it.
+
+         WHERE IT GOES, and it is the Choc 'n' Awe reasoning above, unchanged. The snack
+         machine is trader id 10 and its chain is two links:
+
+             trader_info id=10  ->  <item group="foodVending" count="4,8"/>
+             foodVending        ->  <item group="cannedfood"/>
+
+         Appending to foodVending is the tidier-looking place and is the trap both notes above
+         describe: with count="4,8" drawn from a group that would then hold two entries, honey
+         turns up in every machine on every restock if the picker takes everything up to the
+         count rather than drawing with replacement. That behaviour still cannot be read out of
+         the XML, so this goes one level down with the other two.
+
+         THE RATE. Counted, not remembered, and the first count was WRONG: there are two groups
+         called cannedfood, a lootgroup in loot.xml holding 16 and this trader_item_group
+         holding 15. The xpath below targets the traders one. 15 vanilla tinned items plus
+         Choc 'n' Awe is 16, all at an implicit weight of 1.0, so honey makes 17: about 1 in 17
+         of each pick, 4 to 8 picks a restock, which is roughly one jar every second to fourth
+         restock per working snack machine. (The Choc 'n' Awe note above saying "one entry among
+         sixteen" is correct for the same reason: it was the sixteenth.) NO
+         prob attribute on purpose, because every other entry in this group carries none and a
+         0.5 here would make it the rarest thing in the machine for no stated reason. The
+         drinks machine keeps its own 0.5 and is untouched.
+
+         Across both machine types he now has appreciably more honey than before, which is the
+         request. TO DIAL IT DOWN: add prob="0.5" to the line below.
+
+         PRICE IS STILL THE GATE, exactly as the two notes above say. foodHoney is
+         EconomicValue 80 and trader 10 carries override_buy_markup="3", the same markup as
+         trader 4, so a jar is about 240 Dukes in either machine. Being able to FIND it and
+         being able to AFFORD it stay separate problems.
+
+         THE COST OF GOING ONE LEVEL DOWN, stated plainly as the others do: cannedfood is
+         referenced in four places in vanilla traders.xml, so honey becomes very slightly
+         likelier at a general trader too. The hotel has no traders and the player cannot
+         leave, so in this mod that is academic. It would matter if this file were reused.
+
+         Resolved against the real vanilla traders.xml before shipping.
+         ================================================================================ -->
+    <append xpath="/traders/trader_item_groups/trader_item_group[@name='cannedfood']">
+        <item name="foodHoney" count="1,2"/>
+    </append>
+
+    <!-- ================================================================================
          FRILIOTH'S OWN TRADER ENTRY, WITH NOTHING IN IT (v0.80.0)
 
          He is the end of the run, not a shop. The survivor drives across the city, finds him,
