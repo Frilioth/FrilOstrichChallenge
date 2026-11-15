@@ -201,6 +201,85 @@
     </append>
 
     <!-- ============================================================
+         OAK SAPLINGS IN THE POT PLANTS TOO (v1.243.0)
+
+         Fril, 12 Nov: "Maybe we need to add them back in, wood is finite and it runs out quick.
+         Trees can be planted on the roof."
+
+         THIS REVERSES A DECISION, SO HERE IS WHY IT IS NOT A FLIP-FLOP. v1.5.2 offered saplings
+         and he declined them, and the reason recorded at the time was "there is nowhere outdoors
+         to plant it here". That reason is simply wrong: the roof is outdoors. The decision was
+         sound given what was believed, and the belief was the faulty part.
+
+         ============================================================
+         VERIFIED BEFORE WRITING, because the whole idea rests on being able to plant one.
+         ============================================================
+
+         CAN A SAPLING GO ON A CONCRETE ROOF? Not directly, and that is not the end of it.
+         BlockPlantGrowing.CanGrowOn, read from the 3.4 assembly: if the plant's fertileLevel is
+         0 it grows anywhere; otherwise it reads the MATERIAL of the block BELOW and compares that
+         material's fertile_level. Fertility is a property of the material underneath, not of the
+         terrain and not of the plant.
+
+         treePlantedOak1m inherits fertileLevel 1 from treeMasterGrowing. The later stages want
+         more: 27m needs 3 and 41m needs 5. So a surface has to satisfy 5, not 1, for a tree to
+         reach full height.
+
+         farmPlotBlock is material Mfarmland, fertile_level 16. It clears every stage with room
+         to spare, and a farm plot can be laid on any surface. So: lay a plot on the roof, plant
+         the acorn in it, done. THIS IS THE ROUTE and it needs nothing built.
+
+         TREES DO NOT NEED LIGHT. treeMasterGrowing carries no LightLevelGrow or LightLevelStay,
+         unlike cropsGrowingMaster. Only fertility is checked, so this would work indoors too.
+         The roof is simply the pleasant way to do it.
+
+         FARM PLOTS ARE ALREADY CHEAP HERE. This mod already rewrites that recipe a few files
+         along: no rotting flesh, 16 nitrate and 16 clay. It still asks 4 wood, which matters
+         because the point of this change is that wood is scarce, but 4 is not a bootstrap
+         problem when a single harvest returns 30.
+
+         ============================================================
+         THE ECONOMY, read out of vanilla blocks.xml rather than assumed.
+         ============================================================
+
+             stage     wood on harvest     saplings on destroy
+             1m                      0     1  (itself back)
+             8m                     30     1
+             16m                    70     2
+             27m                   110     2
+             41m                   150     2
+
+         FROM 16m THE TREE PAYS BACK TWO SAPLINGS AS WELL AS THE WOOD. So one acorn is not one
+         tree, it is the end of wood being finite, which is exactly what he asked for.
+
+         SPEED. Every growth stage, crop or tree, uses GrowthRate 63 (cropsGrowingMaster and
+         treeMasterGrowing are the only two rates in the game above 1.5, and they are the same
+         number). GetTickRate is growthRate x CropGrowthModifier x 1200, so a tree stage costs
+         what a crop stage costs. One stage gets you to 8m and 30 wood; two gets you to 16m,
+         70 wood and a pair of saplings.
+
+         ============================================================
+
+         RARE ON PURPOSE, AND THIS DELIBERATELY DOES NOT COPY THE FIBRE DECISION ABOVE. Fibre
+         went from a 1-in-10 lottery to a reliable 2-6 because fibre is a consumable you need
+         constantly and a lottery made it a chore. A sapling is the opposite: you need ONE, once,
+         and after that the trees supply themselves. Finding one should be a moment, not a
+         rhythm. So this keeps Area 7's original 10%, which across fifteen floors of pot plants
+         will still turn several up.
+
+         IF IT READS TOO RARE IN PLAY, raise prob. The number is the only knob and nothing else
+         depends on it.
+
+         BOTH EVENTS, for the reason set out at length above: treePlant02 has a Destroy drop and
+         no Harvest drop, only one event resolves per break, and listing both means whichever one
+         the break resolves to pays out.
+         ============================================================ -->
+    <append xpath="/blocks/block[@name='treePlant02']">
+        <drop event="Harvest" name="treePlantedOak1m" count="1" prob="0.1"/>
+        <drop event="Destroy" name="treePlantedOak1m" count="1" prob="0.1"/>
+    </append>
+
+    <!-- ============================================================
          FIBRE FROM SCRAPPING THE POT PLANTS TOO (v1.13.2)
 
          Fril: "When I scrap primitive armor in my inventory it gives me back fibre. Id like the
