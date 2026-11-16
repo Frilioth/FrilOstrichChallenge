@@ -513,4 +513,38 @@
         <property name="Path" value="solid"/>
     </append>
 
+    <!-- ==================================================================
+         v1.244.0: A TREE GIVES BACK ONE SAPLING, NOT TWO.
+
+         Fril, 15 Nov: "next update trees only drop 1 sappling".
+
+         WHERE THE SAPLINGS ACTUALLY COME FROM, and this is the trap. They are on the
+         DESTROY event, not Harvest. Harvest pays wood only. Anyone who goes looking on
+         the Harvest line will find nothing and conclude the drop is somewhere else.
+
+         Vanilla 3.4 counts, read from the file rather than recalled:
+
+             treePlantedOak1m     1    already correct
+             treePlantedOak08m    1    already correct
+             treePlantedOak16m    2    changed below
+             treePlantedOak27m    2    changed below
+             treePlantedOak41m    2    changed below
+             treeOakLrg01         2    LEFT ALONE, see below
+
+         WHY treeOakLrg01 IS NOT IN THE LIST. treePlantedOak41m extends it, so it is
+         tempting to change the parent once instead of the child. Do not. treeOakLrg01 is
+         the WILD oak that grows all over the map, and editing it would change every tree
+         outside the hotel as well as the player's own. 41m carries its own drop line, so
+         setting that line directly reaches the planted tree and nothing else.
+
+         WHAT IT DOES TO THE ECONOMY v1.243.0 ADDED THE SAPLINGS FOR. A tree stops being
+         self-multiplying and becomes self-sustaining. You replant what you fell and the
+         wood still arrives, 30 at 8m rising to 150 at full height, but one acorn no
+         longer snowballs into a roof full of oaks. The wood problem stays solved. It
+         just stops compounding.
+         ================================================================== -->
+    <set xpath="/blocks/block[@name='treePlantedOak16m']/drop[@event='Destroy'][@name='treePlantedOak1m']/@count">1</set>
+    <set xpath="/blocks/block[@name='treePlantedOak27m']/drop[@event='Destroy'][@name='treePlantedOak1m']/@count">1</set>
+    <set xpath="/blocks/block[@name='treePlantedOak41m']/drop[@event='Destroy'][@name='treePlantedOak1m']/@count">1</set>
+
 </configs>
