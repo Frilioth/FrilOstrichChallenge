@@ -115,7 +115,14 @@
         </lootgroup>
     </insertbefore>
 
-    <!-- The armoury: a rifle, ammunition for it, and enough medicine to survive using it. -->
+    <!-- The armoury: a rifle, ammunition for it, and enough medicine to survive using it.
+
+         v1.250.0: THE REPAIR KIT IS NOT HERE. v1.249.0 put one in this chest and that was the
+         wrong place. Fril: "thats not what I asked for. I asked you to put a vending machine
+         repair kit in his loadout with his gun and knife. Not in the loot chest with the AK and
+         the ammo." It is now in the first-spawn loadout, see Config/gameevents.xml. Recorded here
+         so nobody adds it back on the strength of the v1.249.0 devlog entry.
+         -->
     <append xpath="//lootgroup[@name='groupHardenedChestT5']">
         <item group="occArmouryRifle" count="1"/>
         <item name="ammo762mmBulletBall" count="300"/>

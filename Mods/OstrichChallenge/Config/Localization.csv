@@ -177,7 +177,7 @@ ostrichLoadingTip08,UI,Loading Screen,x,,There is a 4x4 in the basement car park
 ostrichLoadingTip09_title,UI,Loading Screen,x,,"Zero, And Then The Window"
 ostrichLoadingTip09,UI,Loading Screen,x,,"He can be killed for good once a count of the register comes back zero. The laptop on the roof takes one automatically at 5am every morning, and it is not the only terminal in the building. Guests checking in during that day do not shut the window, but if any of them are still in the building at the next count it closes and you start again."
 ostrichLoadingTip10_title,UI,Loading Screen,x,,Nothing Is Coming
-ostrichLoadingTip10,UI,Loading Screen,x,,There is nobody to trade with in here and nothing to build your way out with. What you find in the hotel is what you have.
+ostrichLoadingTip10,UI,Loading Screen,x,,"No trader is coming, and there is nothing in here to build your way out with. The hotel's own vending machines are the only shop there is, the casino tokens you find are what they take, and a dead machine can be brought back if you find the parts for it."
 ostrichLoadingTip11_title,UI,Loading Screen,x,,The Radio
 ostrichLoadingTip11,UI,Loading Screen,x,,"The set picks up one broadcast a day and no more. He got out, he is a long way from here, and he has made it very clear he is not coming in after you."
 ostrichLoadingTip12_title,UI,Loading Screen,x,,Rooms Refill

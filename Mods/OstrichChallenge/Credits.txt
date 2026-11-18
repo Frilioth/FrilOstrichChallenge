@@ -1,0 +1,34 @@
+THE OSTRICH CHALLENGE - CREDITS
+===============================
+
+The Ostrich Challenge is by Frilioth.  https://frilcraft.uk
+
+
+AUDIO
+-----
+
+Footstep sounds for the stalker are adapted from "creature_or_zombie_footstep_11032026"
+by Artninja, https://freesound.org/s/878576/, licensed under CC BY 4.0,
+https://creativecommons.org/licenses/by/4.0/
+
+The original recording was modified for this mod: converted to mono, resampled to 48kHz,
+split into individual footfalls, trimmed, faded and normalised.
+
+Artninja's recording was itself built from these Creative Commons 0 sources:
+  "Foley_Impact_Stones_Strong_Debris_Stereo_DS.wav" by Nox_Sound, https://freesound.org/s/554148/
+  "footsteps boots heavy gravel ext.wav" by kyles, https://freesound.org/s/452629/
+  "Fat Kick" by dpren, https://freesound.org/s/248142/
+
+All other audio in this mod, including the radio broadcasts, is Frilioth's own.
+
+
+BUNDLED MODS
+------------
+
+Frils-HUD is bundled with this mod and is also by Frilioth.
+
+
+THIRD PARTY
+-----------
+
+The Ostrich Challenge runs alongside 7 Days to Die by The Fun Pimps, and uses Harmony.

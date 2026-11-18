@@ -1136,4 +1136,57 @@
          ================================================================================ -->
     <set xpath="/entity_classes/entity_class[@name='zombieDemolition']/property[@class='Explosion']/property[@name='BlockDamage']/@value">500</set>
 
+    <!-- ============================================================================
+         v1.252.0: HE WALKS LIKE SOMETHING ELSE. Frantic_Dan's third idea, 16 Nov, and Fril's
+         answer at the time: "Changing his footsteps so theyre distinctive is a good idea and
+         maybe increase the volume slightly. Bears are removed from the mod so there should be
+         no confusion."
+
+         THE PROBLEM, WHICH IS REAL AND MEASURABLE. zombieDemolition declares SoundStepType
+         "heavystep" on itself, and so do FOUR ordinary zombies:
+
+             zombieChuck, zombieFatHawaiian, zombieBowler, zombieFatCop
+
+         All five walk with the same feet. In a building whose whole tension is listening for
+         him, the one thing you must not mistake for a fat zombie sounds exactly like one.
+
+         THE SWAP. animalhvystep, which in vanilla belongs to animalBear and animalZombieBear.
+         Both are removed from this mod, so nothing else in the hotel can produce it and it
+         becomes his signature by elimination.
+
+         CHECKED ACROSS ALL 17 SURFACES RATHER THAN SPOT-CHECKED ON ONE, because a missing
+         surface would make him SILENT on it, which would be far worse than sounding ordinary:
+
+             - both sets define all 17 surfaces, so there is no gap
+             - the Noise value is IDENTICAL on every one of the 17, so this changes nothing
+               mechanical at all
+             - every animalhvystep node uses AudioSource_FootstepsLG where heavystep uses
+               AudioSource_Footsteps, and heavysteptrash uses AudioSource_DecoTrash
+             - the pitch range is wider and lower where it counts indoors: stone and wood go
+               from 0.9-1.0 to 0.7-1.3, and so do dirt, gravel, sand, snow and grass
+
+         So on the hotel's own floors he goes from a tight, bright step to a deep one that
+         varies from footfall to footfall. That is what reads as a different creature.
+
+         ON "INCREASE THE VOLUME SLIGHTLY", SAID PLAINLY. This change does not set a volume.
+         The LG audio source is vanilla's large-scale footstep prefab and is used by the big
+         animals, so it is expected to carry further than the standard one, but that curve
+         lives inside a Unity prefab and CANNOT be read out of the XML, so it is not something
+         to claim. If it is still not loud enough in play, the honest route is a bespoke
+         17-node sound set of our own, which is a bigger job and has not been done here.
+
+         A SET, NOT AN APPEND. SoundStepType already exists on zombieDemolition in vanilla
+         (confirmed: the xpath matches exactly one node and it reads "heavystep"), so appending
+         a second property of the same name would be undefined. This rewrites the one that is
+         there.
+
+         WHY HIM AND NOT THE TEMPLATE. Same reason as the sight block above: zombieDemolition
+         is its own class with no variants and the only one in the building is ours.
+         ============================================================================ -->
+    <!-- v1.253.0: our own steps now. This is only the DEFAULT, the value he spawns with and
+         falls back to; DemoTracker.SetStepSetByFloor rewrites soundStepType every director tick
+         to Above, Level or Below. The bear set it replaces stays in vanilla, untouched, and is
+         what he would fall back to if these nodes ever failed to load. -->
+    <set xpath="/entity_classes/entity_class[@name='zombieDemolition']/property[@name='SoundStepType']/@value">occStalkerStepLevel</set>
+
 </configs>

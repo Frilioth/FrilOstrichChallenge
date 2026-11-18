@@ -121,6 +121,51 @@
             <property name="slot_numbers" value="0,1,2,3,4,5,6,7,8,9" />
         </action>
 
+        <!-- v1.250.0: THE VENDING MACHINE REPAIR KIT, IN THE BACKPACK AND NOT ON THE BELT.
+             Fril, 18 Nov: "I asked you to put a vending machine repair kit in his loadout with his
+             gun and knife."
+
+             WHY IT IS NOT ON THE TOOLBELT, WHICH IS WHAT HE ASKED FOR. The comment on the action
+             above says it plainly: the toolbelt is ten slots, the kit is ten items, it is exactly
+             full, and "anything added later has to displace something". Nothing of his was going
+             to be thrown out without him choosing it, so this goes in the backpack instead. Same
+             spawn, same sequence, in his hands from the first second, just not on the belt. If he
+             wants it on the belt, one of his ten has to go and that is his call.
+
+             A SEPARATE ACTION, not an eleventh entry on that one, because items_location is a
+             property of the action. Confirmed in Assembly-CSharp rather than assumed:
+             ActionSetItemSlots.ItemLocations is Toolbelt 0, Backpack 1, Equipment 2. The uniform
+             below already uses a second action the same way.
+
+             v1.251.0: slot_numbers IS REQUIRED HERE AND LEAVING IT OUT SILENTLY GAVE NOTHING.
+             v1.250.0 omitted it on the reasoning that the game would pick the first free slot.
+             That was a guess and it is wrong. ActionSetItemSlots.ParseProperties, read properly
+             this time:
+
+                 if slot_numbers is absent:
+                     SlotNumbers = null
+                     if (ItemLocation == Equipment)  keep Items and return
+                     else                            Items = null, ItemCounts = null, return
+
+             So an absent slot_numbers is legal ONLY for Equipment. On Toolbelt or Backpack it
+             NULLS THE ITEM LIST, and the action then runs and hands over nothing, with no error in
+             the log. Fril: "There is no vending machine repair kit in the backpack at the start",
+             and his Player.log showed gameevents loading in 0.17s with zero errors, which is
+             exactly what a silent no-op looks like.
+
+             The uniform action below gets away without slot numbers because it IS Equipment. That
+             is what I generalised from, and the generalisation did not hold.
+
+             WHY THE KIT ALONE IS ENOUGH TO USE. The wrench is already slot 8 of the toolbelt, added
+             in v0.95.0, and the kit's own description says to fit it with a repair tool. So the
+             player spawns holding both halves and the tooltip explains the rest. -->
+        <action class="SetItemSlots">
+            <property name="items_location" value="Backpack" />
+            <property name="items" value="occVendingRepairKit" />
+            <property name="item_counts" value="1" />
+            <property name="slot_numbers" value="0" />
+        </action>
+
         <!-- v1.13.4: THE UNIFORM. Equipped, not carried. item_counts is the QUALITY for these,
              and no slot_numbers because Equipment routes by the item's own EquipSlot. -->
         <action class="SetItemSlots">

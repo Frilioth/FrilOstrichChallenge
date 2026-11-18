@@ -526,5 +526,752 @@
     </SoundDataNode>
     <!-- END RADIO NODES -->
 
+    <!-- ===========================================================================
+         v1.253.0: HIS OWN FOOTSTEPS, AND THEY SAY WHICH WAY HE IS.
+
+         Fril, after hearing the bear steps: "The bear steps sound better and distictive
+         but they are still quiet." Then: "Could we play different clips if he is above
+         or below me?"
+
+         WHY THIS EXISTS AT ALL, rather than a volume number. There is NO volume field in
+         sounds.xml. Across all 2,555 vanilla nodes the only volume-ish values are
+         LocalCrouchVolumeScale, CrouchNoiseScale, NoiseScale and runningvolumescale.
+         Loudness lives in the AudioSource prefab and in the wav itself, both inside Unity
+         bundles. So the only way to make him louder was our own clips, normalised hot.
+
+         THE CLIPS. Six footfalls cut from a 29 second take Fril found on Freesound, which
+         held 37 of them. Mono, 48kHz, trimmed to 2ms before the onset, 280ms long, 60ms
+         fade so they do not click, normalised to -1 dBFS. Verified mono AFTER the Unity
+         import as well, because a stereo clip would not position in 3D and the whole
+         above/below idea would have died silently.
+
+         ATTRIBUTION, REQUIRED. Adapted from "creature_or_zombie_footstep_11032026" by
+         Artninja, https://freesound.org/s/878576/, CC BY 4.0. Changes were made. See
+         Credits.txt; CC BY requires the credit AND a statement that it was modified.
+
+         THREE SETS OFF ONE SET OF CLIPS. Pitch is per node, so above, level and below are
+         the same six wavs at different pitch bands. The bands do not overlap, so there is
+         never an ambiguous footstep:
+
+             Above   1.32 to 1.38     centre 1.35
+             Level   0.94 to 1.00     centre 0.97
+             Below   0.58 to 0.64     centre 0.61
+
+         v1.255.0 PUSHED ABOVE AND BELOW FURTHER OUT. Fril on the v1.254.0 spread: "That just
+         about works. Its subtle but it does sound a little like hes above and below me."
+
+         WHY SUBTLE WAS ALWAYS GOING TO FEEL BORDERLINE, and it is structural rather than a
+         numbers problem. The player almost never hears an Above step and a Below step close
+         together, so there is no reference to compare against, and absolute pitch judgement is
+         poor. A cue that needs an A/B to be noticed will not be noticed in play. The further
+         apart the bands, the less a reference is needed.
+
+         Below to Above is now a ratio of 2.21, slightly over an OCTAVE. At 0.61 a 280ms clip
+         becomes a 459ms thud, which reads as weight below you; at 1.35 it becomes a 207ms tap,
+         thinner, which reads as something up there rather than here. Level is untouched,
+         deliberately: same floor should still sound like the clips Fril approved.
+
+         v1.254.0 NARROWED THESE AND SPREAD THEM, because v1.253.0's bands could not be heard
+         and Fril said so: "The sounds dont seem to change when hes above or below me. They do
+         sound good though." The code was switching correctly in the log, so the fault was here.
+
+         THE ARITHMETIC I SHOULD HAVE DONE FIRST. The old bands were 0.20 wide with centres
+         0.20 apart, and a node picks a RANDOM pitch inside its range. So the wobble WITHIN one
+         set was exactly as large as the gap BETWEEN sets, the ranges touched at their edges,
+         and a Below step rolling 0.85 was identical to a Level step rolling 0.85. The cue was
+         drowned in its own randomness.
+
+         Now each band is 0.06 wide with centres 0.24 apart, so the difference between sets is
+         four times the variation inside one. Below to Above is a ratio of 1.66, comfortably
+         over a musical fifth. The six separate clips still supply the variety that the wide
+         pitch range used to, which is why narrowing it costs nothing.
+
+         WHICH ONE PLAYS IS CHOSEN IN CODE, not here. EntityAlive.soundStepType is a public
+         string field and internalPlayStepSound reads it FRESH at every footfall, then
+         concatenates the surface name onto it. So DemoTracker writes "occStalkerStepAbove",
+         "occStalkerStepLevel" or "occStalkerStepBelow" on the director tick and vanilla
+         plays the matching node. No audio patch, no interception.
+
+         ALL SEVENTEEN SURFACES, THREE TIMES. A missing surface makes him SILENT on it,
+         which is far worse than sounding ordinary. The Noise element on every node is
+         copied verbatim from the matching animalhvystep node, so DETECTION IS UNCHANGED:
+         the same ID, noise value, time and muffled_when_crouched he had before.
+
+         SINGLE PLAYER ONLY, and that is a real limit rather than an oversight. The cue is
+         relative to one player. In multiplayer every client would hear it relative to
+         whoever the server last wrote the field for. Fril: "Its a single player challenge."
+         =========================================================================== -->
+
+        <!-- ABOVE : he is on a higher floor -->
+        <SoundDataNode name="occStalkerStepAbovebush">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="3" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovecloth">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="3" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovedirt">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="5" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovefern">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovegrass">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="6" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovegravel">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAboveleaves">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovemetal">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAboveorganic">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="6" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovesand">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="4" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovesnow">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="8" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovestone">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="1.5" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovetallgrass">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovetrash">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="15" time="3" muffled_when_crouched="0.5"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovetree">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="7" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovewater">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="3" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepAbovewood">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="1.5" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="1.32"/>
+            <HighestPitch name="1.38"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="10"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+
+        <!-- LEVEL : same floor as the player -->
+        <SoundDataNode name="occStalkerStepLevelbush">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="3" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelcloth">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="3" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLeveldirt">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="5" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelfern">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelgrass">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="6" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelgravel">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelleaves">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelmetal">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelorganic">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="6" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelsand">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="4" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelsnow">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="8" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelstone">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="1.5" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLeveltallgrass">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLeveltrash">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="15" time="3" muffled_when_crouched="0.5"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLeveltree">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="7" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelwater">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="3" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepLevelwood">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="1.5" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.94"/>
+            <HighestPitch name="1.00"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="10"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+
+        <!-- BELOW : he is on a lower floor -->
+        <SoundDataNode name="occStalkerStepBelowbush">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="3" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowcloth">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="3" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowdirt">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="5" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowfern">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowgrass">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="6" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowgravel">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowleaves">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowmetal">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBeloworganic">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="6" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowsand">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="0" noise="4" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowsnow">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="8" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowstone">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="1.5" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowtallgrass">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="2" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowtrash">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="15" time="3" muffled_when_crouched="0.5"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.5"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowtree">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="7" time="1" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowwater">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="11" time="3" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="2"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+        <SoundDataNode name="occStalkerStepBelowwood">
+            <AudioSource name="@:Sounds/Prefabs/AudioSource_FootstepsLG.prefab"/>
+            <Noise ID="2" noise="10" time="1.5" muffled_when_crouched="0.507"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep01"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep02"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep03"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep04"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep05"/>
+            <AudioClip ClipName="#@modfolder:Resources/occStalkerStep.unity3d?stalkersteps/occStalkerStep06"/>
+            <LowestPitch name="0.58"/>
+            <HighestPitch name="0.64"/>
+            <LocalCrouchVolumeScale value="0.5"/> <CrouchNoiseScale value="0.4002"/> <NoiseScale value="1"/> <MaxVoices value="10"/> <MaxRepeatRate value="0.01"/> <runningvolumescale value="2"/>
+        </SoundDataNode>
+
+
+
     </append>
 </configs>
