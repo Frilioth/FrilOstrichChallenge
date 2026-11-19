@@ -1,2 +1,3 @@
 Key,File,Type,UsedInMainMenu,NoTranslate,english
 xuiFrilMenuMods,FrilModList,Text,,,Mods
+xuiFrilUpdateExit,FrilModList,Text,,,Exit to the main menu and update

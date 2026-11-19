@@ -1,0 +1,19 @@
+<configs>
+
+    <append xpath="//window[@name='spawnselection']/rect[@name='buttons']/table[@name='content']">
+
+        <rect name="frilUpdateNotice" width="500" height="118" depth="3"
+              visible="{# frilupdateshow and enteringGame and firstTimeSpawn}">
+            <boxbg />
+
+            <label name="lblFrilUpdate" depth="4" pos="6,-6" width="488" height="70"
+                   font_size="24" color="[FFFFFF]" pivot="topleft" justify="center"
+                   overflow="shrinkcontent" text="{frilupdatetext}" />
+
+            <simplebutton name="btnFrilUpdateExit" pos="4,-80" width="492" height="34"
+                          font_size="28" caption_key="xuiFrilUpdateExit" />
+        </rect>
+
+    </append>
+
+</configs>

@@ -2,8 +2,8 @@
 <xml>
     <Name value="FrilModList" />
     <DisplayName value="Fril Mod List" />
-    <Version value="1.5.1" />
-    <Description value="Adds a Mods button to the ESC menu that lists every mod you are running and its version." />
+    <Version value="1.7.2" />
+    <Description value="Adds a Mods button to the ESC menu that lists every mod you are running and its version, and tells you when a Frilioth challenge mod has a newer release. To do that it reads a version number from GitHub when the game starts. It downloads nothing, installs nothing, and sends nothing about you. Turn it off with: modlist updates off" />
     <Author value="Frilioth" />
     <Website value="https://frilcraft.uk" />
 </xml>
