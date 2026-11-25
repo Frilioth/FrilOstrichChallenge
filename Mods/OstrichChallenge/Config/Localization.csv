@@ -175,7 +175,7 @@ ostrichLoadingTip07,UI,Loading Screen,x,,"He can be put down, but while the hote
 ostrichLoadingTip08_title,UI,Loading Screen,x,,He Has the Key
 ostrichLoadingTip08,UI,Loading Screen,x,,There is a 4x4 in the basement car park and a roller shutter in front of it. Neither is any use to you. He has been carrying the fob the whole time.
 ostrichLoadingTip09_title,UI,Loading Screen,x,,"Zero, And Then The Window"
-ostrichLoadingTip09,UI,Loading Screen,x,,"He can be killed for good once a count of the register comes back zero. The laptop on the roof takes one automatically at 5am every morning, and it is not the only terminal in the building. Guests checking in during that day do not shut the window, but if any of them are still in the building at the next count it closes and you start again."
+ostrichLoadingTip09,UI,Loading Screen,x,,"He can be killed for good once the register reads zero AND the hotel has shut. Reading a terminal at zero is what shuts it: the front office at any hour, the roof laptop between five and ten in the morning. That closes the doors and gives you twenty four hours. Kill him before the register is read with guests in it again and he stays dead."
 ostrichLoadingTip10_title,UI,Loading Screen,x,,Nothing Is Coming
 ostrichLoadingTip10,UI,Loading Screen,x,,"No trader is coming, and there is nothing in here to build your way out with. The hotel's own vending machines are the only shop there is, the casino tokens you find are what they take, and a dead machine can be brought back if you find the parts for it."
 ostrichLoadingTip11_title,UI,Loading Screen,x,,The Radio

@@ -1,2 +1,6 @@
 Game Retainer=zombieBurnt
 Game Retainer=zombieBurntFeral
+Frantic Dan=zombieTomClark
+Frantic Dan=zombieTomClarkFeral
+Frantic Dan=zombieTomClark
+Frantic Dan=zombieTomClarkFeral

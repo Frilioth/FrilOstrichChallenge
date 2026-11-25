@@ -26,10 +26,22 @@
 # recalculated without a word of complaint. Thirteen seconds, once, on first load. Fril: "it
 # loaded fine and the files we took out were regenerated".
 # ============================================================================================
+# BOTH SPELLINGS OF THE FOLDER ARE LISTED ON PURPOSE. It is being renamed from "worlds"
+# to "Worlds", from a Nexus bug report by Panda26783 on 24 Nov 2026: Mac and Linux
+# filesystems are case sensitive and the game looks for Worlds, so a lowercase folder is
+# invisible to those players. Listing only the new name would leave these cache files
+# untracked-but-not-ignored for as long as the folder on disk still had the old name, and
+# a "git add ." in that window would commit 140MB of regenerable cache per world.
+# Delete the lowercase four once the rename is done everywhere, or leave them; they cost
+# nothing and they cannot match anything that exists.
 Mods/OstrichChallenge/worlds/**/dtm_processed.raw
 Mods/OstrichChallenge/worlds/**/*_processed.png
 Mods/OstrichChallenge/worlds/**/*_half.png
 Mods/OstrichChallenge/worlds/**/main.ttw.bak
+Mods/OstrichChallenge/Worlds/**/dtm_processed.raw
+Mods/OstrichChallenge/Worlds/**/*_processed.png
+Mods/OstrichChallenge/Worlds/**/*_half.png
+Mods/OstrichChallenge/Worlds/**/main.ttw.bak
 
 # THE PACKAGED MOD IS A RELEASE ASSET, NOT A REPO FILE.
 # Area 7's Mods.zip is 707MB and the Hospital's is 954MB. Neither of those repos has a
