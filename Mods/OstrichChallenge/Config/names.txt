@@ -4,3 +4,5 @@ Frantic Dan=zombieTomClark
 Frantic Dan=zombieTomClarkFeral
 Frantic Dan=zombieTomClark
 Frantic Dan=zombieTomClarkFeral
+Cran5000=zombieYo
+Cran5000=zombieYoFeral
