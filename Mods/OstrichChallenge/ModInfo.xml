@@ -2,8 +2,8 @@
 <xml>
     <Name value="OstrichChallenge" />
     <DisplayName value="The Ostrich Challenge" />
-    <Version value="1.265.0" />
-    <Description value="Empty The Ostrich II from the top down. A demolisher stalks the building, the guests check back in every night, and the only way out is to drive. Frils-HUD bundled in (floor readout instead of elevation)." />
+    <Version value="1.272.0" />
+    <Description value="Empty The Ostrich II from the top down. A demolisher stalks the building, the guests check back in every night, and the only way out is to drive. Furniture on floors well above or below you is not drawn, which keeps the frame rate steady inside the hotel. Frils-HUD bundled in (floor readout instead of elevation)." />
     <Author value="Frilioth" />
     <Website value="https://frilcraft.uk" />
 </xml>

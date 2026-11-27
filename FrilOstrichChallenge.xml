@@ -27,6 +27,7 @@
                 Two terminals. The roof laptop reads the register as it stood at five this morning. The front office terminal reads the hotel live, and it is on the stalker's own floor.
                 A ham radio on the roof, and a man on the other end of it who talks to you once a day and cannot help.
                 An in-game How to play page on the ESC menu, so nobody has to guess what they are supposed to be doing.
+                Furniture on floors well above or below you is not drawn, which keeps the frame rate steady inside the hotel.
                 A permanent ending. Put it down inside the window, take the key fob off it, and drive out of the basement car park.
                 Permadeath. One shift, one run.
 
@@ -42,7 +43,7 @@
                 Twitch: twitch.tv/frilioth
             </Description>
 
-            <Version>1.265.0</Version>
+            <Version>1.272.0</Version>
             <EAC>Disabled</EAC>
             <Discord></Discord>
             <Donate></Donate>
